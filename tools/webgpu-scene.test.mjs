@@ -1,9 +1,20 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { BoxGeometry, InstancedMesh, InstancedBufferAttribute, MeshPhysicalNodeMaterial, Matrix4, Vector3 } from 'three/webgpu';
-import { glassPlanes } from '../src/campus-webgpu/reflections.js';
+import { createReflections, glassPlanes } from '../src/campus-webgpu/reflections.js';
 import { probeRegions } from '../src/campus-webgpu/probes.js';
 import { BUILDINGS } from '../src/campus/layout.js';
+
+test('probe-only reflection mode never binds or renders the unused planar captures',()=>{
+  const reflection=createReflections({renderer:{},scene:{},lighting:{},planar:false,
+    materials:{glass:[{objects:[],material:{}}],setGlassReflection(){assert.fail('planar shader must not be installed');}}});
+  try {
+    reflection.update({});reflection.setEnabled(true);reflection.update({});
+    assert.equal(reflection.stats.enabled,false);
+    assert.equal(reflection.stats.updates,0);
+    assert.equal(reflection.stats.mode,'parallax-probes');
+  } finally {reflection.dispose();}
+});
 
 test('planar domains merge coplanar vision panes, exclude spandrels and point outside the building',()=>{
   const geometry=new BoxGeometry();

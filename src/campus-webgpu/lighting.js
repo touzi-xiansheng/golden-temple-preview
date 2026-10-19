@@ -1,5 +1,5 @@
 import {
-  Color, CubeCamera, CubeRenderTarget, EnvironmentNode, HalfFloatType,
+  Color, CubeCamera, CubeRenderTarget, DirectionalLight, EnvironmentNode, HalfFloatType,
   PMREMGenerator, Scene, Vector3,
 } from 'three/webgpu';
 import {
@@ -11,6 +11,7 @@ import { SkyMesh } from 'three/addons/objects/SkyMesh.js';
 import { SunLight } from 'three/addons/lights/SunLight.js';
 import { SunLightNode } from 'three/addons/lights/SunLightNode.js';
 import { LightProbeGrid } from 'three/addons/lighting/LightProbeGrid.js';
+import { createStaticShadows } from './static-shadows.js';
 
 const SUN_DIRECTION = new Vector3(0.35, 0.72, 0.66843).normalize();
 const SHADOW_SIZES = { performance: 1024, balanced: 2048, quality: 4096 };
@@ -125,7 +126,7 @@ export function applyCampusLighting(material, lighting, { probes = null } = {}) 
   return material;
 }
 
-export function createLighting({ renderer, scene, camera, quality = 'balanced' }) {
+export function createLighting({ renderer, scene, camera, quality = 'balanced', cacheShadows = false }) {
   if (!renderer?.isWebGPURenderer || !scene?.isScene || !camera?.isCamera) {
     throw new TypeError('createLighting requires a WebGPURenderer, Scene and Camera');
   }
@@ -135,7 +136,7 @@ export function createLighting({ renderer, scene, camera, quality = 'balanced' }
     backgroundIntensity: scene.backgroundIntensity, environmentIntensity: scene.environmentIntensity,
     fogNode: scene.fogNode,
   };
-  const sun = new SunLight(new Color(1, 0.96, 0.88), 3.2);
+  const sun = cacheShadows ? new DirectionalLight(new Color(1, 0.96, 0.88), 3.2) : new SunLight(new Color(1, 0.96, 0.88), 3.2);
   sun.name = 'Campus WebGPU sun';
   sun.position.copy(SUN_DIRECTION);
   sun.castShadow = true;
@@ -144,8 +145,9 @@ export function createLighting({ renderer, scene, camera, quality = 'balanced' }
   sun.shadow.bias = -0.0001;
   sun.shadow.normalBias = 0.025;
   sun.shadow.autoUpdate = true;
+  const staticShadows = cacheShadows ? createStaticShadows(sun,scene,SUN_DIRECTION) : null;
   const materials = new Set(), probes = [], bakeScenes = new Set();
-  const stats = { ready: false, skyMs: 0, probeBakeMs: 0, probes: 0, cubeViews: 0, baking: false, quality };
+  const stats = { ready: false, skyMs: 0, probeBakeMs: 0, probes: 0, cubeViews: 0, baking: false, quality, shadowMode:cacheShadows?'cached':'cascades', shadowCache:staticShadows?.stats };
   let disposed = false, environment = null, background = null, captureBackground = null, haze = null;
 
   const lighting = {
@@ -155,6 +157,7 @@ export function createLighting({ renderer, scene, camera, quality = 'balanced' }
     get environment() { return environment; },
     get background() { return background; },
     get captureBackground() { return captureBackground; },
+    update(_camera,{shot=-1}={}) { staticShadows?.update(shot); },
     setQuality(value) {
       if (!Object.hasOwn(SHADOW_SIZES, value)) throw new RangeError('Unknown lighting quality');
       if (disposed) throw new Error('Lighting is disposed');
@@ -165,6 +168,7 @@ export function createLighting({ renderer, scene, camera, quality = 'balanced' }
         // setSize disposes GPU storage while preserving the target retained by SunShadowNode.
         shadow.map?.setSize(size * extents.x, size * extents.y);
         shadow.needsUpdate = true;
+        staticShadows?.update(staticShadows.shot,true);
       }
       stats.quality = value;
     },
@@ -178,7 +182,8 @@ export function createLighting({ renderer, scene, camera, quality = 'balanced' }
       result.background = captureBackground.texture;
       result.environment = environment.texture;
       const captureSun = sun.clone();
-      result.add(captureSun);
+      if(cacheShadows){captureSun.shadow.autoUpdate=false;captureSun.shadow.needsUpdate=true;}
+      result.add(captureSun);if(captureSun.target)result.add(captureSun.target);
       bakeScenes.add({ scene: result, sun: captureSun });
       return result;
     },
@@ -239,9 +244,9 @@ export function createLighting({ renderer, scene, camera, quality = 'balanced' }
       materials.clear();
       for (const probe of probes) probe.grid.dispose();
       probes.length = 0;
-      for (const entry of bakeScenes) { entry.sun.removeFromParent(); entry.sun.dispose(); }
+      for (const entry of bakeScenes) { entry.sun.target?.removeFromParent(); entry.sun.removeFromParent(); entry.sun.dispose(); }
       bakeScenes.clear();
-      sun.removeFromParent(); sun.dispose();
+      sun.target?.removeFromParent(); sun.removeFromParent(); sun.dispose();
       if (background && scene.background === background.texture) {
         scene.background = previous.background;
         scene.backgroundIntensity = previous.backgroundIntensity;
@@ -283,11 +288,12 @@ export function createLighting({ renderer, scene, camera, quality = 'balanced' }
       scene.background = background.texture;
       scene.environment = environment.texture;
       scene.backgroundIntensity = 1;
-      scene.environmentIntensity = 1;
+      // Art-directed fill keeps shaded greenery and pale stone from washing out.
+      scene.environmentIntensity = 0.45;
       // Match directional sky haze without projecting the solar disc through opaque buildings.
       haze = fog(cubeTexture(captureBackground.texture, positionWorld.sub(cameraPosition).normalize()), densityFogFactor(0.00062));
       scene.fogNode = haze;
-      scene.add(sun);
+      scene.add(sun);if(sun.target)scene.add(sun.target);
       stats.skyMs = performance.now() - started;
       stats.ready = true;
       return lighting;

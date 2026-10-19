@@ -78,14 +78,14 @@ async function start() {
   world = await createCampusScene({stage,yieldControl});
   stage('正在建立日光、阴影与程序天空…',60); await yieldControl();
   let tick = performance.now();
-  lighting = createLighting({renderer,scene:world.scene,camera,quality}); await lighting.ready;
+  lighting = createLighting({renderer,scene:world.scene,camera,quality,cacheShadows:query.get('shadows')!=='dynamic'}); await lighting.ready;
   if(query.get('gi')!=='0')world.stats.indirect=await bakeCampusProbes(lighting,world.landscape,{onProgress:fraction=>stage('正在计算庭院与廊下的间接光…',60+fraction*14)});
   const materials = new Set(); world.scene.traverse(object=>{ for(const material of Array.isArray(object.material)?object.material:[object.material])if(material)materials.add(material); });
   world.materials.bindLighting(lighting);
   for(const material of materials)if(material.isMeshStandardNodeMaterial || material.isMeshPhysicalNodeMaterial)applyCampusLighting(material,lighting);
   world.stats.timings.lightingMs = performance.now()-tick;
   if(query.get('reflections')!=='0') {
-    tick=performance.now();reflections=createReflections({renderer,scene:world.scene,materials:world.materials,lighting});
+    tick=performance.now();reflections=createReflections({renderer,scene:world.scene,materials:world.materials,lighting,planar:query.get('reflections')==='planar'});
     await reflections.captureProbes({yieldControl,onProgress:(current,total)=>stage(`正在捕获园区反射（${current}/${total}）…`,75+current/total*8)});
     world.stats.timings.reflectionsMs=performance.now()-tick;
   }
@@ -93,7 +93,7 @@ async function start() {
   setQuality(quality);
   stage('正在编译 WebGPU 材质与渲染管线…',85); await yieldControl(); tick=performance.now();
   await renderer.compileAsync(world.scene,camera);
-  const renderOnce = () => { renderer.info.reset();lighting.update?.(camera);reflections?.update(camera);view.frame(); };
+  const renderOnce = () => { renderer.info.reset();lighting.update?.(camera,{shot:free?-1:currentShot});reflections?.update(camera);view.frame(); };
   renderOnce(); await renderer.backend.device.queue.onSubmittedWorkDone();
   world.stats.timings.compileMs=performance.now()-tick;
   if(runtime.errors.length)throw new Error(runtime.errors[0]);

@@ -33,7 +33,7 @@ export function glassPlanes(glass) {
   return [...planes.values()];
 }
 
-export function createReflections({renderer,scene,materials,lighting}) {
+export function createReflections({renderer,scene,materials,lighting,planar=true}) {
   const planes=glassPlanes(materials.glass), size=new Vector2();
   const empty=new DataTexture(new Float32Array([0,0,0,1]),1,1,RGBAFormat,FloatType);empty.needsUpdate=true;
   const slots=Array.from({length:2},()=>{
@@ -48,14 +48,14 @@ export function createReflections({renderer,scene,materials,lighting}) {
   });
   const weight=slots[0].weight.add(slots[1].weight);
   const radiance=slots[0].sample.rgb.mul(slots[0].weight).add(slots[1].sample.rgb.mul(slots[1].weight)).div(weight.max(.00001));
-  for(const {material} of materials.glass)materials.setGlassReflection(material,{node:radiance,weight:weight.clamp()});
-  const captures=[], stats={planes:planes.length,active:[],updates:0,probeCount:0,enabled:true};
+  if(planar)for(const {material} of materials.glass)materials.setGlassReflection(material,{node:radiance,weight:weight.clamp()});
+  const captures=[], stats={planes:planes.length,active:[],updates:0,probeCount:0,enabled:planar,mode:planar?'planar':'parallax-probes'};
   let disposed=false,scale=.5,dirty=true;
   const lastView=new Matrix4(),lastProjection=new Matrix4(),frustum=new Frustum(),viewProjection=new Matrix4();
   const bias=new Matrix4().set(.5,0,0,.5,0,-.5,0,.5,0,0,1,0,0,0,0,1);
 
   async function captureProbes({yieldControl=()=>Promise.resolve(),onProgress=()=>{}}={}) {
-    const cube=new CubeRenderTarget(256,{type:HalfFloatType}), camera=new CubeCamera(.2,2500,cube), pmrem=new PMREMGenerator(renderer);
+    const cube=new CubeRenderTarget(512,{type:HalfFloatType}), camera=new CubeCamera(.2,2500,cube), pmrem=new PMREMGenerator(renderer);
     const previous=renderer.getRenderTarget(),background=scene.background;
     scene.background=lighting.captureBackground.texture;
     const assignments=[];
@@ -118,7 +118,7 @@ export function createReflections({renderer,scene,materials,lighting}) {
   }
   return {stats,planes,captureProbes,update,
     setQuality(quality){scale=quality==='performance'?.35:quality==='quality'?1:.6;dirty=true;},
-    setEnabled(value){stats.enabled=!!value;dirty=true;if(!value)slots.forEach(slot=>slot.enabled.value=0);},
+    setEnabled(value){stats.enabled=planar&&!!value;dirty=true;if(!stats.enabled)slots.forEach(slot=>slot.enabled.value=0);},
     invalidate(){dirty=true;},
     dispose(){if(disposed)return;disposed=true;slots.forEach(slot=>slot.target.dispose());captures.forEach(target=>target.dispose());empty.dispose();},
   };

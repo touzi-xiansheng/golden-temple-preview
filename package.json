@@ -34,6 +34,7 @@
     "check:campus-loading": "node tools/campus-loading-check.mjs",
     "test:webgpu": "node --test tools/webgpu-*.test.mjs",
     "check:webgpu": "node tools/webgpu-check.mjs",
+    "check:webgpu-motion": "node tools/webgpu-motion-check.mjs",
     "check:webgpu-lab": "node tools/webgpu-check.mjs --lab",
     "build": "vite build",
     "snap": "node tools/snap.mjs",

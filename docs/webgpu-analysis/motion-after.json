@@ -1,0 +1,219 @@
+{
+  "url": "http://127.0.0.1:4173/golden-temple-preview/campus-webgpu.html",
+  "at": "2026-10-19T07:00:23.970Z",
+  "budgetMs": 25,
+  "cases": [
+    {
+      "time": 2,
+      "frames": 120,
+      "intervalMs": {
+        "p50": 16.700000047683716,
+        "p95": 18.5
+      },
+      "cpuSubmitMs": {
+        "p50": 3.299999952316284,
+        "p95": 3.700000047683716
+      },
+      "drawCalls": {
+        "p50": 234,
+        "p95": 235
+      },
+      "triangles": {
+        "p50": 9047065,
+        "p95": 9047809
+      },
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      },
+      "quality": "balanced",
+      "shadowMode": "cached",
+      "reflectionMode": "parallax-probes",
+      "errors": []
+    },
+    {
+      "time": 12,
+      "frames": 120,
+      "intervalMs": {
+        "p50": 16.5,
+        "p95": 18.200000047683716
+      },
+      "cpuSubmitMs": {
+        "p50": 3.100000023841858,
+        "p95": 4.5
+      },
+      "drawCalls": {
+        "p50": 197,
+        "p95": 200
+      },
+      "triangles": {
+        "p50": 8126684,
+        "p95": 8197760
+      },
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      },
+      "quality": "balanced",
+      "shadowMode": "cached",
+      "reflectionMode": "parallax-probes",
+      "errors": []
+    },
+    {
+      "time": 22,
+      "frames": 120,
+      "intervalMs": {
+        "p50": 16.699999928474426,
+        "p95": 20.700000047683716
+      },
+      "cpuSubmitMs": {
+        "p50": 2.899999976158142,
+        "p95": 5.5
+      },
+      "drawCalls": {
+        "p50": 165,
+        "p95": 165
+      },
+      "triangles": {
+        "p50": 6467728,
+        "p95": 6467728
+      },
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      },
+      "quality": "balanced",
+      "shadowMode": "cached",
+      "reflectionMode": "parallax-probes",
+      "errors": []
+    },
+    {
+      "time": 32,
+      "frames": 120,
+      "intervalMs": {
+        "p50": 16.59999990463257,
+        "p95": 20.800000071525574
+      },
+      "cpuSubmitMs": {
+        "p50": 3,
+        "p95": 5.100000023841858
+      },
+      "drawCalls": {
+        "p50": 135,
+        "p95": 135
+      },
+      "triangles": {
+        "p50": 4377474,
+        "p95": 4377474
+      },
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      },
+      "quality": "balanced",
+      "shadowMode": "cached",
+      "reflectionMode": "parallax-probes",
+      "errors": []
+    },
+    {
+      "time": 42,
+      "frames": 120,
+      "intervalMs": {
+        "p50": 16.699999928474426,
+        "p95": 19.5
+      },
+      "cpuSubmitMs": {
+        "p50": 2.899999976158142,
+        "p95": 4.700000047683716
+      },
+      "drawCalls": {
+        "p50": 131,
+        "p95": 132
+      },
+      "triangles": {
+        "p50": 3734132,
+        "p95": 3943742
+      },
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      },
+      "quality": "balanced",
+      "shadowMode": "cached",
+      "reflectionMode": "parallax-probes",
+      "errors": []
+    },
+    {
+      "time": 52,
+      "frames": 120,
+      "intervalMs": {
+        "p50": 16.59999990463257,
+        "p95": 18
+      },
+      "cpuSubmitMs": {
+        "p50": 3.0999999046325684,
+        "p95": 3.600000023841858
+      },
+      "drawCalls": {
+        "p50": 225,
+        "p95": 226
+      },
+      "triangles": {
+        "p50": 8833010,
+        "p95": 8855762
+      },
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      },
+      "quality": "balanced",
+      "shadowMode": "cached",
+      "reflectionMode": "parallax-probes",
+      "errors": []
+    }
+  ],
+  "errors": [],
+  "browser": "Chrome/155.0.8059.84",
+  "capabilities": {
+    "backend": "webgpu",
+    "secureContext": true,
+    "adapter": {
+      "vendor": "apple",
+      "architecture": "metal-3",
+      "device": "",
+      "description": "",
+      "isFallbackAdapter": false
+    },
+    "features": [
+      "bgra8unorm-storage",
+      "clip-distances",
+      "core-features-and-limits",
+      "depth-clip-control",
+      "depth32float-stencil8",
+      "dual-source-blending",
+      "float32-blendable",
+      "float32-filterable",
+      "indirect-first-instance",
+      "rg11b10ufloat-renderable",
+      "shader-f16",
+      "subgroups",
+      "texture-compression-astc",
+      "texture-compression-astc-sliced-3d",
+      "texture-compression-bc",
+      "texture-compression-bc-sliced-3d",
+      "texture-compression-etc2",
+      "texture-formats-tier1",
+      "texture-formats-tier2",
+      "timestamp-query"
+    ],
+    "compatibilityMode": false,
+    "limits": {
+      "maxTextureDimension2D": 8192,
+      "maxTextureDimension3D": 2048,
+      "maxStorageBufferBindingSize": 134217728,
+      "maxBufferSize": 268435456,
+      "maxStorageBuffersPerShaderStage": 8,
+      "maxComputeWorkgroupSizeX": 256
+    }
+  }
+}

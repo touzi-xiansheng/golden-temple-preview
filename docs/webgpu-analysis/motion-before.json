@@ -1,0 +1,207 @@
+{
+  "url": "https://touzi-xiansheng.github.io/golden-temple-preview/campus-webgpu.html",
+  "at": "2026-10-19T06:55:41.504Z",
+  "budgetMs": 25,
+  "cases": [
+    {
+      "time": 2,
+      "frames": 120,
+      "intervalMs": {
+        "p50": 16.799999952316284,
+        "p95": 17.5
+      },
+      "cpuSubmitMs": {
+        "p50": 7.900000095367432,
+        "p95": 8.200000047683716
+      },
+      "drawCalls": {
+        "p50": 551,
+        "p95": 553
+      },
+      "triangles": {
+        "p50": 20480593,
+        "p95": 21169946
+      },
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      },
+      "quality": "balanced",
+      "errors": []
+    },
+    {
+      "time": 12,
+      "frames": 58,
+      "intervalMs": {
+        "p50": 35.89999997615814,
+        "p95": 36.39999997615814
+      },
+      "cpuSubmitMs": {
+        "p50": 35.5,
+        "p95": 36
+      },
+      "drawCalls": {
+        "p50": 1745,
+        "p95": 1745
+      },
+      "triangles": {
+        "p50": 68805951,
+        "p95": 68820019
+      },
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      },
+      "quality": "balanced",
+      "errors": []
+    },
+    {
+      "time": 22,
+      "frames": 120,
+      "intervalMs": {
+        "p50": 16.5,
+        "p95": 17.699999928474426
+      },
+      "cpuSubmitMs": {
+        "p50": 7.5,
+        "p95": 7.799999952316284
+      },
+      "drawCalls": {
+        "p50": 537,
+        "p95": 538
+      },
+      "triangles": {
+        "p50": 22223980,
+        "p95": 22224220
+      },
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      },
+      "quality": "balanced",
+      "errors": []
+    },
+    {
+      "time": 32,
+      "frames": 120,
+      "intervalMs": {
+        "p50": 16.700000047683716,
+        "p95": 17.600000023841858
+      },
+      "cpuSubmitMs": {
+        "p50": 7.099999904632568,
+        "p95": 7.399999976158142
+      },
+      "drawCalls": {
+        "p50": 517,
+        "p95": 520
+      },
+      "triangles": {
+        "p50": 20175486,
+        "p95": 20176350
+      },
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      },
+      "quality": "balanced",
+      "errors": []
+    },
+    {
+      "time": 42,
+      "frames": 73,
+      "intervalMs": {
+        "p50": 28,
+        "p95": 30.200000047683716
+      },
+      "cpuSubmitMs": {
+        "p50": 27.09999990463257,
+        "p95": 29.700000047683716
+      },
+      "drawCalls": {
+        "p50": 1605,
+        "p95": 1608
+      },
+      "triangles": {
+        "p50": 58018976,
+        "p95": 58254206
+      },
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      },
+      "quality": "balanced",
+      "errors": []
+    },
+    {
+      "time": 52,
+      "frames": 120,
+      "intervalMs": {
+        "p50": 16.800000071525574,
+        "p95": 17.300000071525574
+      },
+      "cpuSubmitMs": {
+        "p50": 7.899999976158142,
+        "p95": 8.200000047683716
+      },
+      "drawCalls": {
+        "p50": 565,
+        "p95": 567
+      },
+      "triangles": {
+        "p50": 23367208,
+        "p95": 23640730
+      },
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      },
+      "quality": "balanced",
+      "errors": []
+    }
+  ],
+  "errors": [],
+  "browser": "Chrome/155.0.8059.84",
+  "capabilities": {
+    "backend": "webgpu",
+    "secureContext": true,
+    "adapter": {
+      "vendor": "apple",
+      "architecture": "metal-3",
+      "device": "",
+      "description": "",
+      "isFallbackAdapter": false
+    },
+    "features": [
+      "bgra8unorm-storage",
+      "clip-distances",
+      "core-features-and-limits",
+      "depth-clip-control",
+      "depth32float-stencil8",
+      "dual-source-blending",
+      "float32-blendable",
+      "float32-filterable",
+      "indirect-first-instance",
+      "rg11b10ufloat-renderable",
+      "shader-f16",
+      "subgroups",
+      "texture-compression-astc",
+      "texture-compression-astc-sliced-3d",
+      "texture-compression-bc",
+      "texture-compression-bc-sliced-3d",
+      "texture-compression-etc2",
+      "texture-formats-tier1",
+      "texture-formats-tier2",
+      "timestamp-query"
+    ],
+    "compatibilityMode": false,
+    "limits": {
+      "maxTextureDimension2D": 8192,
+      "maxTextureDimension3D": 2048,
+      "maxStorageBufferBindingSize": 134217728,
+      "maxBufferSize": 268435456,
+      "maxStorageBuffersPerShaderStage": 8,
+      "maxComputeWorkgroupSizeX": 256
+    }
+  }
+}

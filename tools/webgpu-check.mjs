@@ -54,6 +54,23 @@ try {
       await page.evaluate(time=>{window.__campus.setTime(time);window.__campus.renderOnce();},time);
       await page.screenshot({path:`${output}/shot-${Math.floor(time/10)+1}.png`});
     }
+    for(const quality of ['performance','quality','balanced']) {
+      const state=await page.evaluate(async quality=>{
+        const app=window.__campus;app.setQuality(quality);
+        await new Promise(requestAnimationFrame);await new Promise(requestAnimationFrame);
+        await app.renderer.backend.device.queue.onSubmittedWorkDone();
+        return app.getState();
+      },quality);
+      assert.equal(state.quality,quality);assert.deepEqual(state.errors,[]);
+    }
+    const free=await page.evaluate(async()=>{
+      const app=window.__campus;app.setFree(true);app.camera.position.set(60,30,80);
+      await new Promise(requestAnimationFrame);await new Promise(requestAnimationFrame);
+      await app.renderer.backend.device.queue.onSubmittedWorkDone();
+      return app.getState();
+    });
+    assert.equal(free.free,true);assert.deepEqual(free.errors,[]);
+    await page.evaluate(()=>{window.__campus.setFree(false);window.__campus.setTime(55);});
   }
   state.errors = await page.evaluate(lab => lab ? window.__lab.runtime.errors : window.__campus.getState().errors, laboratory);
   fs.writeFileSync(`${output}/${laboratory?'lab':'check'}.json`,JSON.stringify({at:new Date().toISOString(),browser:await browser.version(),state,validations,errors,warnings,external},null,2));

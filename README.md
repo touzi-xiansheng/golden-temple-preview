@@ -59,19 +59,33 @@ snapshot of the local development version; local edits need a fresh build and
 upload to appear online. The complete development source is kept on the preview
 repository's [`source/webgpu-preview` branch](https://github.com/touzi-xiansheng/golden-temple-preview/tree/source/webgpu-preview).
 
-The WebGPU entry is an experimental snapshot, not a completed visual or performance
-upgrade. It requires a WebGPU-capable browser and GPU; GitHub Pages supplies HTTPS.
-On the tested Mac, the production build generated all seven buildings, baked 907
-irradiance probes and captured four reflection probes in about 45 seconds before
-the first complete frame. Other devices may take longer. Lighting still looks too
-pale, performance needs work, and full motion/lifecycle/cross-device acceptance is pending.
+The WebGPU entry is an experimental snapshot requiring a WebGPU-capable browser
+and GPU; GitHub Pages supplies HTTPS. Its default favours appearance and smooth
+movement: one world-space shadow map is reused between tour cuts, quality changes
+and exploration-mode changes; four 512-pixel local reflection probes use box-projected
+parallax instead of redrawing the campus in every visible glass plane. Architecture,
+plants and render resolution are preserved. The environment fill is reduced to
+retain contrast in foliage and pale stone. This assumes a fixed sun and static geometry;
+moving objects would require invalidating their lighting. Close mirror reflections
+remain an approximation.
+
+The tested production build generated seven buildings, baked 907 irradiance probes
+and captured four reflection probes in about 15 seconds before the first complete
+frame on the tested Mac. This is not a controlled cold-start benchmark. Continuous
+1080p tour checks are recorded in `docs/webgpu-analysis/motion-before.json` and
+`motion-after.json`; they measure application frame cadence and CPU render submission,
+not pure GPU time. Full lifecycle and cross-device acceptance remain pending.
 The GPU visibility module has calibration tests but is not enabled in the campus.
 
 Build for this hosting path with `npm run build -- --base=/golden-temple-preview/`.
 Publish the generated `dist/` files to the preview repository's `main` branch,
 preserving its license files and `.nojekyll`. For local development, open
 `http://localhost:5173/campus-webgpu.html`; a remote plain-HTTP IP address is not
-a secure WebGPU context. `?gi=0&reflections=0` is available for diagnostic comparisons.
+a secure WebGPU context. `?gi=0&reflections=0` is available for diagnostic comparisons;
+`?shadows=dynamic&reflections=planar` enables the more expensive live-cascade/mirror
+path. Run `npm run check:webgpu-motion` against a running server to check all six
+moving tour sections. `WEBGPU_URL`, `PROFILE_LABEL` and `FRAME_BUDGET_MS` select
+the entry, report label and reference-device frame-time budget (25ms by default).
 
 ## Quick start
 
