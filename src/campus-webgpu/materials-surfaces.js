@@ -2,7 +2,7 @@ import { InstancedBufferAttribute } from 'three/webgpu';
 import {
   Fn, attribute, cameraViewMatrix, diffuseColor, float, fract, max, min, mix,
   normalMap, normalView, normalWorld, positionGeometry, positionView, positionWorld,
-  materialColor, materialRoughness, smoothstep, texture, uv, vec2, vec3, vec4,
+  materialColor, materialEnvIntensity, materialRoughness, smoothstep, texture, uv, vec2, vec3, vec4,
 } from 'three/tsl';
 
 const hash = Fn(([p]) => p.dot(vec3(127.1, 311.7, 74.7)).sin().mul(43758.5453).fract());
@@ -119,7 +119,9 @@ export function foliageSurface(material, source, object, lighting) {
       const model = setup(...args), indirect = model.indirect.bind(model);
       model.indirect = builder => {
         indirect(builder);
-        builder.context.reflectedLight.indirectDiffuse.addAssign(back.mul(diffuseColor.rgb).mul(ao).mul(.25 / Math.PI));
+        // Use the same incident-light scale as the front face, including zero fill.
+        builder.context.reflectedLight.indirectDiffuse.addAssign(back.mul(materialEnvIntensity)
+          .mul(diffuseColor.rgb).mul(vec3(1.05, 1.12, .7)).mul(ao).mul(.25 / Math.PI));
       };
       return model;
     };

@@ -2,6 +2,7 @@ import puppeteer from 'puppeteer-core';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { findChrome } from './lib/chrome.mjs';
+import { waitForStableCampus } from './lib/webgpu-checks.mjs';
 
 const laboratory = process.argv.includes('--lab');
 const base = process.env.WEBGPU_URL || `http://localhost:5173/${laboratory ? 'webgpu-lab' : 'campus-webgpu'}.html`;
@@ -26,18 +27,14 @@ try {
   await page.goto(url.href, {waitUntil:'domcontentloaded',timeout:30000});
   await page.waitForFunction(()=>window.__READY||window.__ERROR,{timeout:180000});
   assert.equal(await page.evaluate(()=>window.__ERROR ?? null),null);
-  const state=await page.evaluate(async lab=>{
-    const app=lab?window.__lab:window.__campus;
-    if(lab)await app.render(); else app.renderOnce();
-    await app.renderer.backend.device.queue.onSubmittedWorkDone();
-    return lab?{capabilities:app.runtime.capabilities,errors:app.runtime.errors}:app.getState();
-  },laboratory);
+  let state=await waitForStableCampus(page,laboratory);
   assert.equal(state.capabilities.backend,'webgpu');
   assert.notEqual(state.capabilities.adapter.isFallbackAdapter,true);
   const validations = {};
   for (const [flag, path, exported] of [
     ['--visibility', '/src/campus-webgpu/visibility.js', 'runValidation'],
     ['--lighting', '/src/campus-webgpu/lighting-calibration.js', 'runLightingCalibration'],
+    ['--materials', '/src/campus-webgpu/material-calibration.js', 'runMaterialCalibration'],
   ]) {
     if (!process.argv.includes(flag)) continue;
     validations[flag.slice(2)] = await page.evaluate(async ({path,exported}) => {
@@ -47,33 +44,33 @@ try {
     console.log('VALIDATION',flag,JSON.stringify(validations[flag.slice(2)]));
     assert.equal(validations[flag.slice(2)].passed ?? validations[flag.slice(2)].ok, true, `${flag} calibration failed`);
   }
+  state=await waitForStableCampus(page,laboratory);
+  const shots=[],qualityChecks=[];
+  let freeCamera=null;
   await page.screenshot({path:`${output}/${laboratory?'lab':'campus'}-initial.png`});
   if(!laboratory) {
     assert.equal(state.stats.buildings,7);
     for(const time of [5,15,25,35,45,55]) {
-      await page.evaluate(time=>{window.__campus.setTime(time);window.__campus.renderOnce();},time);
-      await page.screenshot({path:`${output}/shot-${Math.floor(time/10)+1}.png`});
+      await page.evaluate(time=>window.__campus.setTime(time),time);
+      const shot=await waitForStableCampus(page),image=`${output}/shot-${Math.floor(time/10)+1}.png`;
+      assert.equal(shot.time,time);assert.equal(shot.playing,false);assert.deepEqual(shot.errors,[]);
+      await page.screenshot({path:image});
+      shots.push({image,requestedTime:time,state:shot});
     }
     for(const quality of ['performance','quality','balanced']) {
-      const state=await page.evaluate(async quality=>{
-        const app=window.__campus;app.setQuality(quality);
-        await new Promise(requestAnimationFrame);await new Promise(requestAnimationFrame);
-        await app.renderer.backend.device.queue.onSubmittedWorkDone();
-        return app.getState();
-      },quality);
+      await page.evaluate(quality=>window.__campus.setQuality(quality),quality);
+      const state=await waitForStableCampus(page);
       assert.equal(state.quality,quality);assert.deepEqual(state.errors,[]);
+      qualityChecks.push(state);
     }
-    const free=await page.evaluate(async()=>{
-      const app=window.__campus;app.setFree(true);app.camera.position.set(60,30,80);
-      await new Promise(requestAnimationFrame);await new Promise(requestAnimationFrame);
-      await app.renderer.backend.device.queue.onSubmittedWorkDone();
-      return app.getState();
-    });
-    assert.equal(free.free,true);assert.deepEqual(free.errors,[]);
+    await page.evaluate(()=>{const app=window.__campus;app.setFree(true);app.camera.position.set(60,30,80);});
+    freeCamera=await waitForStableCampus(page);
+    assert.equal(freeCamera.free,true);assert.deepEqual(freeCamera.errors,[]);
     await page.evaluate(()=>{window.__campus.setFree(false);window.__campus.setTime(55);});
   }
-  state.errors = await page.evaluate(lab => lab ? window.__lab.runtime.errors : window.__campus.getState().errors, laboratory);
-  fs.writeFileSync(`${output}/${laboratory?'lab':'check'}.json`,JSON.stringify({at:new Date().toISOString(),browser:await browser.version(),state,validations,errors,warnings,external},null,2));
+  const finalState=await waitForStableCampus(page,laboratory);
+  state.errors=finalState.errors;
+  fs.writeFileSync(`${output}/${laboratory?'lab':'check'}.json`,JSON.stringify({schemaVersion:2,url:url.href,at:new Date().toISOString(),browser:await browser.version(),state,shots,qualityChecks,freeCamera,finalState,validations,errors,warnings,external},null,2));
   assert.deepEqual(errors,[]); assert.deepEqual(state.errors,[]); assert.deepEqual(external,[]);
   console.log(JSON.stringify({success:true,backend:state.capabilities,stats:state.stats,warnings},null,2));
 } finally { await browser.close(); }

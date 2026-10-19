@@ -24,13 +24,19 @@ export async function diagnoseCampusLighting(campus = window.__campus) {
   const mesh = new Mesh(geometry, material);
   const camera = new OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
   const sun = lighting.sun.clone(); sun.castShadow = false;
+  sun.position.copy(lighting.sun.getWorldPosition(new Vector3()));
+  if (sun.target) sun.target.position.copy(lighting.sun.target.getWorldPosition(new Vector3()));
   const normalAxis = new Vector3(0, 0, 1);
-  const sunDirection = lighting.sun.position.clone().normalize();
+  const sunDirection = sun.position.clone();
+  if (sun.target) sunDirection.sub(sun.target.position);
+  sunDirection.normalize();
   const report = {
     backend: 'WebGPU', pipelineToneMapping: renderer.toneMapping,
     exposure: renderer.toneMappingExposure,
     sun: { intensity: lighting.sun.intensity, color: lighting.sun.color.toArray(), direction: sunDirection.toArray() },
     environmentIntensity: campus.scene.environmentIntensity,
+    groundBounce: lighting.stats.groundBounce,
+    groundAlbedo: lighting.stats.groundAlbedo,
     hasFogNode: !!campus.scene.fogNode,
     fogFactor: Object.fromEntries([10, 30, 100, 300, 1000].map(distance => [distance, 1 - Math.exp(-Math.pow(0.00062 * distance, 2))])),
     samples: [],
@@ -54,7 +60,7 @@ export async function diagnoseCampusLighting(campus = window.__campus) {
   async function grayCard(normal, direct, environment) {
     const scene = new Scene(); scene.environment = environment ? lighting.environment.texture : null;
     scene.environmentIntensity = campus.scene.environmentIntensity;
-    if (direct) scene.add(sun);
+    if (direct) { scene.add(sun); if (sun.target) scene.add(sun.target); }
     mesh.quaternion.setFromUnitVectors(normalAxis, normal);
     scene.add(mesh);
     camera.up.set(0, 1, 0);
@@ -62,12 +68,12 @@ export async function diagnoseCampusLighting(campus = window.__campus) {
     camera.position.copy(normal).multiplyScalar(3);
     camera.lookAt(0, 0, 0); camera.updateMatrixWorld();
     try { return await measure(() => renderer.render(scene, camera)); }
-    finally { scene.remove(mesh, sun); }
+    finally { scene.remove(mesh, sun); sun.target?.removeFromParent(); }
   }
 
   try {
     const normals = [
-      ['up', [0, 1, 0]], ['south', [0, 0, 1]], ['north', [0, 0, -1]],
+      ['up', [0, 1, 0]], ['down', [0, -1, 0]], ['south', [0, 0, 1]], ['north', [0, 0, -1]],
       ['east', [1, 0, 0]], ['west', [-1, 0, 0]], ['toward-sun', sunDirection.toArray()],
     ];
     for (const [name, components] of normals) {
@@ -77,6 +83,7 @@ export async function diagnoseCampusLighting(campus = window.__campus) {
       }), 1);
       shader.needsUpdate = true;
       const skyIrradiance = await measure(() => quad.render(renderer));
+      const effectiveEnvironmentIrradiance = skyIrradiance.map(value => value * campus.scene.environmentIntensity);
       const cosTheta = Math.max(0, normal.dot(sunDirection));
       const directIrradiance = lighting.sun.color.clone().multiplyScalar(lighting.sun.intensity * cosTheta).toArray();
       const direct = await grayCard(normal, true, false);
@@ -84,8 +91,8 @@ export async function diagnoseCampusLighting(campus = window.__campus) {
       const combined = await grayCard(normal, true, true);
       const sum = direct.map((value, index) => value + indirect[index]);
       const linearityError = Math.max(...combined.map((value, index) => Math.abs(value - sum[index]) / Math.max(sum[index], 0.001)));
-      report.samples.push({ name, skyIrradiance, directIrradiance,
-        directToSky: luma(directIrradiance) / Math.max(luma(skyIrradiance), 1e-6),
+      report.samples.push({ name, skyIrradiance, effectiveEnvironmentIrradiance, directIrradiance,
+        directToSky: luma(directIrradiance) / Math.max(luma(effectiveEnvironmentIrradiance), 1e-6),
         gray18: { direct, indirect, combined, linearityError },
       });
     }

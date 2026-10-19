@@ -6,9 +6,10 @@ import {
 } from 'three/webgpu';
 import { vec3, vec4, uniform } from 'three/tsl';
 import { LightProbeGrid } from 'three/addons/lighting/LightProbeGrid.js';
-import { applyCampusLighting, createIrradianceNode, createLighting } from './lighting.js';
+import { applyCampusLighting, createGroundRadianceNode, createIrradianceNode, createLighting, GROUND_ALBEDO } from './lighting.js';
 
 const relativeError = (actual, expected) => Math.max(...expected.map((value, index) => Math.abs(actual[index] - value) / Math.max(value, 0.01)));
+const luma = rgb => rgb[0] * 0.2126 + rgb[1] * 0.7152 + rgb[2] * 0.0722;
 
 // P0 only: known-radiance scenes make double counting observable without an art judgement.
 export async function runLightingCalibration(renderer = null) {
@@ -92,6 +93,60 @@ export async function runLightingCalibration(renderer = null) {
     shadowCamera.position.set(-8, 7, -8); shadowCamera.lookAt(0, 0, 0);
     sunlight = createLighting({ renderer, scene: shadowScene, camera: shadowCamera, quality: 'performance' });
     await sunlight.ready;
+    const rawSky = pmrem.fromCubemap(sunlight.captureBackground.texture); resources.push(rawSky);
+    const direction = sunlight.sun.getWorldPosition(new Vector3());
+    if (sunlight.sun.target) direction.sub(sunlight.sun.target.getWorldPosition(new Vector3()));
+    direction.normalize();
+    const skyUp = await drawNode(createIrradianceNode({ skyTexture: rawSky.texture, normal: vec3(0, 1, 0) }));
+    const ground = await drawNode(createGroundRadianceNode({ skyTexture: rawSky.texture,
+      sunDirection: direction, sunColor: sunlight.sun.color, sunIntensity: sunlight.sun.intensity }));
+    const direct = sunlight.sun.color.clone().multiplyScalar(sunlight.sun.intensity * direction.y).toArray();
+    const expectedGround = skyUp.map((value, index) => (value + direct[index]) * GROUND_ALBEDO.toArray()[index] / Math.PI);
+    check('ground bounce matches Lambertian sky plus sun energy', relativeError(ground, expectedGround) < 0.015,
+      { actual: ground, expected: expectedGround, albedo: GROUND_ALBEDO.toArray() });
+    const hemisphere = {};
+    for (const [name, y] of [['up', 1], ['down', -1]]) {
+      hemisphere[name] = {
+        raw: await drawNode(createIrradianceNode({ skyTexture: rawSky.texture, normal: vec3(0, y, 0) })),
+        grounded: await drawNode(createIrradianceNode({ skyTexture: sunlight.environment.texture, normal: vec3(0, y, 0) })),
+      };
+    }
+    check('IBL lower hemisphere is a nonzero ground bounce, below upper sky energy',
+      luma(hemisphere.down.grounded) > 0 && luma(hemisphere.down.grounded) < luma(hemisphere.up.grounded)
+        && luma(hemisphere.down.grounded) < luma(hemisphere.down.raw) * 0.5,
+      { hemisphere });
+
+    const grayMaterial = new MeshStandardNodeMaterial({ color: new Color(.18, .18, .18), roughness: 1 });
+    const grayGeometry = new PlaneGeometry(2, 2), grayMesh = new Mesh(grayGeometry, grayMaterial);
+    const grayScene = new Scene(); grayScene.environmentIntensity = shadowScene.environmentIntensity;
+    grayScene.add(grayMesh); applyCampusLighting(grayMaterial, sunlight);
+    const graySun = sunlight.sun.clone(); graySun.castShadow = false;
+    resources.push(grayMaterial, grayGeometry, graySun);
+    const grayCamera = new OrthographicCamera(-1, 1, 1, -1, .1, 10), gray = {};
+    for (const [name, y] of [['up', 1], ['down', -1]]) {
+      const normal = new Vector3(0, y, 0);
+      grayMesh.quaternion.setFromUnitVectors(new Vector3(0, 0, 1), normal);
+      grayCamera.position.copy(normal).multiplyScalar(3); grayCamera.up.set(0, 0, -1); grayCamera.lookAt(0, 0, 0);
+      gray[name] = {};
+      for (const [mode, hasSun, hasEnvironment] of [['direct', true, false], ['indirect', false, true], ['combined', true, true]]) {
+        if (hasSun) {
+          grayScene.add(graySun);
+          if (graySun.target) grayScene.add(graySun.target);
+        } else {
+          graySun.removeFromParent(); graySun.target?.removeFromParent();
+        }
+        // The lighting binding requires an environment; zero intensity isolates the direct term.
+        grayScene.environment = sunlight.environment.texture;
+        grayScene.environmentIntensity = hasEnvironment ? shadowScene.environmentIntensity : 0;
+        renderer.setRenderTarget(target); renderer.render(grayScene, grayCamera);
+        gray[name][mode] = (await read()).pixel;
+      }
+    }
+    check('18 percent gray cards preserve direct plus indirect superposition', Object.values(gray).every(sample =>
+      relativeError(sample.combined, sample.direct.map((value, index) => value + sample.indirect[index])) < .015), { gray });
+    check('18 percent upward gray card receives more energy than downward card',
+      luma(gray.up.combined) > luma(gray.down.combined) * 1.5 && luma(gray.down.indirect) > 0,
+      { up: gray.up.combined, down: gray.down.combined });
     const floorMaterial = new MeshStandardNodeMaterial({ color: 0x999999, roughness: 1 });
     const floorGeometry = new PlaneGeometry(14, 14), boxGeometry = new BoxGeometry(2, 2, 2);
     const floor = new Mesh(floorGeometry, floorMaterial); floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true;

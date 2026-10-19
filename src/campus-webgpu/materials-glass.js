@@ -1,13 +1,20 @@
 import { MeshPhysicalNodeMaterial, Vector3 } from 'three/webgpu';
 import { copyMaterialProperties } from './materials-copy.js';
 import {
-  Fn, If, attribute, float, max, min, mix, normalViewGeometry, pmremTexture,
-  positionView, positionViewDirection, positionWorld, smoothstep, uniform, uv, vec2, vec3, vec4,
+  Fn, If, attribute, float, getGeometryRoughness, materialRoughness, max, min, mix, normalViewGeometry, pmremTexture,
+  positionView, positionViewDirection, positionWorld, roughness, smoothstep, uniform, uv, vec2, vec3, vec4,
 } from 'three/tsl';
 
 const transmission = cosine => float(.957).mul(float(1).sub(float(1).sub(cosine.clamp()).pow(5)));
 
 class CampusGlassMaterial extends MeshPhysicalNodeMaterial {
+  setupVariants(builder) {
+    super.setupVariants(builder);
+    // These 512px probes support the legacy .038 floor; retain geometric filtering.
+    const surface = this.roughnessNode ? float(this.roughnessNode) : materialRoughness;
+    roughness.assign(surface.max(.038).add(getGeometryRoughness()).min(1));
+  }
+
   setupLightingModel() {
     const model = super.setupLightingModel(), room = this.campusRoomNode;
     const direct = model.direct.bind(model), indirect = model.indirect.bind(model);
@@ -92,7 +99,8 @@ export function createGlassMaterial(source, context = false) {
     return vision.select(result, vec4(0));
   })();
   material.campusRoomNode = room;
-  material.emissiveNode = room.rgb.mul(room.a.oneMinus()).mul(transmission(incident.dot(normalViewGeometry).abs())).mul(vec3(.90, .97, .94)).mul(.12);
+  // Art-directed room bounce: keep normal-facing rooms legible without brightening blinds or spandrels.
+  material.emissiveNode = room.rgb.mul(room.a.oneMinus()).mul(transmission(incident.dot(normalViewGeometry).abs())).mul(vec3(.90, .97, .94)).mul(.18);
   material.roughnessNode = float(source.roughness).mul(detail.x.mul(.2).add(.9));
   const bow = uv().mul(Math.PI * 2).add(detail.xy.mul(4)).sin().mul(vec2(.0012, .0018)).add(detail.xy.sub(.5).mul(.0008));
   const visible = smoothstep(.15, .45, max(uv().x.fwidth(), uv().y.fwidth())).oneMinus();

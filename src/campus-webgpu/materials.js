@@ -14,7 +14,7 @@ function sourceUniforms(source) {
   return capture.uniforms;
 }
 
-export function createCampusMaterials({ lighting = null } = {}) {
+export function createCampusMaterials({ lighting = null, contactOcclusion = null } = {}) {
   const cache = new WeakMap(), owned = new Set(), captured = new WeakMap(), glass = [], records = [];
   const textures = new Set();
   const stats = { converted: 0, reused: 0, categories: {}, extractedTextureUniforms: 0, pending: [] };
@@ -71,6 +71,7 @@ export function createCampusMaterials({ lighting = null } = {}) {
     if (category === 'context-recess' || category === 'context-glass') {
       applyRecessVisibility(material, object);
     }
+    if (contactOcclusion && ['mineral', 'ground', 'turf'].includes(category)) material.aoNode = contactOcclusion;
     if (category === 'glass') {
       for (const attribute of ['paneDetail', 'paneSize', 'paneRoom', 'paneType']) {
         if (object && !object.geometry.hasAttribute(attribute)) throw new Error(`Glass mesh is missing ${attribute}`);

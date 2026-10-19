@@ -5,7 +5,7 @@ import {
 import {
   array, cameraPosition, cubeTexture, densityFogFactor, float, Fn, fog, getShIrradianceAt,
   If, isolate, materialEnvIntensity, max, min, mix, normalWorld, pmremTexture,
-  positionWorld, texture3D, uniform, vec3,
+  positionWorld, texture3D, uniform, vec3, vec4,
 } from 'three/tsl';
 import { SkyMesh } from 'three/addons/objects/SkyMesh.js';
 import { SunLight } from 'three/addons/lights/SunLight.js';
@@ -15,6 +15,8 @@ import { createStaticShadows } from './static-shadows.js';
 
 const SUN_DIRECTION = new Vector3(0.35, 0.72, 0.66843).normalize();
 const SHADOW_SIZES = { performance: 1024, balanced: 2048, quality: 4096 };
+// Same representative soil/grass reflectance as the probe capture ground.
+export const GROUND_ALBEDO = new Color('#54643b');
 const bindings = new WeakMap();
 
 function validateProbe(bounds, resolution, blendDistance) {
@@ -81,6 +83,13 @@ export function createIrradianceNode({ skyTexture, probes = [], position = posit
   return blendProbeGroup(base, ready.filter(probe => probe.kind === 'local'), position, normal);
 }
 
+export function createGroundRadianceNode({ skyTexture, sunDirection, sunColor, sunIntensity, groundAlbedo = GROUND_ALBEDO }) {
+  const sky = createIrradianceNode({ skyTexture, normal: vec3(0, 1, 0) });
+  const direct = sunColor.clone().multiplyScalar(sunIntensity * Math.max(0, sunDirection.y));
+  // Reference capture uses unit sky intensity; the existing scene intensity applies once at shading.
+  return sky.add(uniform(direct)).mul(uniform(groundAlbedo.clone())).div(Math.PI);
+}
+
 class CampusEnvironmentNode extends EnvironmentNode {
   static get type() { return 'CampusEnvironmentNode'; }
   constructor(environmentNode, options) {
@@ -126,7 +135,7 @@ export function applyCampusLighting(material, lighting, { probes = null } = {}) 
   return material;
 }
 
-export function createLighting({ renderer, scene, camera, quality = 'balanced', cacheShadows = false }) {
+export function createLighting({ renderer, scene, camera, quality = 'balanced', cacheShadows = false, groundBounce = true }) {
   if (!renderer?.isWebGPURenderer || !scene?.isScene || !camera?.isCamera) {
     throw new TypeError('createLighting requires a WebGPURenderer, Scene and Camera');
   }
@@ -147,7 +156,7 @@ export function createLighting({ renderer, scene, camera, quality = 'balanced', 
   sun.shadow.autoUpdate = true;
   const staticShadows = cacheShadows ? createStaticShadows(sun,scene,SUN_DIRECTION) : null;
   const materials = new Set(), probes = [], bakeScenes = new Set();
-  const stats = { ready: false, skyMs: 0, probeBakeMs: 0, probes: 0, cubeViews: 0, baking: false, quality, shadowMode:cacheShadows?'cached':'cascades', shadowCache:staticShadows?.stats };
+  const stats = { ready: false, skyMs: 0, probeBakeMs: 0, probes: 0, cubeViews: 0, baking: false, quality, groundBounce, groundAlbedo: GROUND_ALBEDO.toArray(), shadowMode:cacheShadows?'cached':'cascades', shadowCache:staticShadows?.stats };
   let disposed = false, environment = null, background = null, captureBackground = null, haze = null;
 
   const lighting = {
@@ -285,6 +294,24 @@ export function createLighting({ renderer, scene, camera, quality = 'balanced', 
       sky.showSunDisc.value = 0;
       new CubeCamera(0.1, 20000, captureBackground).update(renderer, capture);
       environment = pmrem.fromCubemap(captureBackground.texture);
+      if (groundBounce) {
+        const skyEnvironment = environment;
+        const groundedCube = new CubeRenderTarget(128, { type: HalfFloatType });
+        try {
+          const ground = createGroundRadianceNode({ skyTexture: skyEnvironment.texture,
+            sunDirection: SUN_DIRECTION, sunColor: sun.color, sunIntensity: sun.intensity });
+          const direction = positionWorld.sub(cameraPosition).normalize();
+          // SkyMesh extends its bright horizon below ground. Replace that hemisphere for IBL only.
+          // shortcut: one grass/soil bounce represents distant ground; local probes retain actual occlusion.
+          sky.material.colorNode = vec4(mix(ground, sky.material.colorNode.rgb, direction.y.smoothstep(-0.01, 0.01)), 1);
+          sky.material.needsUpdate = true;
+          new CubeCamera(0.1, 20000, groundedCube).update(renderer, capture);
+          environment = pmrem.fromCubemap(groundedCube.texture);
+        } finally {
+          groundedCube.dispose();
+          if (environment !== skyEnvironment) skyEnvironment.dispose();
+        }
+      }
       scene.background = background.texture;
       scene.environment = environment.texture;
       scene.backgroundIntensity = 1;

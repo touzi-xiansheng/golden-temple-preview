@@ -4,8 +4,9 @@ import { buildLandscapeSteps } from '../campus/landscape.js';
 import { buildCampusProps } from '../campus/props.js';
 import { runBuild } from '../campus/loading.js';
 import { createCampusMaterials } from './materials.js';
+import { createContactOcclusion } from './contact-occlusion.js';
 
-export async function createCampusScene({ stage, yieldControl }) {
+export async function createCampusScene({ stage, yieldControl, contacts = true }) {
   const scene = new Scene(); scene.name = 'Verdant WebGPU campus';
   const timings = {}, started = performance.now();
   stage('正在生成七栋建筑与立面构造…', 12); await yieldControl();
@@ -26,7 +27,8 @@ export async function createCampusScene({ stage, yieldControl }) {
     object.customDepthMaterial?.dispose(); object.customDistanceMaterial?.dispose();
     object.customDepthMaterial = undefined; object.customDistanceMaterial = undefined;
   });
-  const materials = createCampusMaterials(); materials.apply(scene);
+  const contactOcclusion = contacts ? createContactOcclusion(architecture, landscape.userData.treePositions) : null;
+  const materials = createCampusMaterials({ contactOcclusion: contactOcclusion?.node }); materials.apply(scene);
   timings.materialsMs = performance.now() - tick;
   let meshes = 0, triangles = 0, instances = 0;
   scene.traverse(object => {
@@ -34,7 +36,7 @@ export async function createCampusScene({ stage, yieldControl }) {
     meshes++; const count = object.isInstancedMesh ? object.count : 1; instances += count;
     triangles += (object.geometry.index?.count || object.geometry.attributes.position.count) / 3 * count;
   });
-  const stats = { buildings: architecture.userData.buildingCount, meshes, triangles, instances, landscape: landscape.userData.stats, timings };
+  const stats = { buildings: architecture.userData.buildingCount, meshes, triangles, instances, landscape: landscape.userData.stats, contacts: contactOcclusion?.stats, timings };
   let disposed = false;
   return { scene, architecture, landscape, props, materials, stats,
     dispose() {
@@ -46,7 +48,7 @@ export async function createCampusScene({ stage, yieldControl }) {
       });
       for (const material of sourceMaterials) { for (const value of Object.values(material)) if (value?.isTexture) textures.add(value); material.dispose(); }
       for (const geometry of geometries) geometry.dispose();
-      materials.dispose(); for (const texture of textures) texture.dispose(); scene.clear();
+      materials.dispose(); contactOcclusion?.dispose(); for (const texture of textures) texture.dispose(); scene.clear();
     },
   };
 }

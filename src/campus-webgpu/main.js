@@ -75,10 +75,10 @@ async function start() {
     time=Math.max(0,Math.min(DURATION-.001,number)); if(free)setFree(false); applyTour(); view?.resetHistory();
   }
   applyTour(); resize();
-  world = await createCampusScene({stage,yieldControl});
+  world = await createCampusScene({stage,yieldControl,contacts:query.get('contacts')!=='0'});
   stage('正在建立日光、阴影与程序天空…',60); await yieldControl();
   let tick = performance.now();
-  lighting = createLighting({renderer,scene:world.scene,camera,quality,cacheShadows:query.get('shadows')!=='dynamic'}); await lighting.ready;
+  lighting = createLighting({renderer,scene:world.scene,camera,quality,cacheShadows:query.get('shadows')!=='dynamic',groundBounce:query.get('groundBounce')!=='0'}); await lighting.ready;
   if(query.get('gi')!=='0')world.stats.indirect=await bakeCampusProbes(lighting,world.landscape,{onProgress:fraction=>stage('正在计算庭院与廊下的间接光…',60+fraction*14)});
   const materials = new Set(); world.scene.traverse(object=>{ for(const material of Array.isArray(object.material)?object.material:[object.material])if(material)materials.add(material); });
   world.materials.bindLighting(lighting);

@@ -69,6 +69,14 @@ retain contrast in foliage and pale stone. This assumes a fixed sun and static g
 moving objects would require invalidating their lighting. Close mirror reflections
 remain an approximation.
 
+The current realism pass corrects sky light arriving from below ground, scales leaf-back
+lighting with the environment, and restores the glass roughness range used by the
+512-pixel probes. A generated 4 MiB ground-contact mask adds subtle depth at tree roots
+and column feet; apparent interiors receive a small artistic fill. These changes add
+no scene geometry or per-frame capture pass. The [implementation evidence](docs/WEBGPU_IMPLEMENTATION.md)
+records GPU calibration, matched screenshots and paired motion checks; it does not
+claim photographic realism or a numerical probability of visual quality.
+
 The tested production build generated seven buildings, baked 907 irradiance probes
 and captured four reflection probes in about 15 seconds before the first complete
 frame on the tested Mac. This is not a controlled cold-start benchmark. Continuous
@@ -86,6 +94,11 @@ a secure WebGPU context. `?gi=0&reflections=0` is available for diagnostic compa
 path. Run `npm run check:webgpu-motion` against a running server to check all six
 moving tour sections. `WEBGPU_URL`, `PROFILE_LABEL` and `FRAME_BUDGET_MS` select
 the entry, report label and reference-device frame-time budget (25ms by default).
+Set `BASELINE_REPORT=out/webgpu/motion-<label>.json` for a paired comparison made with
+the same version of the tool. It also records natural camera cuts and free-camera
+transitions separately. `?groundBounce=0` and `?contacts=0` isolate the two new lighting
+approximations. On the development server, `node tools/webgpu-check.mjs --lab --lighting --materials`
+runs the standalone real-GPU lighting and production-material checks.
 
 ## Quick start
 
