@@ -4,13 +4,14 @@
 - [Campus (WebGL)](https://touzi-xiansheng.github.io/golden-temple-preview/campus.html)
 - [Campus (WebGPU experimental preview)](https://touzi-xiansheng.github.io/golden-temple-preview/campus-webgpu.html)
 
-This repository contains built static assets from the local development project. GitHub Pages serves the `main` branch. Updates require a fresh build and push of the output; local source edits are not automatically published.
+GitHub Pages serves built static assets from the `main` branch. The complete source is on [source/webgpu-preview](https://github.com/touzi-xiansheng/golden-temple-preview/tree/source/webgpu-preview). This snapshot was built from [8cfc1c0](https://github.com/touzi-xiansheng/golden-temple-preview/commit/8cfc1c0e2bb29e5e9771236c37c455af818bb4ea) with `npm run build -- --base=/golden-temple-preview/`.
 
-The complete development source is on the [source/webgpu-preview branch](https://github.com/touzi-xiansheng/golden-temple-preview/tree/source/webgpu-preview).
-This snapshot was built from source commit [9fe99d6](https://github.com/touzi-xiansheng/golden-temple-preview/commit/9fe99d6c8375fc637da9d36deb52c69ad6c4b918) with `npm run build -- --base=/golden-temple-preview/`.
+The WebGPU preview now caches world-space shadows for the static campus and uses four 512-pixel, parallax-corrected reflection probes. It preserves all seven buildings, vegetation and render resolution. Reduced environment fill improves contrast. Dynamic shadows and planar reflections remain available for diagnosis with `?shadows=dynamic&reflections=planar`.
 
-The WebGPU page is an experimental preview requiring a compatible browser and GPU. Its production build was checked on Chrome/macOS with real WebGPU at 1920×1080: seven campus buildings, 907 irradiance probes, four reflection probes and all six tour screenshots completed without recorded page/GPU errors. The first complete frame took about 45 seconds on that run; other devices may take longer. The source tests passed 72 campus and 18 WebGPU cases; one separate real-GPU test was skipped in the Node suite.
+On the reference Chrome/macOS device at 1920×1080, continuous playback near glass improved from a median application frame interval of 35.9 ms to 16.5 ms. All six sampled tour segments passed a 25 ms p95 interval check. These are application frame intervals, not GPU timings or a guarantee for other devices. [Before/after raw reports and method](https://github.com/touzi-xiansheng/golden-temple-preview/blob/source/webgpu-preview/docs/WEBGPU_IMPLEMENTATION.md) are in the source branch.
 
-Visual quality is still too pale, performance needs work, and full motion, lifecycle and cross-device acceptance remain incomplete. GPU visibility experiments are included in the source but not enabled in the campus. This is not a claim that WebGPU already looks or runs better than the WebGL version.
+The final build also passed six-view screenshots, three quality settings and free-camera checks without recorded page/GPU errors. Node WebGPU tests: 21 passed, one optional real-GPU calibration skipped. The first complete frame took about 15 seconds in that local run; cold-start conditions were not controlled. The browser and GPU must support WebGPU.
+
+Reflection probes approximate mirrors. Cached shadows assume a static sun and geometry. Cross-device, long-duration and full visual acceptance remain incomplete; GPU visibility experiments are not enabled in the campus.
 
 Original Golden Temple project: [Leonxlnx/golden-temple](https://github.com/Leonxlnx/golden-temple), Copyright (c) 2026 Leon Lin, MIT license. See LICENSE and THIRD_PARTY_LICENSES.txt.
