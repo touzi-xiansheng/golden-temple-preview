@@ -17,7 +17,8 @@ export function createStaticShadows(sun, scene, direction) {
     currentShot=shot;
     let [x,y,z,radius]=shotBounds[shot] || [0,12,0,170];
     let distance=400,near=100,far=700;
-    if(shot<0||shot===0||shot===5) {
+    const wideCoverage=shot<0||shot===0||shot===5;
+    if(wideCoverage) {
       [x,y,z]=overview.getCenter(new Vector3()).toArray();
       const rotation=new Matrix4().lookAt(direction,new Vector3(),sun.up).invert();
       const size=overview.clone().applyMatrix4(rotation).getSize(new Vector3());
@@ -29,7 +30,9 @@ export function createStaticShadows(sun, scene, direction) {
     sun.position.copy(sun.target.position).addScaledVector(direction,distance);sun.updateMatrixWorld();
     Object.assign(sun.shadow.camera,{left:-radius,right:radius,top:radius,bottom:-radius,near,far});
     sun.shadow.bias=-.002/(far-near);
-    sun.shadow.normalBias=Math.min(.008,(radius*2/sun.shadow.mapSize.x)*.2);
+    const texelMetres=radius*2/sun.shadow.mapSize.x;
+    // Wide aerial maps need a larger receiver offset to avoid self-shadow bands.
+    sun.shadow.normalBias=wideCoverage?Math.min(.08,texelMetres*.5):Math.min(.008,texelMetres*.2);
     sun.shadow.camera.updateProjectionMatrix();sun.shadow.needsUpdate=true;stats.invalidations++;
   }
   sun.shadow.autoUpdate=false;

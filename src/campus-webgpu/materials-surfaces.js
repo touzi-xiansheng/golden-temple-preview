@@ -1,9 +1,14 @@
 import { InstancedBufferAttribute } from 'three/webgpu';
 import {
-  Fn, attribute, cameraViewMatrix, diffuseColor, float, fract, max, min, mix,
-  normalMap, normalView, normalWorld, positionGeometry, positionView, positionWorld,
-  materialColor, materialEnvIntensity, materialRoughness, smoothstep, texture, uv, vec2, vec3, vec4,
+  Fn, attribute, cameraViewMatrix, diffuseColor, float, fract, instanceColor, max, min, mix,
+  normalMap, normalView, normalViewGeometry, normalWorld, positionGeometry, positionView, positionViewDirection, positionWorld,
+  materialColor, materialRoughness, smoothstep, texture, uniform, uv, vec2, vec3, vec4, vertexColor,
 } from 'three/tsl';
+import { campusDiffuseIntensity } from './lighting.js';
+import { foliageColorContrast } from './materials-foliage-color.js';
+
+export const leafTransmissionStrength = uniform(.18);
+const foliageSetups = new WeakMap();
 
 const hash = Fn(([p]) => p.dot(vec3(127.1, 311.7, 74.7)).sin().mul(43758.5453).fract());
 export const noise = Fn(([p]) => {
@@ -112,20 +117,53 @@ export function foliageSurface(material, source, object, lighting) {
   material.thicknessAttenuationNode = float(volume ? .08 : .18);
   material.thicknessPowerNode = float(6);
   material.thicknessScaleNode = float(2);
-  if (lighting && !source.map && !volume) {
-    const back = Fn(() => lighting.sampleIrradiance({normal: normalWorld.negate(), position: positionWorld}))();
-    const setup = material.setupLightingModel.bind(material);
-    material.setupLightingModel = (...args) => {
-      const model = setup(...args), indirect = model.indirect.bind(model);
+  const thinLeaf = !source.map && !volume;
+  if (!foliageSetups.has(material)) foliageSetups.set(material, {
+    model: material.setupLightingModel, diffuse: material.setupDiffuseColor,
+  });
+  const original = foliageSetups.get(material);
+  material.setupDiffuseColor = function(builder) {
+    original.diffuse.call(this, builder);
+    if (thinLeaf && builder.object.instanceColor && builder.geometry.hasAttribute('campusFoliageMean')) {
+      let albedo = this.colorNode ? vec4(this.colorNode) : materialColor;
+      if (this.vertexColors && builder.geometry.hasAttribute('color')) albedo = albedo.mul(vertexColor());
+      const palette = mix(attribute('campusFoliageMean', 'vec3'), instanceColor, foliageColorContrast.clamp());
+      diffuseColor.rgb.assign(albedo.rgb.mul(palette));
+    }
+  };
+  material.setupLightingModel = function(...args) {
+    const model = original.model.call(this, ...args);
+    if (thinLeaf) {
+      const scatter = this.useSSS, direct = model.direct.bind(model), leaf = this;
+      model.useSSS = false;
+      model.direct = (input, builder) => {
+        direct(input, builder);
+        if (scatter) {
+          const face = normalViewGeometry.dot(positionViewDirection).lessThan(0)
+            .select(normalViewGeometry.negate(), normalViewGeometry);
+          const intercepted = face.negate().dot(input.lightDirection).clamp();
+          const half = input.lightDirection.add(normalView.mul(leaf.thicknessDistortionNode)).normalize();
+          const forward = positionViewDirection.dot(half.negate()).clamp().pow(leaf.thicknessPowerNode).mul(leaf.thicknessScaleNode);
+          // Thin-sheet approximation: only light entering the opposite face can
+          // transmit; its intercepted energy vanishes at grazing incidence.
+          input.reflectedLight.directDiffuse.addAssign(leaf.thicknessColorNode
+            .mul(forward.add(leaf.thicknessAmbientNode)).mul(leafTransmissionStrength)
+            .mul(intercepted).mul(input.lightColor));
+        }
+      };
+    }
+    if (lighting && thinLeaf) {
+      const back = Fn(() => lighting.sampleIrradiance({normal: normalWorld.negate(), position: positionWorld}))();
+      const indirect = model.indirect.bind(model);
       model.indirect = builder => {
         indirect(builder);
         // Use the same incident-light scale as the front face, including zero fill.
-        builder.context.reflectedLight.indirectDiffuse.addAssign(back.mul(materialEnvIntensity)
+        builder.context.reflectedLight.indirectDiffuse.addAssign(back.mul(campusDiffuseIntensity)
           .mul(diffuseColor.rgb).mul(vec3(1.05, 1.12, .7)).mul(ao).mul(.25 / Math.PI));
       };
-      return model;
-    };
-  }
+    }
+    return model;
+  };
 }
 
 export function groundSurface(material, source, uniforms) {

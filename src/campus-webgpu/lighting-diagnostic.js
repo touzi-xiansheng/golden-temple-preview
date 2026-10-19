@@ -4,7 +4,7 @@ import {
   QuadMesh, RenderTarget, Scene, Vector3,
 } from 'three/webgpu';
 import { vec3, vec4 } from 'three/tsl';
-import { createIrradianceNode } from './lighting.js';
+import { createIrradianceNode, DAYLIGHT } from './lighting.js';
 
 const luma = rgb => rgb[0] * 0.2126 + rgb[1] * 0.7152 + rgb[2] * 0.0722;
 
@@ -38,7 +38,7 @@ export async function diagnoseCampusLighting(campus = window.__campus) {
     groundBounce: lighting.stats.groundBounce,
     groundAlbedo: lighting.stats.groundAlbedo,
     hasFogNode: !!campus.scene.fogNode,
-    fogFactor: Object.fromEntries([10, 30, 100, 300, 1000].map(distance => [distance, 1 - Math.exp(-Math.pow(0.00062 * distance, 2))])),
+    fogFactor: Object.fromEntries([10, 30, 100, 300, 1000].map(distance => [distance, 1 - Math.exp(-Math.pow(DAYLIGHT.fogDensity * Math.max(0, distance - DAYLIGHT.fogStart), 2))])),
     samples: [],
   };
 

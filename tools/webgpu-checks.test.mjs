@@ -38,6 +38,12 @@ test('relative gate uses max(2ms,10%) and rejects incomparable baseline settings
   const temporal=report();temporal.cases[0].aa='traa';
   assert.throws(()=>compareMotionBaseline(temporal,report()),/aa differs/);
   assert.throws(()=>compareMotionBaseline(report(),{...report(),schemaVersion:1}),/Re-run/);
+  const portal=report();portal.cases[0].reflectionMode='portal';
+  assert.throws(()=>compareMotionBaseline(portal,report()),/reflectionMode differs/);
+  assert.equal(compareMotionBaseline(portal,report(),{reflectionUpgrade:true})[0].passed,true);
+  portal.cases[0].aa='traa';
+  assert.throws(()=>compareMotionBaseline(portal,report(),{reflectionUpgrade:true}),/aa differs/);
+  assert.throws(()=>compareMotionBaseline(report(),report(),{reflectionUpgrade:true}),/portal reflection upgrade/);
 });
 
 test('snapshot waits for loading opacity, rendered frames, stable pose and GPU completion',async()=>{

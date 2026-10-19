@@ -5,6 +5,7 @@ import { createGlassMaterial, glassEnvironment } from './materials-glass.js';
 import { copyMaterialProperties } from './materials-copy.js';
 import { applyRecessVisibility } from './materials-context.js';
 import { MINERAL_SURFACES, addMaterialScale, mineralSurface, barkSurface, foliageSurface, groundSurface } from './materials-surfaces.js';
+import { prepareFoliageColors } from './materials-foliage-color.js';
 
 // Legacy generators keep some textures in closures. Read their uniform values once;
 // none of the generated GLSL or hooks is attached to the new node materials.
@@ -42,6 +43,7 @@ export function createCampusMaterials({ lighting = null, contactOcclusion = null
       throw new Error(`Unmigrated material shader: ${name || source.type} (${key})`);
     }
     if (category === 'bark' || (category === 'mineral' && name === 'Thermally treated ash')) addMaterialScale(object, category === 'bark');
+    if (category === 'foliage') prepareFoliageColors(object, source);
     const signature = `${category}:${object?.isInstancedMesh ? 'instances' : 'mesh'}:${Object.keys(object?.geometry?.attributes || {}).sort().join(',')}`;
     let variants = cache.get(source);
     if (!variants) { variants = new Map(); cache.set(source, variants); }

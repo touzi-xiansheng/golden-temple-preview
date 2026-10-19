@@ -1,6 +1,7 @@
-import { Box3, Vector2, Vector3, Vector4, Matrix4, Plane, Frustum, PerspectiveCamera, RenderTarget, CubeRenderTarget, CubeCamera, PMREMGenerator, HalfFloatType, DataTexture, RGBAFormat, FloatType, NoToneMapping } from 'three/webgpu';
-import { texture, uniform, positionWorld, vec4, mix, float } from 'three/tsl';
+import { Vector2, Vector3, Matrix4, Plane, PerspectiveCamera, RenderTarget, CubeRenderTarget, CubeCamera, PMREMGenerator, HalfFloatType, DataTexture, RGBAFormat, FloatType, NoToneMapping } from 'three/webgpu';
+import { texture, uniform, positionWorld, vec4, float } from 'three/tsl';
 import { BUILDINGS } from '../campus/layout.js';
+import { configureReflectionCamera, projectReflectionPortal } from './reflection-camera.js';
 
 // Each physical facade plane shares one capture, regardless of pane batching.
 export function glassPlanes(glass) {
@@ -33,26 +34,31 @@ export function glassPlanes(glass) {
   return [...planes.values()];
 }
 
-export function createReflections({renderer,scene,materials,lighting,planar=true}) {
+export function createReflections({renderer,scene,materials,lighting,planar=true,mode='portal'}) {
+  if (!['portal','reference'].includes(mode)) throw new RangeError('Unknown reflection mode');
   const planes=glassPlanes(materials.glass), size=new Vector2();
   const empty=new DataTexture(new Float32Array([0,0,0,1]),1,1,RGBAFormat,FloatType);empty.needsUpdate=true;
-  const slots=Array.from({length:2},()=>{
+  const slot=(()=>{
     const target=new RenderTarget(1,1,{type:HalfFloatType,samples:4});
-    const matrix=uniform(new Matrix4()), min=uniform(new Vector3()), max=uniform(new Vector3()), enabled=uniform(0);
+    const matrix=uniform(new Matrix4()), min=uniform(new Vector3()), max=uniform(new Vector3()), enabled=uniform(0),uvMax=uniform(new Vector2(1,1));
     const projected=matrix.mul(vec4(positionWorld,1));
     const coordinates=projected.xy.div(projected.w.max(.00001));
     const sample=texture(empty,coordinates);
     const inside=positionWorld.greaterThanEqual(min).all().and(positionWorld.lessThanEqual(max).all())
-      .and(coordinates.greaterThanEqual(0).all()).and(coordinates.lessThanEqual(1).all()).and(projected.w.greaterThan(0));
-    return {target,matrix,min,max,enabled,sample,weight:float(inside).mul(enabled),camera:new PerspectiveCamera(),plane:null};
-  });
-  const weight=slots[0].weight.add(slots[1].weight);
-  const radiance=slots[0].sample.rgb.mul(slots[0].weight).add(slots[1].sample.rgb.mul(slots[1].weight)).div(weight.max(.00001));
-  if(planar)for(const {material} of materials.glass)materials.setGlassReflection(material,{node:radiance,weight:weight.clamp()});
-  const captures=[], stats={planes:planes.length,active:[],updates:0,probeCount:0,enabled:planar,mode:planar?'planar':'parallax-probes'};
+      .and(coordinates.greaterThanEqual(0).all()).and(coordinates.lessThanEqual(uvMax).all()).and(projected.w.greaterThan(0));
+    return {target,matrix,min,max,enabled,uvMax,sample,weight:float(inside).mul(enabled),camera:new PerspectiveCamera(),plane:null};
+  })();
+  if(planar)for(const {material} of materials.glass)materials.setGlassReflection(material,{node:slot.sample.rgb,weight:slot.weight.clamp()});
+  const captures=[], stats={planes:planes.length,active:[],updates:0,probeCount:0,enabled:planar,mode:planar?mode:'parallax-probes',
+    capturesThisUpdate:0,cacheHits:0,captureSize:[0,0],allocatedSize:[0,0],selectedPlane:null,selectedAreaPixels:0,
+    updateCpuMs:0,captureCpuMs:0,captureDrawCalls:0,captureTriangles:0,reason:'initial'};
   let disposed=false,scale=.5,dirty=true;
-  const lastView=new Matrix4(),lastProjection=new Matrix4(),frustum=new Frustum(),viewProjection=new Matrix4();
-  const bias=new Matrix4().set(.5,0,0,.5,0,-.5,0,.5,0,0,1,0,0,0,0,1);
+  const lastView=new Matrix4(),lastProjection=new Matrix4(),lastSize=new Vector2();
+
+  function disable(reason) {
+    slot.enabled.value=0;slot.sample.value=empty;
+    stats.active=[];stats.selectedPlane=null;stats.selectedAreaPixels=0;stats.captureSize=[0,0];stats.reason=reason;
+  }
 
   async function captureProbes({yieldControl=()=>Promise.resolve(),onProgress=()=>{}}={}) {
     const cube=new CubeRenderTarget(512,{type:HalfFloatType}), camera=new CubeCamera(.2,2500,cube), pmrem=new PMREMGenerator(renderer);
@@ -76,50 +82,68 @@ export function createReflections({renderer,scene,materials,lighting,planar=true
 
   function update(camera,{force=false}={}) {
     if(disposed)return;
-    if(!stats.enabled || scale<=0){slots.forEach(slot=>slot.enabled.value=0);stats.active=[];return;}
-    camera.updateWorldMatrix(true,false);renderer.getDrawingBufferSize(size);
-    if(!force&&!dirty&&camera.matrixWorld.equals(lastView)&&camera.projectionMatrix.equals(lastProjection))return;
-    viewProjection.multiplyMatrices(camera.projectionMatrix,camera.matrixWorldInverse);
-    frustum.setFromProjectionMatrix(viewProjection,camera.coordinateSystem);
-    const eye=new Vector3().setFromMatrixPosition(camera.matrixWorld);
-    const candidates=planes.map(plane=>({plane,distance:plane.bounds.distanceToPoint(eye)}))
-      .filter(({plane,distance})=>distance<18&&plane.plane.distanceToPoint(eye)>.03&&frustum.intersectsBox(plane.bounds))
-      .sort((a,b)=>a.distance-b.distance).slice(0,2);
-    const previousTarget=renderer.getRenderTarget(),mrt=renderer.getMRT(),tone=renderer.toneMapping,autoClear=renderer.autoClear,background=scene.background;
-    slots.forEach(slot=>{slot.enabled.value=0;slot.sample.value=empty;});
+    const start=performance.now();
+    stats.capturesThisUpdate=0;stats.captureCpuMs=0;stats.captureDrawCalls=0;stats.captureTriangles=0;
     try {
-      renderer.setMRT(null);renderer.toneMapping=NoToneMapping;renderer.autoClear=true;scene.background=lighting.captureBackground.texture;
-      for(let index=0;index<candidates.length;index++) {
-        const {plane,distance}=candidates[index],slot=slots[index],mirror=slot.camera;
-        const reflect=point=>point.addScaledVector(plane.normal,-2*plane.plane.distanceToPoint(point));
-        mirror.position.copy(reflect(eye.clone()));
-        const look=camera.getWorldDirection(new Vector3()).add(eye);reflect(look);
-        mirror.up.setFromMatrixColumn(camera.matrixWorld,1).reflect(plane.normal);mirror.lookAt(look);
-        mirror.coordinateSystem=camera.coordinateSystem;mirror.near=camera.near;mirror.far=camera.far;mirror.layers.mask=camera.layers.mask;
-        mirror.updateMatrixWorld();mirror.projectionMatrix.copy(camera.projectionMatrix);mirror.projectionMatrixInverse.copy(camera.projectionMatrix).invert();
-        slot.matrix.value.copy(bias).multiply(mirror.projectionMatrix).multiply(mirror.matrixWorldInverse);
-        const clip=plane.plane.clone().applyMatrix4(mirror.matrixWorldInverse);
-        const equation=new Vector4(...clip.normal.toArray(),clip.constant);
-        const opposite=new Vector4(Math.sign(equation.x),Math.sign(equation.y),1,1).applyMatrix4(mirror.projectionMatrixInverse);
-        const denominator=equation.dot(opposite);if(Math.abs(denominator)<1e-7)continue;
-        equation.multiplyScalar(1/denominator);
-        // WebGPU near clip is z=0, so replace row 3 directly (not GL's row3-row4).
-        const p=mirror.projectionMatrix.elements;p[2]=equation.x;p[6]=equation.y;p[10]=equation.z;p[14]=equation.w;
-        mirror.projectionMatrixInverse.copy(mirror.projectionMatrix).invert();
-        const factor=Math.min(scale,1536/Math.max(size.x,size.y));
-        slot.target.setSize(Math.max(1,Math.round(size.x*factor)),Math.max(1,Math.round(size.y*factor)));
-        renderer.setRenderTarget(slot.target);renderer.render(scene,mirror);
-        slot.min.value.copy(plane.bounds.min).addScalar(-.015);slot.max.value.copy(plane.bounds.max).addScalar(.015);
-        slot.plane=plane;slot.nextWeight=1-Math.max(0,Math.min(1,(distance-12)/6));stats.updates++;
+      if(!stats.enabled || scale<=0){disable('disabled');return;}
+      camera.updateWorldMatrix(true,false);renderer.getDrawingBufferSize(size);
+      if(!force&&!dirty&&size.equals(lastSize)&&camera.matrixWorld.equals(lastView)&&camera.projectionMatrix.equals(lastProjection)) {
+        stats.cacheHits++;stats.reason='stationary';return;
       }
-    } finally { renderer.setRenderTarget(previousTarget);renderer.setMRT(mrt);renderer.toneMapping=tone;renderer.autoClear=autoClear;scene.background=background; }
-    for(let index=0;index<slots.length;index++){const slot=slots[index];slot.sample.value=slot.target.texture;slot.enabled.value=index<candidates.length?slot.nextWeight||0:0;}
-    stats.active=candidates.map(({plane})=>plane.id);lastView.copy(camera.matrixWorld);lastProjection.copy(camera.projectionMatrix);dirty=false;
+      // Keep a failed forced recapture retryable even when the viewer is still.
+      dirty=true;
+      const eye=new Vector3().setFromMatrixPosition(camera.matrixWorld),candidates=[];
+      for(const plane of planes) {
+        const distance=plane.bounds.distanceToPoint(eye);
+        if(distance>=18 || plane.plane.distanceToPoint(eye)<=.03)continue;
+        const portal=projectReflectionPortal(plane,camera,size.x,size.y);
+        if(!portal || portal.areaPixels<64)continue;
+        const weight=1-Math.max(0,Math.min(1,(distance-12)/6));
+        candidates.push({plane,portal,weight,score:portal.areaPixels*weight});
+      }
+      candidates.sort((a,b)=>b.score-a.score);
+      let selected=candidates[0];
+      const previous=candidates.find(candidate=>candidate.plane===slot.plane);
+      if(previous && selected && previous.score>=selected.score/1.2)selected=previous;
+      const factor=Math.min(scale,1536/Math.max(size.x,size.y));
+      const width=Math.max(1,Math.round(size.x*factor)),height=Math.max(1,Math.round(size.y*factor));
+      const configured=selected && configureReflectionCamera(slot.camera,camera,selected.plane,selected.portal,{width,height,mode});
+      disable(selected?'invalid-projection':'no-visible-facade');
+      if(configured) {
+        const previousTarget=renderer.getRenderTarget(),mrt=renderer.getMRT(),tone=renderer.toneMapping,autoClear=renderer.autoClear,background=scene.background;
+        // Fixed allocation prevents moving portal edges from reallocating MSAA,
+        // depth and colour textures each frame. The real projection and viewport
+        // are cropped; scissoring a full camera alone would not cull any draws.
+        slot.target.setSize(width,height);
+        slot.target.viewport.set(0,0,configured.width,configured.height);
+        slot.target.scissor.set(0,0,configured.width,configured.height);slot.target.scissorTest=true;
+        const captureStart=performance.now(),beforeCalls=renderer.info?.render?.drawCalls||0,beforeTriangles=renderer.info?.render?.triangles||0;
+        try {
+          renderer.setMRT(null);renderer.toneMapping=NoToneMapping;renderer.autoClear=true;scene.background=lighting.captureBackground.texture;
+          renderer.setRenderTarget(slot.target);renderer.render(scene,slot.camera);
+          // Publish the texture, transform and domain atomically. A failed or
+          // degenerate capture leaves only the static probe fallback enabled.
+          slot.uvMax.value.set(configured.width/width,configured.height/height);
+          slot.matrix.value.makeScale(slot.uvMax.value.x,slot.uvMax.value.y,1).multiply(configured.textureMatrix);
+          slot.min.value.copy(selected.plane.bounds.min).addScalar(-.015);slot.max.value.copy(selected.plane.bounds.max).addScalar(.015);
+          slot.plane=selected.plane;slot.sample.value=slot.target.texture;slot.enabled.value=selected.weight;
+          stats.updates++;stats.capturesThisUpdate=1;stats.active=[selected.plane.id];stats.selectedPlane=selected.plane.id;
+          stats.selectedAreaPixels=selected.portal.areaPixels;stats.captureSize=[configured.width,configured.height];stats.allocatedSize=[width,height];stats.reason='captured';
+        } finally {
+          stats.captureCpuMs=performance.now()-captureStart;
+          stats.captureDrawCalls=(renderer.info?.render?.drawCalls||0)-beforeCalls;
+          stats.captureTriangles=(renderer.info?.render?.triangles||0)-beforeTriangles;
+          renderer.setRenderTarget(previousTarget);renderer.setMRT(mrt);renderer.toneMapping=tone;renderer.autoClear=autoClear;scene.background=background;
+        }
+      }
+      lastView.copy(camera.matrixWorld);lastProjection.copy(camera.projectionMatrix);lastSize.copy(size);dirty=false;
+    } finally {stats.updateCpuMs=performance.now()-start;}
   }
   return {stats,planes,captureProbes,update,
     setQuality(quality){scale=quality==='performance'?.35:quality==='quality'?1:.6;dirty=true;},
-    setEnabled(value){stats.enabled=planar&&!!value;dirty=true;if(!stats.enabled)slots.forEach(slot=>slot.enabled.value=0);},
+    setEnabled(value){stats.enabled=planar&&!!value;dirty=true;if(!stats.enabled)disable('disabled');},
+    setMode(value){if(!['portal','reference'].includes(value))throw new RangeError('Unknown reflection mode');mode=value;stats.mode=planar?mode:'parallax-probes';dirty=true;},
     invalidate(){dirty=true;},
-    dispose(){if(disposed)return;disposed=true;slots.forEach(slot=>slot.target.dispose());captures.forEach(target=>target.dispose());empty.dispose();},
+    dispose(){if(disposed)return;disposed=true;slot.target.dispose();captures.forEach(target=>target.dispose());empty.dispose();},
   };
 }

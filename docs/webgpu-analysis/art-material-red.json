@@ -1,0 +1,289 @@
+{
+  "backend": "WebGPU",
+  "tests": [
+    {
+      "name": "leaf-back radiance retains the calibrated transmission tint",
+      "passed": true,
+      "actual": [
+        0.013105779886245728,
+        0.033530279994010925,
+        0.010458983480930328
+      ],
+      "expected": [
+        0.013125000000000001,
+        0.033600000000000005,
+        0.010499999999999999
+      ],
+      "relativeError": 0.0039063351494924336
+    },
+    {
+      "name": "leaf-back energy scales with environment 1 to .45",
+      "passed": true,
+      "full": {
+        "strength": 1,
+        "actual": [
+          0.06812108308076859,
+          0.160398468375206,
+          0.0839376226067543
+        ],
+        "baseline": [
+          0.05501530319452286,
+          0.12686818838119507,
+          0.07347863912582397
+        ],
+        "added": [
+          0.013105779886245728,
+          0.033530279994010925,
+          0.010458983480930328
+        ]
+      },
+      "reduced": {
+        "strength": 0.45,
+        "actual": [
+          0.030654482543468475,
+          0.07217931002378464,
+          0.037771932780742645
+        ],
+        "baseline": [
+          0.024756886065006256,
+          0.05709068477153778,
+          0.03306538611650467
+        ],
+        "added": [
+          0.005897596478462219,
+          0.015088625252246857,
+          0.004706546664237976
+        ]
+      },
+      "expected": [
+        0.005897600948810577,
+        0.015088625997304917,
+        0.004706542566418648
+      ]
+    },
+    {
+      "name": "zero environment produces zero leaf-back energy and no residual glow",
+      "passed": true,
+      "actual": {
+        "strength": 0,
+        "actual": [
+          0,
+          0,
+          0
+        ],
+        "baseline": [
+          0,
+          0,
+          0
+        ],
+        "added": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "thin leaves transmit back light but add no front-lit scattering",
+      "passed": false,
+      "actual": {
+        "front": [
+          0.002268001437187195,
+          0.0036287978291511536,
+          0.0007559992372989655
+        ],
+        "back": [
+          0.07786799967288971,
+          0.12458880990743637,
+          0.02595599927008152
+        ],
+        "grazing": [
+          0.002268000040203333,
+          0.0036288003902882338,
+          0.0007559999939985573
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "thin-leaf direct transmission vanishes at grazing incidence and zero sunlight",
+      "passed": false,
+      "actual": {
+        "front": [
+          0.002268001437187195,
+          0.0036287978291511536,
+          0.0007559992372989655
+        ],
+        "back": [
+          0.07786799967288971,
+          0.12458880990743637,
+          0.02595599927008152
+        ],
+        "grazing": [
+          0.002268000040203333,
+          0.0036288003902882338,
+          0.0007559999939985573
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "an opaque blocker removes thin-leaf transmitted sunlight",
+      "passed": true,
+      "actual": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "ordinary room daylight follows the scene environment and goes dark at zero",
+      "passed": false,
+      "actual": [
+        {
+          "strength": 1,
+          "pixel": [
+            0.0024361375253647566,
+            0.0024943340104073286,
+            0.0020991384517401457
+          ]
+        },
+        {
+          "strength": 0.45,
+          "pixel": [
+            0.0024361375253647566,
+            0.0024943340104073286,
+            0.0020991384517401457
+          ]
+        },
+        {
+          "strength": 0,
+          "pixel": [
+            0.0024361375253647566,
+            0.0024943340104073286,
+            0.0020991384517401457
+          ]
+        }
+      ]
+    },
+    {
+      "name": "binding a glass reflection probe does not change blind or room diffuse lighting",
+      "passed": false,
+      "actual": [
+        {
+          "name": "room",
+          "sceneEnvironment": [
+            0.0024361375253647566,
+            0.0024943340104073286,
+            0.0020991384517401457
+          ],
+          "ownEnvironment": [
+            0.0024361375253647566,
+            0.0024943340104073286,
+            0.0020991384517401457
+          ]
+        },
+        {
+          "name": "blind",
+          "sceneEnvironment": [
+            0.006586388684809208,
+            0.01042646262794733,
+            0.013561069034039974
+          ],
+          "ownEnvironment": [
+            0.014636419713497162,
+            0.02316991612315178,
+            0.030135709792375565
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ordinary rooms receive actual window-facing sunlight without a constant glow",
+      "passed": false,
+      "sunRoom": [
+        297.0489339828491,
+        297.04899311065674,
+        297.04859828948975
+      ],
+      "sunBacking": [
+        297.0464925765991,
+        297.0464925765991,
+        297.0464925765991
+      ],
+      "roomAddition": [
+        0.00244140625,
+        0.0025005340576171875,
+        0.002105712890625
+      ],
+      "darkRoom": [
+        0.0024361375253647566,
+        0.0024943340104073286,
+        0.0020991384517401457
+      ],
+      "darkBacking": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "glass uses the .038 floor and preserves variation below .0525",
+      "passed": true,
+      "actual": [
+        {
+          "detail": 0,
+          "pixel": [
+            0.03799999877810478,
+            0,
+            0.035999998450279236
+          ]
+        },
+        {
+          "detail": 0.5,
+          "pixel": [
+            0.03999999910593033,
+            0,
+            0.03999999910593033
+          ]
+        },
+        {
+          "detail": 1,
+          "pixel": [
+            0.04399999976158142,
+            0,
+            0.04399999976158142
+          ]
+        }
+      ],
+      "expected": [
+        0.038,
+        0.04,
+        0.044
+      ]
+    },
+    {
+      "name": "glass retains geometric-normal derivative roughness",
+      "passed": true,
+      "actual": [
+        0.06741660088300705,
+        0.02341660112142563,
+        0.04399999976158142
+      ],
+      "channels": [
+        "roughness",
+        "geometryRoughness",
+        "surfaceRoughness"
+      ]
+    }
+  ],
+  "passed": false
+}

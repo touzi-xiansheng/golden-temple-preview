@@ -1,0 +1,10 @@
+{
+  "region": [
+    28,
+    100,
+    430,
+    1050
+  ],
+  "meanAbsoluteChannelError": 0.08299380291524831,
+  "maxChannelError": 9
+}

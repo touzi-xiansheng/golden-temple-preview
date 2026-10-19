@@ -6,6 +6,7 @@ import {
 } from 'three/tsl';
 
 const transmission = cosine => float(.957).mul(float(1).sub(float(1).sub(cosine.clamp()).pow(5)));
+export const roomDaylightGain = uniform(.65);
 
 class CampusGlassMaterial extends MeshPhysicalNodeMaterial {
   setupVariants(builder) {
@@ -20,16 +21,20 @@ class CampusGlassMaterial extends MeshPhysicalNodeMaterial {
     const direct = model.direct.bind(model), indirect = model.indirect.bind(model);
     const exit = transmission(normalViewGeometry.dot(positionViewDirection).abs());
     const bulk = this.campusBulkTransmission ?? .65;
+    // Ray-box surfaces approximate a room's aggregate diffuse response. Blinds
+    // remain at the aperture; rooms retain their existing depth/material falloff.
+    const response = room.rgb.mul(mix(roomDaylightGain, 1, room.a))
+      .mul(mix(vec3(.90, .97, .94), vec3(1), room.a));
     model.direct = (input, builder) => {
       direct(input, builder);
       const cosine = normalViewGeometry.dot(input.lightDirection).max(0);
-      const backing = room.rgb.mul(room.a).mul(exit).mul(transmission(cosine)).mul(bulk * bulk / Math.PI);
+      const backing = response.mul(exit).mul(transmission(cosine)).mul(bulk * bulk / Math.PI);
       input.reflectedLight.directDiffuse.addAssign(backing.mul(input.lightColor).mul(cosine));
     };
     model.indirect = builder => {
       indirect(builder);
       const incident = builder.context.irradiance.add(builder.context.iblIrradiance).max(0);
-      builder.context.reflectedLight.indirectDiffuse.addAssign(room.rgb.mul(room.a).mul(incident).mul(exit).mul(bulk * bulk * .957 * 20 / 21 / Math.PI));
+      builder.context.reflectedLight.indirectDiffuse.addAssign(response.mul(incident).mul(exit).mul(bulk * bulk * .957 * 20 / 21 / Math.PI));
     };
     return model;
   }
@@ -99,13 +104,12 @@ export function createGlassMaterial(source, context = false) {
     return vision.select(result, vec4(0));
   })();
   material.campusRoomNode = room;
-  // Art-directed room bounce: keep normal-facing rooms legible without brightening blinds or spandrels.
-  material.emissiveNode = room.rgb.mul(room.a.oneMinus()).mul(transmission(incident.dot(normalViewGeometry).abs())).mul(vec3(.90, .97, .94)).mul(.18);
+  material.emissiveNode = null;
   material.roughnessNode = float(source.roughness).mul(detail.x.mul(.2).add(.9));
   const bow = uv().mul(Math.PI * 2).add(detail.xy.mul(4)).sin().mul(vec2(.0012, .0018)).add(detail.xy.sub(.5).mul(.0008));
   const visible = smoothstep(.15, .45, max(uv().x.fwidth(), uv().y.fwidth())).oneMinus();
   material.normalNode = normalViewGeometry.add(tangent.mul(bow.x).add(vertical.mul(bow.y)).mul(visible)).normalize();
-  material.userData.webgpuPending = ['Room interiors retain the calibrated ray-box lighting approximation; geometric interior refraction is not simulated.'];
+  material.userData.webgpuPending = ['Room daylight uses an incident-light-driven ray-box diffuse approximation; geometric interior refraction and multi-bounce transport are not simulated.'];
   return material;
 }
 

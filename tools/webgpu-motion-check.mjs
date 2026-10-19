@@ -11,6 +11,7 @@ assert.match(label,/^[a-z0-9-]+$/);
 const budget=Number(process.env.FRAME_BUDGET_MS || 25);
 assert.ok(Number.isFinite(budget)&&budget>0,'FRAME_BUDGET_MS must be positive');
 const baselinePath=process.env.BASELINE_REPORT;
+const reflectionUpgrade=process.env.REFLECTION_UPGRADE==='1';
 const baseline=baselinePath?JSON.parse(fs.readFileSync(baselinePath,'utf8')):null;
 if(baseline)assert.equal(baseline.schemaVersion,2,'Re-run BASELINE_REPORT with this version of the motion tool');
 const output=`out/webgpu/motion-${label}.json`;
@@ -53,6 +54,15 @@ try {
     return {...summarizeMotion(samples),...state,firstFrame:samples[0],observedShots:[...new Set(samples.map(row=>row.shot))],events};
   }
 
+  // Measure the first interactive entry before steady windows warm this camera path.
+  await page.evaluate(()=>{window.__campus.pause();window.__campus.setTime(39.6);});
+  await waitForStableCampus(page);
+  await page.evaluate(()=>{window.__motionProbe.reset();document.getElementById('play').click();});
+  await page.waitForFunction(()=>window.__motionProbe.samples.filter(row=>row.shot===4).length>=18,{timeout:15000});
+  const firstReflectionCut={kind:'first-reflection-cut',at:40,...await collect()};
+  report.transitions.push(firstReflectionCut);console.log('FIRST REFLECTION CUT',JSON.stringify(firstReflectionCut));
+  assert.ok(firstReflectionCut.events.some(event=>event.from===3&&event.to===4),'First reflection cut was not sampled on both sides');
+
   for(const time of [2,12,22,32,42,52]) {
     await page.evaluate(time=>{const app=window.__campus;app.pause();app.setTime(time);document.getElementById('play').click();},time);
     await delay(1200);
@@ -90,7 +100,8 @@ try {
 
   if(baseline) {
     report.baselineReport=baselinePath;
-    report.relativeComparisons=compareMotionBaseline(report,baseline);
+    report.reflectionUpgrade=reflectionUpgrade ? {from:'parallax-probes',to:'portal'} : null;
+    report.relativeComparisons=compareMotionBaseline(report,baseline,{reflectionUpgrade});
   }
   assert.deepEqual(report.errors,[]);
   for(const sample of [...report.cases,...report.transitions])assert.deepEqual(sample.errors,[]);

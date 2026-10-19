@@ -38,6 +38,7 @@ export async function runLightingCalibration(renderer = null) {
   };
   const drawNode = async node => {
     quadMaterial.fragmentNode = vec4(node, 1); quadMaterial.needsUpdate = true;
+    await new Promise(requestAnimationFrame);
     renderer.setRenderTarget(target); quad.render(renderer);
     return (await read()).pixel;
   };
@@ -80,6 +81,7 @@ export async function runLightingCalibration(renderer = null) {
     applyCampusLighting(material, owner);
     const drawMaterial = async strength => {
       darkProbe.strength.value = strength;
+      await new Promise(requestAnimationFrame);
       renderer.setRenderTarget(target); renderer.render(scene, camera);
       return (await read()).pixel;
     };
@@ -91,7 +93,7 @@ export async function runLightingCalibration(renderer = null) {
 
     const shadowScene = new Scene(), shadowCamera = new PerspectiveCamera(45, 1, 0.1, 80);
     shadowCamera.position.set(-8, 7, -8); shadowCamera.lookAt(0, 0, 0);
-    sunlight = createLighting({ renderer, scene: shadowScene, camera: shadowCamera, quality: 'performance' });
+    sunlight = createLighting({ renderer, scene: shadowScene, camera: shadowCamera, quality: 'performance', cacheShadows: true });
     await sunlight.ready;
     const rawSky = pmrem.fromCubemap(sunlight.captureBackground.texture); resources.push(rawSky);
     const direction = sunlight.sun.getWorldPosition(new Vector3());
@@ -138,6 +140,7 @@ export async function runLightingCalibration(renderer = null) {
         // The lighting binding requires an environment; zero intensity isolates the direct term.
         grayScene.environment = sunlight.environment.texture;
         grayScene.environmentIntensity = hasEnvironment ? shadowScene.environmentIntensity : 0;
+        await new Promise(requestAnimationFrame);
         renderer.setRenderTarget(target); renderer.render(grayScene, grayCamera);
         gray[name][mode] = (await read()).pixel;
       }
@@ -147,13 +150,20 @@ export async function runLightingCalibration(renderer = null) {
     check('18 percent upward gray card receives more energy than downward card',
       luma(gray.up.combined) > luma(gray.down.combined) * 1.5 && luma(gray.down.indirect) > 0,
       { up: gray.up.combined, down: gray.down.combined });
+    // Art-direction bounds for this fixed clear-day preset, not a universal daylight law.
+    const sunToSky = luma(gray.up.direct) / luma(gray.up.indirect);
+    const blueToRed = gray.up.combined[2] / gray.up.combined[0];
+    check('clear-day gray card has a dominant sun and bounded blue cast', sunToSky >= 1.5 && sunToSky <= 4
+      && blueToRed >= .9 && blueToRed <= 1.45, { sunToSky, blueToRed, gray: gray.up });
     const floorMaterial = new MeshStandardNodeMaterial({ color: 0x999999, roughness: 1 });
     const floorGeometry = new PlaneGeometry(14, 14), boxGeometry = new BoxGeometry(2, 2, 2);
     const floor = new Mesh(floorGeometry, floorMaterial); floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true;
     const box = new Mesh(boxGeometry, floorMaterial); box.position.y = 1; box.castShadow = true;
     shadowScene.add(floor, box); resources.push(floorMaterial, floorGeometry, boxGeometry);
+    sunlight.update(shadowCamera, { shot: 2 });
     const renderShadow = async enabled => {
       box.castShadow = enabled; sunlight.sun.shadow.needsUpdate = true;
+      await new Promise(requestAnimationFrame);
       renderer.setRenderTarget(target); renderer.render(shadowScene, shadowCamera);
       return (await read()).data;
     };
@@ -162,7 +172,7 @@ export async function runLightingCalibration(renderer = null) {
     for (let i = 0; i < shadowOn.length; i += 4) {
       if (shadowOff[i] - shadowOn[i] > 0.025) darkerPixels++;
     }
-    check('SunLight cascades cast an actual shadow', darkerPixels > 32, { darkerPixels, size: [size, size], camera: shadowCamera.position.toArray() });
+    check('default cached sunlight casts an actual shadow', darkerPixels > 32, { darkerPixels, mode: sunlight.stats.shadowMode, size: [size, size], camera: shadowCamera.position.toArray() });
     report.passed = report.tests.every(test => test.passed);
     return report;
   } finally {

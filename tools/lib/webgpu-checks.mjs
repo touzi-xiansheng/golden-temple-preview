@@ -69,7 +69,7 @@ export function summarizeMotion(samples) {
   return { frames: samples.length, intervalMs: summarize('interval'), cpuSubmitMs: summarize('cpu'), drawCalls: summarize('drawCalls'), triangles: summarize('triangles') };
 }
 
-export function compareMotionBaseline(report, baseline) {
+export function compareMotionBaseline(report, baseline, { reflectionUpgrade = false } = {}) {
   assert.equal(baseline.schemaVersion, 2, 'Re-run BASELINE_REPORT with this version of the motion tool');
   assert.equal(report.browser, baseline.browser, 'Baseline browser differs');
   for (const key of ['vendor', 'architecture', 'device', 'isFallbackAdapter']) {
@@ -79,9 +79,13 @@ export function compareMotionBaseline(report, baseline) {
   return report.cases.map(current => {
     const before = baseline.cases.find(sample => sample.time === current.time);
     assert.ok(before, `Baseline is missing t=${current.time}`);
-    for (const key of ['renderSize', 'quality', 'aa', 'shadowMode', 'reflectionMode']) {
+    for (const key of ['renderSize', 'quality', 'aa', 'shadowMode']) {
       assert.deepEqual(current[key], before[key], `Baseline ${key} differs at t=${current.time}`);
     }
+    if (reflectionUpgrade) {
+      assert.equal(before.reflectionMode, 'parallax-probes', 'Expected a probe-only baseline');
+      assert.equal(current.reflectionMode, 'portal', 'Expected the portal reflection upgrade');
+    } else assert.equal(current.reflectionMode, before.reflectionMode, `Baseline reflectionMode differs at t=${current.time}`);
     const baselineMs = before.intervalMs.p95, actualMs = current.intervalMs.p95;
     assert.ok(Number.isFinite(baselineMs) && baselineMs > 0 && Number.isFinite(actualMs), 'Invalid baseline p95');
     const allowanceMs = Math.max(2, baselineMs * .1);

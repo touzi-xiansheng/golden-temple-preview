@@ -1,0 +1,693 @@
+{
+  "schemaVersion": 2,
+  "url": "http://127.0.0.1:5185/webgpu-lab.html?paused=1",
+  "at": "2026-10-19T09:25:08.883Z",
+  "browser": "Chrome/155.0.8059.84",
+  "state": {
+    "capabilities": {
+      "backend": "webgpu",
+      "secureContext": true,
+      "adapter": {
+        "vendor": "apple",
+        "architecture": "metal-3",
+        "device": "",
+        "description": "",
+        "isFallbackAdapter": false
+      },
+      "features": [
+        "bgra8unorm-storage",
+        "clip-distances",
+        "core-features-and-limits",
+        "depth-clip-control",
+        "depth32float-stencil8",
+        "dual-source-blending",
+        "float32-blendable",
+        "float32-filterable",
+        "indirect-first-instance",
+        "rg11b10ufloat-renderable",
+        "shader-f16",
+        "subgroups",
+        "texture-compression-astc",
+        "texture-compression-astc-sliced-3d",
+        "texture-compression-bc",
+        "texture-compression-bc-sliced-3d",
+        "texture-compression-etc2",
+        "texture-formats-tier1",
+        "texture-formats-tier2",
+        "timestamp-query"
+      ],
+      "compatibilityMode": false,
+      "limits": {
+        "maxTextureDimension2D": 8192,
+        "maxTextureDimension3D": 2048,
+        "maxStorageBufferBindingSize": 134217728,
+        "maxBufferSize": 268435456,
+        "maxStorageBuffersPerShaderStage": 8,
+        "maxComputeWorkgroupSizeX": 256
+      }
+    },
+    "errors": []
+  },
+  "shots": [],
+  "qualityChecks": [],
+  "freeCamera": null,
+  "finalState": {
+    "capabilities": {
+      "backend": "webgpu",
+      "secureContext": true,
+      "adapter": {
+        "vendor": "apple",
+        "architecture": "metal-3",
+        "device": "",
+        "description": "",
+        "isFallbackAdapter": false
+      },
+      "features": [
+        "bgra8unorm-storage",
+        "clip-distances",
+        "core-features-and-limits",
+        "depth-clip-control",
+        "depth32float-stencil8",
+        "dual-source-blending",
+        "float32-blendable",
+        "float32-filterable",
+        "indirect-first-instance",
+        "rg11b10ufloat-renderable",
+        "shader-f16",
+        "subgroups",
+        "texture-compression-astc",
+        "texture-compression-astc-sliced-3d",
+        "texture-compression-bc",
+        "texture-compression-bc-sliced-3d",
+        "texture-compression-etc2",
+        "texture-formats-tier1",
+        "texture-formats-tier2",
+        "timestamp-query"
+      ],
+      "compatibilityMode": false,
+      "limits": {
+        "maxTextureDimension2D": 8192,
+        "maxTextureDimension3D": 2048,
+        "maxStorageBufferBindingSize": 134217728,
+        "maxBufferSize": 268435456,
+        "maxStorageBuffersPerShaderStage": 8,
+        "maxComputeWorkgroupSizeX": 256
+      }
+    },
+    "errors": []
+  },
+  "validations": {
+    "lighting": {
+      "backend": "WebGPU",
+      "tests": [
+        {
+          "name": "constant sky radiance",
+          "passed": true,
+          "actual": [
+            0.2496337890625,
+            0.399169921875,
+            0.59765625
+          ],
+          "expected": [
+            0.25,
+            0.4,
+            0.6
+          ]
+        },
+        {
+          "name": "sky and unobstructed SH probe agree",
+          "passed": true,
+          "actual": [
+            0.24988657236099243,
+            0.39976340532302856,
+            0.600058376789093
+          ],
+          "expected": [
+            0.2496337890625,
+            0.399169921875,
+            0.59765625
+          ]
+        },
+        {
+          "name": "probe replaces sky rather than adds to it",
+          "passed": true,
+          "actual": [
+            0.059992048889398575,
+            0.09002252668142319,
+            0.14002738893032074
+          ],
+          "expected": [
+            0.06,
+            0.09,
+            0.14
+          ]
+        },
+        {
+          "name": "duplicate atlas invariant at x=0",
+          "passed": true,
+          "single": [
+            0.059992048889398575,
+            0.09002252668142319,
+            0.14002738893032074
+          ],
+          "duplicate": [
+            0.059992048889398575,
+            0.09002252668142319,
+            0.14002738893032074
+          ]
+        },
+        {
+          "name": "duplicate atlas invariant at x=1.75",
+          "passed": true,
+          "single": [
+            0.22000226378440857,
+            0.3508656322956085,
+            0.5261517763137817
+          ],
+          "duplicate": [
+            0.22000226378440857,
+            0.3508656322956085,
+            0.5261517763137817
+          ]
+        },
+        {
+          "name": "outside volume returns to sky",
+          "passed": true,
+          "actual": [
+            0.2496337890625,
+            0.3991698920726776,
+            0.59765625
+          ],
+          "expected": [
+            0.2496337890625,
+            0.399169921875,
+            0.59765625
+          ]
+        },
+        {
+          "name": "sharp metallic environment reflection remains",
+          "passed": true,
+          "before": [
+            0.25,
+            0.39990234375,
+            0.599609375
+          ],
+          "after": [
+            0.25,
+            0.39990234375,
+            0.599609375
+          ]
+        },
+        {
+          "name": "physical diffuse path receives replacement",
+          "passed": true,
+          "before": [
+            0.2496337890625,
+            0.3991698920726776,
+            0.59765625
+          ],
+          "after": [
+            0.06262410432100296,
+            0.09431321918964386,
+            0.14637887477874756
+          ]
+        },
+        {
+          "name": "ground bounce matches Lambertian sky plus sun energy",
+          "passed": true,
+          "actual": [
+            0.15489903092384338,
+            0.24720031023025513,
+            0.1003565564751625
+          ],
+          "expected": [
+            0.15489904080158645,
+            0.24720032559890054,
+            0.10035655502246286
+          ],
+          "albedo": [
+            0.08865558627723595,
+            0.12743768042608497,
+            0.04373502925049377
+          ]
+        },
+        {
+          "name": "IBL lower hemisphere is a nonzero ground bounce, below upper sky energy",
+          "passed": true,
+          "hemisphere": {
+            "up": {
+              "raw": [
+                1.6229517459869385,
+                2.3439226150512695,
+                3.690757989883423
+              ],
+              "grounded": [
+                1.245592474937439,
+                1.9282139539718628,
+                3.2213597297668457
+              ]
+            },
+            "down": {
+              "raw": [
+                4.874990940093994,
+                5.694136619567871,
+                6.062292098999023
+              ],
+              "grounded": [
+                0.6354515552520752,
+                0.9986215233802795,
+                0.6799370050430298
+              ]
+            }
+          }
+        },
+        {
+          "name": "18 percent gray cards preserve direct plus indirect superposition",
+          "passed": true,
+          "gray": {
+            "up": {
+              "direct": [
+                0.2283855527639389,
+                0.22153399884700775,
+                0.20783087611198425
+              ],
+              "indirect": [
+                0.07614780217409134,
+                0.11787905544042587,
+                0.19693398475646973
+              ],
+              "combined": [
+                0.30453336238861084,
+                0.339413046836853,
+                0.404764860868454
+              ]
+            },
+            "down": {
+              "direct": [
+                0,
+                0,
+                0
+              ],
+              "indirect": [
+                0.03884756937623024,
+                0.061049532145261765,
+                0.04156713932752609
+              ],
+              "combined": [
+                0.03884756937623024,
+                0.061049532145261765,
+                0.04156713932752609
+              ]
+            }
+          }
+        },
+        {
+          "name": "18 percent upward gray card receives more energy than downward card",
+          "passed": true,
+          "up": [
+            0.30453336238861084,
+            0.339413046836853,
+            0.404764860868454
+          ],
+          "down": [
+            0.03884756937623024,
+            0.061049532145261765,
+            0.04156713932752609
+          ]
+        },
+        {
+          "name": "clear-day gray card has a dominant sun and bounded blue cast",
+          "passed": true,
+          "sunToSky": 1.9352459941669269,
+          "blueToRed": 1.3291314215745567,
+          "gray": {
+            "direct": [
+              0.2283855527639389,
+              0.22153399884700775,
+              0.20783087611198425
+            ],
+            "indirect": [
+              0.07614780217409134,
+              0.11787905544042587,
+              0.19693398475646973
+            ],
+            "combined": [
+              0.30453336238861084,
+              0.339413046836853,
+              0.404764860868454
+            ]
+          }
+        },
+        {
+          "name": "default cached sunlight casts an actual shadow",
+          "passed": true,
+          "darkerPixels": 385,
+          "mode": "cached",
+          "size": [
+            96,
+            96
+          ],
+          "camera": [
+            -8,
+            7,
+            -8
+          ]
+        }
+      ],
+      "passed": true
+    },
+    "materials": {
+      "backend": "WebGPU",
+      "tests": [
+        {
+          "name": "leaf-back radiance retains the calibrated transmission tint",
+          "passed": true,
+          "actual": [
+            0.013105779886245728,
+            0.033530279994010925,
+            0.010458983480930328
+          ],
+          "expected": [
+            0.013125000000000001,
+            0.033600000000000005,
+            0.010499999999999999
+          ],
+          "relativeError": 0.0039063351494924336
+        },
+        {
+          "name": "leaf-back energy scales with environment 1 to .45",
+          "passed": true,
+          "full": {
+            "strength": 1,
+            "actual": [
+              0.06812108308076859,
+              0.160398468375206,
+              0.0839376226067543
+            ],
+            "baseline": [
+              0.05501530319452286,
+              0.12686818838119507,
+              0.07347863912582397
+            ],
+            "added": [
+              0.013105779886245728,
+              0.033530279994010925,
+              0.010458983480930328
+            ]
+          },
+          "reduced": {
+            "strength": 0.45,
+            "actual": [
+              0.030654482543468475,
+              0.07217931002378464,
+              0.037771932780742645
+            ],
+            "baseline": [
+              0.024756886065006256,
+              0.05709068477153778,
+              0.03306538611650467
+            ],
+            "added": [
+              0.005897596478462219,
+              0.015088625252246857,
+              0.004706546664237976
+            ]
+          },
+          "expected": [
+            0.005897600948810577,
+            0.015088625997304917,
+            0.004706542566418648
+          ]
+        },
+        {
+          "name": "zero environment produces zero leaf-back energy and no residual glow",
+          "passed": true,
+          "actual": {
+            "strength": 0,
+            "actual": [
+              0,
+              0,
+              0
+            ],
+            "baseline": [
+              0,
+              0,
+              0
+            ],
+            "added": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "name": "thin leaves transmit back light but add no front-lit scattering",
+          "passed": true,
+          "actual": {
+            "front": [
+              0,
+              0,
+              0
+            ],
+            "back": [
+              0.07786799967288971,
+              0.12458880990743637,
+              0.02595599927008152
+            ],
+            "grazing": [
+              0,
+              0,
+              0
+            ],
+            "zero": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "name": "thin-leaf direct transmission vanishes at grazing incidence and zero sunlight",
+          "passed": true,
+          "actual": {
+            "front": [
+              0,
+              0,
+              0
+            ],
+            "back": [
+              0.07786799967288971,
+              0.12458880990743637,
+              0.02595599927008152
+            ],
+            "grazing": [
+              0,
+              0,
+              0
+            ],
+            "zero": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "name": "an opaque blocker removes thin-leaf transmitted sunlight",
+          "passed": true,
+          "actual": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "ordinary room daylight follows the scene environment and goes dark at zero",
+          "passed": true,
+          "actual": [
+            {
+              "strength": 1,
+              "pixel": [
+                0.0008456590585410595,
+                0.001384530682116747,
+                0.0017445472767576575
+              ]
+            },
+            {
+              "strength": 0.45,
+              "pixel": [
+                0.0003805465530604124,
+                0.0006230388535186648,
+                0.0007850462570786476
+              ]
+            },
+            {
+              "strength": 0,
+              "pixel": [
+                0,
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "binding a glass reflection probe does not change blind or room diffuse lighting",
+          "passed": true,
+          "actual": [
+            {
+              "name": "room",
+              "sceneEnvironment": [
+                0.0003805465530604124,
+                0.0006230388535186648,
+                0.0007850462570786476
+              ],
+              "ownEnvironment": [
+                0.0003805465530604124,
+                0.0006230388535186648,
+                0.0007850462570786476
+              ]
+            },
+            {
+              "name": "blind",
+              "sceneEnvironment": [
+                0.006586388684809208,
+                0.01042646262794733,
+                0.013561069034039974
+              ],
+              "ownEnvironment": [
+                0.006586388684809208,
+                0.01042646262794733,
+                0.013561069034039974
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ordinary rooms receive actual window-facing sunlight without a constant glow",
+          "passed": true,
+          "sunRoom": [
+            297.04762172698975,
+            297.04765224456787,
+            297.0474691390991
+          ],
+          "sunBacking": [
+            297.0464925765991,
+            297.0464925765991,
+            297.0464925765991
+          ],
+          "roomAddition": [
+            0.001129150390625,
+            0.00115966796875,
+            0.0009765625
+          ],
+          "darkRoom": [
+            0,
+            0,
+            0
+          ],
+          "darkBacking": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "rendered leaf palette preserves RGB mean while moderately reducing per-leaf variance",
+          "passed": true,
+          "actual": [
+            [
+              0.08540000021457672,
+              0.20720000565052032,
+              0.046800002455711365
+            ],
+            [
+              0.18379999697208405,
+              0.3384000062942505,
+              0.07959999889135361
+            ],
+            [
+              0.05260000005364418,
+              0.14159999787807465,
+              0.030400000512599945
+            ],
+            [
+              0.11819999665021896,
+              0.2727999985218048,
+              0.06319999694824219
+            ]
+          ],
+          "expectedMean": [
+            0.11,
+            0.24000000000000002,
+            0.05500000000000001
+          ],
+          "actualMean": [
+            0.10999999847263098,
+            0.24000000208616257,
+            0.054999999701976776
+          ],
+          "varianceRatio": [
+            0.67239996295912,
+            0.6724000371456165,
+            0.672399914956101
+          ]
+        },
+        {
+          "name": "glass uses the .038 floor and preserves variation below .0525",
+          "passed": true,
+          "actual": [
+            {
+              "detail": 0,
+              "pixel": [
+                0.03799999877810478,
+                0,
+                0.035999998450279236
+              ]
+            },
+            {
+              "detail": 0.5,
+              "pixel": [
+                0.03999999910593033,
+                0,
+                0.03999999910593033
+              ]
+            },
+            {
+              "detail": 1,
+              "pixel": [
+                0.04399999976158142,
+                0,
+                0.04399999976158142
+              ]
+            }
+          ],
+          "expected": [
+            0.038,
+            0.04,
+            0.044
+          ]
+        },
+        {
+          "name": "glass retains geometric-normal derivative roughness",
+          "passed": true,
+          "actual": [
+            0.06741660088300705,
+            0.02341660112142563,
+            0.04399999976158142
+          ],
+          "channels": [
+            "roughness",
+            "geometryRoughness",
+            "surfaceRoughness"
+          ]
+        }
+      ],
+      "passed": true
+    }
+  },
+  "errors": [],
+  "warnings": [],
+  "external": []
+}

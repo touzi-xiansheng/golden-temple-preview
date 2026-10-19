@@ -3,9 +3,9 @@ import {
   PMREMGenerator, Scene, Vector3,
 } from 'three/webgpu';
 import {
-  array, cameraPosition, cubeTexture, densityFogFactor, float, Fn, fog, getShIrradianceAt,
-  If, isolate, materialEnvIntensity, max, min, mix, normalWorld, pmremTexture,
-  positionWorld, texture3D, uniform, vec3, vec4,
+  array, cameraPosition, cubeTexture, float, Fn, fog, getShIrradianceAt,
+  If, isolate, max, min, mix, normalWorld, pmremTexture,
+  positionWorld, positionView, texture3D, uniform, vec3, vec4,
 } from 'three/tsl';
 import { SkyMesh } from 'three/addons/objects/SkyMesh.js';
 import { SunLight } from 'three/addons/lights/SunLight.js';
@@ -14,7 +14,11 @@ import { LightProbeGrid } from 'three/addons/lighting/LightProbeGrid.js';
 import { createStaticShadows } from './static-shadows.js';
 
 const SUN_DIRECTION = new Vector3(0.35, 0.72, 0.66843).normalize();
-const SHADOW_SIZES = { performance: 1024, balanced: 2048, quality: 4096 };
+const SHADOW_SIZES = { performance: 1024, balanced: 4096, quality: 4096 };
+// One daylight scale is captured by the sky, diffuse probes and local reflections.
+export const DAYLIGHT = Object.freeze({ sunIntensity: 5.6, skyIntensity: .4, skySaturation: .65, fogDensity: .00048, fogStart: 95 });
+// A captured material reflection must not change the scale of diffuse sky/probe light.
+export const campusDiffuseIntensity = uniform(1).onRenderUpdate(({ scene }) => scene.environmentIntensity);
 // Same representative soil/grass reflectance as the probe capture ground.
 export const GROUND_ALBEDO = new Color('#54643b');
 const bindings = new WeakMap();
@@ -29,7 +33,8 @@ function validateProbe(bounds, resolution, blendDistance) {
       resolution.some(value => !Number.isInteger(value) || value < 2 || value > 64)) {
     throw new RangeError('Probe resolution must contain three integers in [2, 64]');
   }
-  if (!Number.isFinite(blendDistance) || blendDistance <= 0) {
+  const fade = blendDistance?.isVector3 ? blendDistance.toArray() : Array.isArray(blendDistance) ? blendDistance : [blendDistance];
+  if (![1, 3].includes(fade.length) || fade.some(value => !Number.isFinite(value) || value <= 0)) {
     throw new RangeError('Probe blendDistance must be positive');
   }
 }
@@ -62,8 +67,10 @@ function blendProbeGroup(base, probes, position, normal) {
     const total = float(0).toVar(), coverage = float(0).toVar(), sum = vec3(0).toVar();
     for (const probe of probes) {
       const inside = position.sub(uniform(probe.bounds.min)).min(uniform(probe.bounds.max).sub(position));
-      const distance = min(inside.x, min(inside.y, inside.z));
-      const weight = distance.smoothstep(0, probe.blendDistance).mul(probe.strength).toVar();
+      const fade = probe.blendDistance?.isVector3 ? probe.blendDistance
+        : Array.isArray(probe.blendDistance) ? new Vector3(...probe.blendDistance) : new Vector3().setScalar(probe.blendDistance);
+      const distance = inside.div(uniform(fade));
+      const weight = min(distance.x, min(distance.y, distance.z)).smoothstep(0, 1).mul(probe.strength).toVar();
       If(weight.greaterThan(0), () => {
         total.addAssign(weight);
         coverage.assign(max(coverage, weight));
@@ -99,7 +106,7 @@ class CampusEnvironmentNode extends EnvironmentNode {
   setup(builder) {
     super.setup(builder);
     // Preserve native radiance/clearcoat and its BRDF; replace the ONE diffuse IBL source.
-    builder.context.iblIrradiance.assign(isolate(createIrradianceNode(this.options).mul(materialEnvIntensity)));
+    builder.context.iblIrradiance.assign(isolate(createIrradianceNode(this.options).mul(campusDiffuseIntensity)));
   }
 }
 
@@ -145,7 +152,7 @@ export function createLighting({ renderer, scene, camera, quality = 'balanced', 
     backgroundIntensity: scene.backgroundIntensity, environmentIntensity: scene.environmentIntensity,
     fogNode: scene.fogNode,
   };
-  const sun = cacheShadows ? new DirectionalLight(new Color(1, 0.96, 0.88), 3.2) : new SunLight(new Color(1, 0.96, 0.88), 3.2);
+  const sun = cacheShadows ? new DirectionalLight(new Color(1, 0.97, 0.91), DAYLIGHT.sunIntensity) : new SunLight(new Color(1, 0.97, 0.91), DAYLIGHT.sunIntensity);
   sun.name = 'Campus WebGPU sun';
   sun.position.copy(SUN_DIRECTION);
   sun.castShadow = true;
@@ -195,6 +202,17 @@ export function createLighting({ renderer, scene, camera, quality = 'balanced', 
       result.add(captureSun);if(captureSun.target)result.add(captureSun.target);
       bakeScenes.add({ scene: result, sun: captureSun });
       return result;
+    },
+    releaseBakeScene(captureScene) {
+      for (const entry of bakeScenes) {
+        if (entry.scene !== captureScene) continue;
+        bakeScenes.delete(entry);
+        entry.sun.target?.removeFromParent();
+        entry.sun.removeFromParent();
+        entry.sun.dispose();
+        return true;
+      }
+      return false;
     },
     async bakeProbe({ bounds, coverageBounds = bounds, resolution = [3, 3, 3], scene: captureScene, kind = 'base', blendDistance = 1, batchSize = 12, onProgress = () => {} }) {
       validateProbe(bounds, resolution, blendDistance);
@@ -285,6 +303,9 @@ export function createLighting({ renderer, scene, camera, quality = 'balanced', 
     sky.cloudSpeed.value = 0;
     sky.cloudCoverage.value = 0.2;
     sky.cloudDensity.value = 0.25;
+    const skyRadiance = sky.material.colorNode.rgb;
+    const skyLuminance = skyRadiance.dot(vec3(.2126, .7152, .0722));
+    sky.material.colorNode = vec4(mix(vec3(skyLuminance), skyRadiance, DAYLIGHT.skySaturation).mul(DAYLIGHT.skyIntensity), 1);
     const capture = new Scene(); capture.add(sky);
     const pmrem = new PMREMGenerator(renderer);
     try {
@@ -315,10 +336,11 @@ export function createLighting({ renderer, scene, camera, quality = 'balanced', 
       scene.background = background.texture;
       scene.environment = environment.texture;
       scene.backgroundIntensity = 1;
-      // Art-directed fill keeps shaded greenery and pale stone from washing out.
-      scene.environmentIntensity = 0.45;
+      scene.environmentIntensity = 1;
       // Match directional sky haze without projecting the solar disc through opaque buildings.
-      haze = fog(cubeTexture(captureBackground.texture, positionWorld.sub(cameraPosition).normalize()), densityFogFactor(0.00062));
+      const hazeDistance = positionView.z.negate().sub(DAYLIGHT.fogStart).max(0);
+      const hazeAmount = hazeDistance.mul(DAYLIGHT.fogDensity).pow(2).negate().exp().oneMinus();
+      haze = fog(cubeTexture(captureBackground.texture, positionWorld.sub(cameraPosition).normalize()), hazeAmount);
       scene.fogNode = haze;
       scene.add(sun);if(sun.target)scene.add(sun.target);
       stats.skyMs = performance.now() - started;

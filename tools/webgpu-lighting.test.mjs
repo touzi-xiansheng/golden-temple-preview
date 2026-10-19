@@ -26,8 +26,8 @@ test('disposing while initialization is pending does not attach lights', async (
 test('quality changes release shadow storage without detaching the node-owned target', async () => {
   let finish;
   const renderer = { isWebGPURenderer: true, init: () => new Promise(resolve => { finish = resolve; }) };
-  const lighting = createLighting({ renderer, scene: new Scene(), camera: new PerspectiveCamera(45, 1, 0.1, 200) });
-  const target = new RenderTarget(4096, 2048);
+  const lighting = createLighting({ renderer, scene: new Scene(), camera: new PerspectiveCamera(45, 1, 0.1, 200), quality: 'performance' });
+  const target = new RenderTarget(2048, 1024);
   let disposals = 0;
   target.addEventListener('dispose', () => disposals++);
   lighting.sun.shadow.map = target;

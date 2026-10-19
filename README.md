@@ -59,44 +59,46 @@ snapshot of the local development version; local edits need a fresh build and
 upload to appear online. The complete development source is kept on the preview
 repository's [`source/webgpu-preview` branch](https://github.com/touzi-xiansheng/golden-temple-preview/tree/source/webgpu-preview).
 
-The WebGPU entry is an experimental snapshot requiring a WebGPU-capable browser
-and GPU; GitHub Pages supplies HTTPS. Its default favours appearance and smooth
-movement: one world-space shadow map is reused between tour cuts, quality changes
-and exploration-mode changes; four 512-pixel local reflection probes use box-projected
-parallax instead of redrawing the campus in every visible glass plane. Architecture,
-plants and render resolution are preserved. The environment fill is reduced to
-retain contrast in foliage and pale stone. This assumes a fixed sun and static geometry;
-moving objects would require invalidating their lighting. Close mirror reflections
-remain an approximation.
+The WebGPU entry requires a WebGPU-capable desktop browser and GPU; GitHub Pages
+supplies HTTPS. It preserves the seven buildings, plants and render resolution.
+Fixed daylight, 907 diffuse probes and two small local wood-ceiling environments
+are generated at startup. Four 512-pixel glass probes provide broad coverage; one
+nearby facade can receive a live planar reflection cropped to its visible region.
+Stationary views reuse that capture. Balanced and quality modes use a cached 4096²
+sun shadow, refreshed at camera cuts and actual shadow-size changes.
 
-The current realism pass corrects sky light arriving from below ground, scales leaf-back
-lighting with the environment, and restores the glass roughness range used by the
-512-pixel probes. A generated 4 MiB ground-contact mask adds subtle depth at tree roots
-and column feet; apparent interiors receive a small artistic fill. These changes add
-no scene geometry or per-frame capture pass. The [implementation evidence](docs/WEBGPU_IMPLEMENTATION.md)
-records GPU calibration, matched screenshots and paired motion checks; it does not
-claim photographic realism or a numerical probability of visual quality.
+The current pass reduces the blue daylight cast, uses real path geometry for bounce
+lighting, separates diffuse intensity from material reflections, and makes apparent
+interiors respond to daylight instead of a constant glow. Thin leaves transmit only
+back light; moderate per-leaf colour compression preserves their mean. Everything
+remains procedurally generated, with no external models, photographs or HDRIs.
 
-The tested production build generated seven buildings, baked 907 irradiance probes
-and captured four reflection probes in about 15 seconds before the first complete
-frame on the tested Mac. This is not a controlled cold-start benchmark. Continuous
-1080p tour checks are recorded in `docs/webgpu-analysis/motion-before.json` and
-`motion-after.json`; they measure application frame cadence and CPU render submission,
-not pure GPU time. Full lifecycle and cross-device acceptance remain pending.
-The GPU visibility module has calibration tests but is not enabled in the campus.
+The [implementation evidence](docs/WEBGPU_IMPLEMENTATION.md) records 26 real-GPU
+calibrations, matched screenshots and paired 1080p motion checks. The six steady
+sections passed the reference-device budget and baseline comparison. Initial shader
+work still takes seconds; the tested warm-cache build reached its first complete
+frame in about 16.6 seconds, including reflection prewarming. This is not a cold-start
+or cross-device guarantee, and occasional camera-cut stalls remain recorded.
+The scene assumes fixed sunlight and static geometry; dynamic lighting requires
+rebaking the relevant caches. Distant glass, simplified interiors and foliage remain
+visual approximations. The calibrated GPU visibility module is not enabled in the campus.
 
 Build for this hosting path with `npm run build -- --base=/golden-temple-preview/`.
 Publish the generated `dist/` files to the preview repository's `main` branch,
 preserving its license files and `.nojekyll`. For local development, open
 `http://localhost:5173/campus-webgpu.html`; a remote plain-HTTP IP address is not
 a secure WebGPU context. `?gi=0&reflections=0` is available for diagnostic comparisons;
-`?shadows=dynamic&reflections=planar` enables the more expensive live-cascade/mirror
-path. Run `npm run check:webgpu-motion` against a running server to check all six
+`?reflections=probes` disables live planar capture, `?reflectionMode=reference` uses
+the full reflected frustum for comparison, and `?roughSpecular=0` disables local wood
+environments. `?shadows=dynamic` selects the experimental live cascades.
+Run `npm run check:webgpu-motion` against a running server to check all six
 moving tour sections. `WEBGPU_URL`, `PROFILE_LABEL` and `FRAME_BUDGET_MS` select
 the entry, report label and reference-device frame-time budget (25ms by default).
 Set `BASELINE_REPORT=out/webgpu/motion-<label>.json` for a paired comparison made with
-the same version of the tool. It also records natural camera cuts and free-camera
-transitions separately. `?groundBounce=0` and `?contacts=0` isolate the two new lighting
+the same version of the tool. `REFLECTION_UPGRADE=1` explicitly permits only the
+probe-to-portal mode change in that comparison, retaining the other matching checks.
+It records first entry into the reflection shot, natural cuts and free-camera
+transitions separately. `?groundBounce=0` and `?contacts=0` isolate the two lighting
 approximations. On the development server, `node tools/webgpu-check.mjs --lab --lighting --materials`
 runs the standalone real-GPU lighting and production-material checks.
 

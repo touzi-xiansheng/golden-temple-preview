@@ -32,7 +32,7 @@ async function start() {
   let playing = !query.has('paused') && !matchMedia('(prefers-reduced-motion: reduce)').matches;
   let free = false, currentShot = -1;
   let quality = Object.hasOwn(QUALITY, query.get('quality')) ? query.get('quality') : 'balanced';
-  let dimensions, view, lighting, world, reflections;
+  let dimensions, view, lighting, world, reflections, indirect;
   const controls = new OrbitControls(camera, canvas); controls.enabled = false;
   controls.enableDamping = true; controls.dampingFactor = .075;
   controls.minDistance = .3; controls.maxDistance = 650; controls.maxPolarAngle = Math.PI / 2 - .015;
@@ -79,13 +79,17 @@ async function start() {
   stage('正在建立日光、阴影与程序天空…',60); await yieldControl();
   let tick = performance.now();
   lighting = createLighting({renderer,scene:world.scene,camera,quality,cacheShadows:query.get('shadows')!=='dynamic',groundBounce:query.get('groundBounce')!=='0'}); await lighting.ready;
-  if(query.get('gi')!=='0')world.stats.indirect=await bakeCampusProbes(lighting,world.landscape,{onProgress:fraction=>stage('正在计算庭院与廊下的间接光…',60+fraction*14)});
+  if(query.get('gi')!=='0') {
+    indirect=await bakeCampusProbes(lighting,world.landscape,{renderer,architecture:world.architecture,roughSpecular:query.get('roughSpecular')!=='0',onProgress:fraction=>stage('正在计算庭院与廊下的间接光…',60+fraction*14)});
+    world.stats.indirect=indirect.stats;
+  }
   const materials = new Set(); world.scene.traverse(object=>{ for(const material of Array.isArray(object.material)?object.material:[object.material])if(material)materials.add(material); });
   world.materials.bindLighting(lighting);
   for(const material of materials)if(material.isMeshStandardNodeMaterial || material.isMeshPhysicalNodeMaterial)applyCampusLighting(material,lighting);
+  indirect?.bindRoughEnvironment();
   world.stats.timings.lightingMs = performance.now()-tick;
   if(query.get('reflections')!=='0') {
-    tick=performance.now();reflections=createReflections({renderer,scene:world.scene,materials:world.materials,lighting,planar:query.get('reflections')==='planar'});
+    tick=performance.now();reflections=createReflections({renderer,scene:world.scene,materials:world.materials,lighting,planar:query.get('reflections')!=='probes',mode:query.get('reflectionMode')==='reference'?'reference':'portal'});
     await reflections.captureProbes({yieldControl,onProgress:(current,total)=>stage(`正在捕获园区反射（${current}/${total}）…`,75+current/total*8)});
     world.stats.timings.reflectionsMs=performance.now()-tick;
   }
@@ -93,7 +97,26 @@ async function start() {
   setQuality(quality);
   stage('正在编译 WebGPU 材质与渲染管线…',85); await yieldControl(); tick=performance.now();
   await renderer.compileAsync(world.scene,camera);
-  const renderOnce = () => { renderer.info.reset();lighting.update?.(camera,{shot:free?-1:currentShot});reflections?.update(camera);view.frame(); };
+  const renderOnce = () => {
+    renderer.info.reset();
+    const shadowRevision=lighting.stats.shadowCache?.invalidations;
+    lighting.update?.(camera,{shot:free?-1:currentShot});
+    if(lighting.stats.shadowCache?.invalidations!==shadowRevision)reflections?.invalidate();
+    reflections?.update(camera);view.frame();
+  };
+  if(reflections?.stats.enabled) {
+    stage('正在准备近景玻璃反射…',92);await yieldControl();
+    const warmupStarted=performance.now(),initialCamera=camera.clone();
+    // Warm both the reflected and main MSAA paths before the first arcade cut.
+    for(const time of [4*SHOT_SECONDS,4.5*SHOT_SECONDS]) {
+      const frame=sampleTour(time);
+      camera.position.copy(frame.position);camera.lookAt(frame.target);camera.fov=frame.fov;camera.updateProjectionMatrix();
+      lighting.update(camera,{shot:frame.index});reflections.update(camera,{force:true});view.frame();
+      await renderer.backend.device.queue.onSubmittedWorkDone();await new Promise(requestAnimationFrame);
+    }
+    camera.copy(initialCamera);
+    reflections.invalidate();world.stats.timings.reflectionWarmupMs=performance.now()-warmupStarted;
+  }
   renderOnce(); await renderer.backend.device.queue.onSubmittedWorkDone();
   world.stats.timings.compileMs=performance.now()-tick;
   if(runtime.errors.length)throw new Error(runtime.errors[0]);
@@ -101,7 +124,7 @@ async function start() {
   let previous=performance.now(), sampleStart=previous, frameCount=0, fps=0, frameTimes=[];
   const pause=()=>{playing=false;playbackUI();};
   let disposed=false;
-  function dispose() { if(disposed)return;disposed=true;stopped=true;controls.dispose();view.dispose();reflections?.dispose();lighting.dispose();world.dispose();runtime.dispose(); }
+  function dispose() { if(disposed)return;disposed=true;stopped=true;controls.dispose();view.dispose();reflections?.dispose();indirect?.dispose();lighting.dispose();world.dispose();runtime.dispose(); }
   window.__campus={renderer,scene:world.scene,camera,lighting,reflections,world,view,stats:world.stats,capabilities:runtime.capabilities,renderOnce,setTime:seek,setQuality,setFree,pause,dispose,
     setAA:value=>view.setAA(value),
     getState:()=>({capabilities:runtime.capabilities,errors:[...runtime.errors],quality,time,playing,free,shot:currentShot,renderSize:dimensions,fps,frameTimes:[...frameTimes],stats:world.stats,materials:world.materials.stats,lighting:lighting.stats,reflections:reflections?.stats,rendering:view.stats,memory:{...renderer.info.memory},camera:camera.position.toArray(),target:controls.target.toArray()})};

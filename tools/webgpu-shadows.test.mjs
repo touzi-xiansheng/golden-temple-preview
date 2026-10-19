@@ -11,7 +11,7 @@ function fixture() {
   return {lighting, camera, async close() { lighting.dispose(); finish(); await assert.rejects(lighting.ready,/disposed/); }};
 }
 
-test('static daylight keeps one world-space shadow while the view moves, and refreshes for cuts and quality changes', async () => {
+test('static daylight reuses a world-space shadow, refreshing only for cuts or an actual map-size change', async () => {
   const {lighting,camera,close}=fixture();
   try {
     assert.equal(lighting.sun.type,'DirectionalLight');
@@ -28,6 +28,14 @@ test('static daylight keeps one world-space shadow while the view moves, and ref
     assert.equal(lighting.sun.shadow.needsUpdate,true);
     lighting.sun.shadow.needsUpdate=false;
     lighting.setQuality('quality');
+    assert.equal(lighting.sun.shadow.mapSize.x,4096);
+    assert.equal(lighting.sun.shadow.needsUpdate,false,'balanced and quality share the same shadow size');
+    lighting.setQuality('performance');
+    assert.equal(lighting.sun.shadow.mapSize.x,1024);
+    assert.equal(lighting.sun.shadow.needsUpdate,true);
+    lighting.sun.shadow.needsUpdate=false;
+    lighting.setQuality('balanced');
+    assert.equal(lighting.sun.shadow.mapSize.x,4096);
     assert.equal(lighting.sun.shadow.needsUpdate,true);
   } finally {await close();}
 });
