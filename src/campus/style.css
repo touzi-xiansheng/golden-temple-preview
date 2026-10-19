@@ -1,0 +1,47 @@
+@font-face { font-family: CampusSans; src: local('Aptos'), local('Arial'); font-display: swap; }
+:root { font-family: CampusSans, 'PingFang SC', 'Microsoft YaHei', sans-serif; color: #fff; font-synthesis: none; --glass: rgba(17, 36, 32, .72); --hairline: rgba(255,255,255,.19); }
+* { box-sizing: border-box; }
+html, body, #experience { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #c7d8dc; }
+button, input { font: inherit; }
+button { color: inherit; cursor: pointer; border: 0; background: transparent; touch-action: manipulation; }
+button:focus-visible, input:focus-visible, canvas:focus-visible { outline: 2px solid #e4dfb3; outline-offset: 5px; }
+button:hover { color: #f3e9bc; }
+button:disabled { opacity: .45; cursor: wait; }
+#scene { display: block; width: 100%; height: 100%; touch-action: none; }
+.masthead { position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 30px 36px 62px; background: linear-gradient(rgba(13,32,36,.38), transparent); pointer-events: none; }
+.identity { display: flex; align-items: center; gap: 15px; text-shadow: 0 1px 9px #263a3c45; }
+.identity h1 { margin: 0; font-size: 22px; font-weight: 500; letter-spacing: .2em; }
+.identity p { margin: 7px 0 0; font-size: 9px; letter-spacing: .3em; opacity: .85; }
+.brand-mark { display: flex; align-items: end; height: 36px; gap: 4px; transform: skewY(-13deg); }
+.brand-mark i { display: block; height: 26px; width: 5px; border: 1px solid #fff; }
+.brand-mark i:nth-child(2) { height: 36px; }.brand-mark i:nth-child(3) { height: 20px; }
+.header-tools { display: flex; align-items: center; gap: 25px; pointer-events: auto; }
+.weather { font-size: 12px; letter-spacing: .06em; }.weather span { font-size: 20px; margin-right: 7px; }
+.icon-button { width: 36px; height: 36px; font-size: 23px; border-radius: 50%; }.icon-button:hover { background: #ffffff16; }
+.scene-caption { position: absolute; left: 38px; bottom: 185px; pointer-events: none; text-shadow: 0 2px 16px #14291d99; }
+.chapter-number { font-size: 10px; letter-spacing: .25em; }
+.scene-caption h2 { margin: 12px 0 9px; font-size: clamp(22px, 2.2vw, 35px); font-weight: 400; letter-spacing: .11em; }
+.scene-caption p { margin: 0; font-size: 12px; letter-spacing: .12em; opacity: .93; }
+.quality-panel { position: absolute; right: 36px; bottom: 186px; display: grid; gap: 8px; justify-items: end; }
+.control-label { font-size: 10px; letter-spacing: .15em; text-shadow: 0 1px 5px #000; }
+.segmented { display: flex; padding: 4px; border: 1px solid var(--hairline); border-radius: 7px; background: var(--glass); backdrop-filter: blur(14px); }
+.segmented button { padding: 9px 17px; font-size: 12px; border-radius: 4px; }
+.segmented button[aria-pressed=true] { background: #f0eee4; color: #29423b; }
+.performance { font-size: 10px; font-variant-numeric: tabular-nums; color: #fff; text-shadow: 0 1px 5px #000; }
+.playback { position: absolute; left: 36px; right: 36px; bottom: 44px; background: var(--glass); border: 1px solid var(--hairline); border-radius: 9px; padding: 13px 22px 12px; backdrop-filter: blur(16px); box-shadow: 0 4px 30px #16322918; }
+.playback-top { display: flex; align-items: center; gap: 20px; }
+.playback-buttons { display: flex; align-items: center; gap: 10px; }
+.play-button { display: grid; place-content: center; width: 33px; height: 33px; background: #f1eee0; color: #283f35; border-radius: 50%; font-size: 16px; }.play-button:hover { background: #fff; color: #1b392d; }
+.playback-label { font-size: 12px; letter-spacing: .05em; }
+.time-display { display: flex; gap: 7px; font-size: 11px; font-variant-numeric: tabular-nums; color: #c5cfc6; margin-left: auto; }.time-display output { color: white; }
+.mode-button { border-left: 1px solid var(--hairline); padding: 7px 0 7px 22px; font-size: 12px; }.mode-button span { margin-left: 9px; }
+#timeline { display: block; width: 100%; margin: 10px 0 8px; height: 3px; accent-color: #dedec1; cursor: pointer; }
+.chapters { display: flex; justify-content: space-between; gap: 6px; }.chapters button { font-size: 10px; opacity: .59; padding: 6px 0; letter-spacing: .05em; }.chapters button[aria-current=true] { opacity: 1; color: #eeedcc; }
+.interaction-hint { position: absolute; bottom: 9px; left: 36px; margin: 0; font-size: 10px; letter-spacing: .05em; text-shadow: 0 1px 6px #203a2d; }.interaction-hint span { padding: 0 9px; opacity: .55; }
+.loading { position: absolute; inset: 0; z-index: 4; display: grid; place-items: center; background: #e8ece4; color: #2d493e; transition: opacity .65s, visibility .65s; }
+.loading.done { opacity: 0; visibility: hidden; pointer-events: none; }
+.loading-inner { width: min(460px, 82vw); }.loading-kicker { font-size: 10px; letter-spacing: .3em; }.loading h2 { font-size: clamp(24px, 4vw, 37px); font-weight: 400; letter-spacing: .04em; margin: 22px 0 36px; }.loading p { font-size: 12px; min-height: 2em; line-height: 1.6; }.loading-track { height: 2px; background: #bac6bb; margin: 16px 0; }.loading-track div { width: 3%; height: 100%; background: #52745b; transition: width .25s; }.loading small { font-size: 10px; color: #728475; }.loading #retry { display: block; border: 1px solid #728475; padding: 10px 20px; margin-top: 20px; color: #2d493e; }.loading #retry[hidden] { display: none; }
+.notice { position: absolute; top: 110px; left: 50%; transform: translateX(-50%); border-radius: 5px; background: var(--glass); padding: 11px 17px; font-size: 12px; opacity: 0; transition: opacity .25s; pointer-events: none; }.notice.visible { opacity: 1; }
+body.clean .masthead, body.clean .scene-caption, body.clean .quality-panel, body.clean .playback, body.clean .interaction-hint, body.clean .notice { display: none; }
+@media (max-width: 700px) { .masthead { padding: 22px 20px 60px; }.identity h1 { font-size: 18px; }.weather { display:none; }.scene-caption { left: 20px; bottom: 200px; }.scene-caption h2 { font-size: 24px; }.scene-caption p { font-size: 10px; }.quality-panel { right: 18px; bottom: 139px; }.control-label { display: none; }.segmented button { padding: 7px 12px; }.performance { font-size: 9px; }.playback { left: 16px; right: 16px; bottom: 32px; padding: 10px 13px; }.playback-label { display: none; }.mode-button { padding-left: 12px; }.chapters button { font-size: 9px; letter-spacing: 0; }.interaction-hint { left: 19px; bottom: 8px; font-size: 9px; } }
+@media (prefers-reduced-motion: reduce) { .loading, .notice, .loading-track div { transition: none; } }

@@ -47,6 +47,32 @@ All stills are single frames from the finished film.
 
 <p><img src="docs/images/finale.jpg" width="100%" alt="Aerial view over the whole temple precinct, the pagoda and hall in front of wooded hills"><br><sub>The finale: a crane up over the whole precinct (shot 10)</sub></p>
 
+## Online development preview
+
+- [Temple](https://touzi-xiansheng.github.io/golden-temple-preview/)
+- [Campus (WebGL)](https://touzi-xiansheng.github.io/golden-temple-preview/campus.html)
+- [Campus (WebGPU experimental preview)](https://touzi-xiansheng.github.io/golden-temple-preview/campus-webgpu.html)
+
+The [preview repository](https://github.com/touzi-xiansheng/golden-temple-preview)
+publishes built files from its `main` branch through GitHub Pages. This is a
+snapshot of the local development version; local edits need a fresh build and
+upload to appear online. The complete development source is kept on the preview
+repository's [`source/webgpu-preview` branch](https://github.com/touzi-xiansheng/golden-temple-preview/tree/source/webgpu-preview).
+
+The WebGPU entry is an experimental snapshot, not a completed visual or performance
+upgrade. It requires a WebGPU-capable browser and GPU; GitHub Pages supplies HTTPS.
+On the tested Mac, the production build generated all seven buildings, baked 907
+irradiance probes and captured four reflection probes in about 45 seconds before
+the first complete frame. Other devices may take longer. Lighting still looks too
+pale, performance needs work, and full motion/lifecycle/cross-device acceptance is pending.
+The GPU visibility module has calibration tests but is not enabled in the campus.
+
+Build for this hosting path with `npm run build -- --base=/golden-temple-preview/`.
+Publish the generated `dist/` files to the preview repository's `main` branch,
+preserving its license files and `.nojekyll`. For local development, open
+`http://localhost:5173/campus-webgpu.html`; a remote plain-HTTP IP address is not
+a secure WebGPU context. `?gi=0&reflections=0` is available for diagnostic comparisons.
+
 ## Quick start
 
 Requirements:
@@ -78,6 +104,203 @@ The page is controlled by URL parameters:
 | `exp`, `fstop`, `focus`, `dof=1`, `ao`, `bloom`, `fog`, `vol` | Post-processing overrides, for example `&exp=1.2&dof=1&fstop=2.8`. |
 
 For example, <http://localhost:5173/?shot=0&t=5&w=1920&h=1080&spp=8> renders the frame at the top of this page.
+
+## Real-time procedural campus test
+
+Open `/campus.html` for the separate seven-building modern campus. It generates architecture,
+landscape, foliage textures, daylight and reflections locally in your browser, without external
+models or image textures. The original temple remains at `/`.
+
+The buildings enclose two garden courtyards: a shaded grove and a sunny lawn with layered
+planting. Entrances face the gardens; two offices have recessed, walkable ground-floor arcades.
+The commons cafe also opens into a five-metre-deep covered terrace with four columns and
+three table groups. A 1.2m ramp joins the existing entrance paving to a clear turning area
+and 1.8m passages. Its geometry adds 2,230 triangles and three batches; the lighting proxy
+matches the recess, but most of this terrace still uses environment lighting outside the
+existing irradiance grids.
+Five equipment roofs connect their access huts to maintenance areas with 600mm paving,
+1.4m clear screen openings and supported louvers. Thirty shallow fan collars give the existing
+units visible mechanical structure. These additions reuse the existing materials and add
+12,108 triangles and two batches.
+Terrace planters contain 483 shrubs with rooted stems and individual leaves in two batches.
+Their soil sits 30mm below the rim; a supported opening in the cafe timber roof preserves
+the planter depth. Planting clears the nearby roof equipment and parapet caps.
+Most tour shots use pedestrian eye height. Vegetation is split into spatial batches for culling.
+Tree crowns retain connected, curved branches above pedestrian clearance. Surrounding woodland
+and its ground cover share a density field, with openings kept clear of the access road.
+The western front woodland slopes gradually into a lower canopy while mature trees remain behind
+and at both ends. This preserves root positions, tree counts and the overview shadow bounds.
+Vase-shaped trees use less primary-branch wandering and droop before the height and clearance remaps,
+reducing hooked limbs and long bare trunks while retaining broad, layered crowns. This campus-only
+growth setting resamples their branches and leaves; the shared generator's temple defaults are unchanged.
+Campus trunks and branches use a slimmer radius profile without moving the planting positions.
+Branch roots retain their original parent-segment attachment through the height remaps, and a shallow
+bark surface closes each main trunk's open tip. Four exposed primary roots gain short continuous
+tube extensions whose open ends lie inside the trunk. This is not a Boolean union; smaller branch
+intersections still need work for close-up inspection. Crown shading follows both slopes of the
+height remaps without moving leaves or cards; its occlusion remains an ellipsoid approximation.
+Garden shrubs use branching stems with attached leaves and open silhouettes; low spreading
+shoots fill the planting beds without opaque spherical interiors. In two foreground beds,
+38 shrubs retain their original growth and add 567 connected short shoots with 6,804 alternating
+leaves. This adds 48,096 triangles while reusing the existing batches. The north courtyard groups shrubs
+by height and adds 750 low spreading plants with small leaves and connected runners. Whole-plant
+footprints stay inside the soil boundary and clear of paths; plant roots keep their distance from tree
+centres. Leaves and stems use spatial
+batches; this adds about 788,000 triangles. The low plants have bent short shoots with leaves
+attached at separate stem nodes through real petioles. Smaller, more upright young leaves sit
+above the expanded mature leaves. This replaces the repeated four-leaf tips while preserving the
+750 root positions and their clearance envelopes. It borrows the shoot structure of
+[Pachysandra](https://www.rhs.org.uk/plants/12099/pachysandra-terminalis/details), without reproducing
+that species' exact leaf outline. Repeated blade shapes and faceting remain visible at close range.
+The 105 broadleaf groundcover plants vary blade and petiole size with maturity: expanded outer
+leaves sit below smaller central growth. Their actual leaf surfaces stay inside each planting
+footprint, with no extra triangles or batches. Flowering plants retain their existing shape.
+The sunny garden's two western beds form one continuous border, with 108 existing plants
+rearranged into lower front planting and overlapping shrub groups. Lawn and soil meet at a real
+geometry boundary; 23 grass tufts covered by the new soil are removed. This adds 1,386 triangles
+without another draw batch.
+The southeast bed extends into a local layered border: six taller shrubs and 44 lower plants replace
+two overlapping old shrubs. The taller plants use paired leaf nodes, terminal growth and attached
+axillary short branches, with 8–10cm leaves and physical petioles. Their shoot structure borrows from
+[Viburnum carlesii](https://landscapeplants.oregonstate.edu/plants/viburnum-carlesii); internodes,
+bud activation and taper remain design assumptions, and leaf detail is not an exact species replica.
+The six plants add 166,464 triangles in the existing leaf batches and one shared-material wood batch.
+The complete local border changes the accepted scene by 315,214 triangles and one batch, reaching
+9,179,037 triangles in 271 meshes. The known new-versus-old woody contacts were removed by renewing
+the two old shrubs; this is not a proof that all vegetation geometry is mutually disjoint.
+Planting and soil changes are staged together; a failed local layout retains the original bed.
+
+The campus reuses the procedural atmosphere and branching-tree generators. The atmosphere
+is baked to a background cube once at startup, with four local reflection probes for glazing.
+The upper east elevation of building C has its own elevated capture, so its sky and opposite-building
+reflections no longer share the ground-level west probe. This adds one startup capture and one glass
+batch, without another per-frame scene pass. A single static origin still approximates parallax
+and occlusion across the facade; it is not equivalent to a live mirror.
+The visible sky, diffuse environment and courtyard probe captures share one radiance scale;
+direct sunlight uses the fixed atmosphere's transmittance. Glazing preserves captured radiance
+without an extra reflection gain. The sun's azimuth gives the west courtyard elevations direct
+light while retaining sunlight across the north planting bed; its elevation and intensity are unchanged.
+Window blinds respond to the existing shadowed sun and diffuse
+irradiance, including the GI fallback in low quality. Their pane-level light estimate assumes .65 bulk
+transmission each way; it does not trace light through a physical double-glazing assembly.
+The sun disc and cloud shading remain artistic approximations,
+so this is not a fully calibrated light model.
+Glass includes view-dependent room detail; these are apparent interiors, not navigable rooms.
+Adjacent panes share room layouts. Local captures use box projection to keep nearby reflected
+buildings and planting better aligned; this remains an approximation, not ray-traced glass.
+Floor spandrels share the outer window plane and reflection material, with recessed opaque
+backing and no apparent interior behind them, so reflections continue across storeys.
+Ordinary curtain-wall panes overlap their connected frames by 6 mm, with separate top and
+entrance-edge closures; the deeper external shading fins retain their original dimensions.
+Glazing uses a roughness floor matched to its 512-pixel probes, retaining geometric derivative
+filtering instead of unnecessarily blurring the reflections to the default 256-pixel level.
+In balanced and quality modes, nearby west-side ground-floor glass instead uses a live planar
+reflection of the full scene. It preserves the actual occlusion of soffits, columns, frames and
+paving. Arcade doors and transoms share the curtain wall's physical outer plane.
+Only the nearest visible arcade updates, at the active render resolution capped to a 2048-pixel
+long edge. Up to four samples, selected from the GPU's supported half-float formats, resolve
+narrow board joints before reflection mip filtering; unsupported devices retain single-sample rendering.
+Still views reuse the capture. Between 8 and 12 metres it fades into the local probe. Performance
+mode uses probes only. This is a planar approximation with mip filtering, not general ray
+tracing or exact curved-glass/GGX reflection. The older isolated soffit cache is no longer used.
+Arcade floors use 600-by-900mm stone modules, with physical 3mm joints over a continuous recessed
+bed and 1mm geometric chamfers. Stone surfaces retain the original floor height, with cuts around
+columns and door frames, subtle per-stone colour variation and procedural mineral relief.
+Arcade soffits use finite timber boards with staggered end joints, narrow gaps and a recessed
+backing. Their grain uses explicit metre-scale board coordinates, including cut edges, so short
+end pieces keep the same grain direction. Other timber components retain their existing finish.
+Ground-floor stone and metal edges have small geometric chamfers. Bark, cut-turf and mulch maps are
+generated at physical scales, with separate color and surface-relief data.
+The gallery's four upper elevations use 228 limestone panels with 6mm physical joints and recessed
+backing. Panel faces retain the old pier envelope and window openings, with 1mm bevels and subtle
+linear reflectance variation. This adds one batch and 9,456 triangles. At a distance, the narrow joints
+can still alias; their physical width is not enlarged to make them stand out.
+Offices A and D have three upper south-end storeys with paired office windows beside a narrow
+service-window bay. These are real openings with mineral reveals, framed glazing and shared room
+coordinates for each pair; the ground floor and recessed top floor retain their original layout.
+The sunny scene is static: local probes are captured at startup and shadow maps update on cuts
+or quality changes. Nearby planar reflections update as the camera moves.
+Sun shadows soften with blocker distance, with a constant physical sun size across quality modes.
+Walls, paving and foliage interpolate neighbouring shadow comparison results at each filter sample,
+reducing coarse bands and stair steps while retaining occlusion. This costs extra depth reads in all
+three quality modes; it does not recover silhouettes missing from the shadow map's finite resolution.
+Overview shadows include the surrounding tree crowns; walking shots concentrate resolution locally.
+The arcade shot aligns the shadow map with its long eaves to reduce stair steps on near columns,
+without increasing texture size. Other shots and the free camera restore the normal orientation.
+Three neighbouring districts use simple distant buildings and connected streets outside the woodland.
+Two research offices form a western frontage with a shared parking court and a connected branch street.
+All four research offices, including the northern pair, use 380 window openings with 450mm reveals
+and 1,140 recessed panes. Actual aperture and mullion
+dimensions also determine local sunlight occlusion, without enlarging the main shadow map.
+These panes combine dielectric reflection with a daylight-lit matte backing. They retain the central
+environment probe, so reflections are approximate; adjacent trees and buildings do not cast facade
+shadows here. This detail improves the tour's background, not unrestricted close-up interiors.
+Entrance ramps and loading aprons follow the terrain with filled sides; adjoining roads and parking
+share a single asphalt surface to prevent overlapping faces from flickering.
+Distant meadow colours mix green and dry vegetation reflectance directly, without amplifying the
+coverage field into high-contrast bands. This reduces the procedural striping at shallow view angles;
+it does not replace the still-simplified distant landscape with a complete land-use model.
+The northern research frontage adds managed grass verges, entrance forecourts and irregular tree
+groups connecting the woodland edge to the neighbouring grounds. Their tree roots follow the
+rendered terrain triangles; independent foliage batches preserve the campus planting and shadow bounds.
+Their ground shadows are baked into a separate 1024-square single-channel atlas from the actual
+receiver triangles. It attenuates direct sunlight only, without enlarging the campus shadow camera.
+This approximation covers fixed, axis-aligned buildings and translucent ellipsoid tree crowns in
+daylight, not moving objects, individual leaf shadows or facade shadows.
+Thin leaves respond to the sun direction and shadow visibility, with modest opposite-side diffuse
+transmission that retains crown occlusion. Canopy cards do not receive this extra leaf-surface term.
+Seven near-view courtyard trees use complete trunk-to-leaf growth graphs with staggered branches,
+age-dependent secondary growth and individual leaves instead of foliage cards. Six use stable
+site-specific seeds and their planted height/radius; the first calibrated tree retains its original
+graph. Leaf and petiole sizes stay in physical units. The six-tree expansion adds 668,244 triangles
+and removes two old card batches. It is calibrated to these courtyard sites, not enabled for every
+hero tree. The six added trees’ measured crown bounds also drive the existing coarse AO and GI ellipsoids;
+these remain approximations, not a leaf-resolved light transport solution.
+Individual leaves use the same surface normal for reflection and transmission; forward transmission
+also follows the projected area facing the sun. Shrubs within eight metres of the walking tour use
+cupped leaves with a longitudinal midrib. This geometry is selected once for whole plants, with
+the original leaf positions and colours preserved; switching quality never rebuilds it.
+The arrival and sunny garden walks also have centimetre-scale mown grass, sharing the procedural
+turf colour texture and the scene's sunlight, shadows and indirect light. Placement uses actual
+lawn and paving contours, including flowerbeds and tree pits; blade roots sit just below the surface.
+This detail is fixed around the tour's visible near ground, with density decreasing over twelve metres.
+It is not a dynamic terrain system for unrestricted free-camera exploration. Paving foundations extend
+below the ground while retaining their existing walking-surface height.
+Balanced and quality modes also use 315 courtyard irradiance probes, 432 denser probes in the
+two west arcades, and 160 probes beneath the commons cafe roof. These are generated at startup
+from simplified buildings, paths, tree crowns and the six taller shrubs. Shrub leaf bounds form
+coarse porous ellipsoids in the same four atlases; soil bounce remains approximate.
+The covered-space proxies include the recessed
+glazing, columns, wood soffits and stone floors. Local volumes
+cover the exposed paving joints and fade at the openings, while staying bounded by the rear walls
+and ceilings. They replace local diffuse fill without adding a second copy of the sky lighting. This is
+an approximate static, single-bounce solution for the courtyards and covered outdoor spaces, not full ray tracing or accurate
+lighting inside buildings. Moving the sun or buildings would require recapturing the light data.
+
+- The six-shot tour loops every 60 seconds. Use the timeline or chapter buttons to seek,
+  Space to pause, and F to switch between the tour and an orbit camera.
+- Switch 流畅 / 平衡 / 画质 while running. The modes change render resolution, shadows,
+  indirect light, near-glass reflections, anti-aliasing and post-processing without rebuilding geometry or resetting the camera.
+  Pixel budgets are 720p / 1080p / 1440p; the displayed canvas always fills the window.
+- The counter shows measured browser FPS and actual render resolution. The 1080p / 30 FPS
+  balanced target still needs validation on the target Windows / GTX 1660 Ti device.
+- Optional parameters: `?quality=performance`, `?quality=balanced`, `?quality=quality`,
+  `?paused`, `?t=23`, and `?clean` (hide controls for captures).
+  `?gi=0` skips the irradiance volume for diagnostic comparisons; unsupported float-texture
+  hardware automatically falls back to environment lighting.
+
+To reach the Mac from another Tailscale device, start Vite bound to the Mac's Tailscale IP:
+`npm run dev -- --host <mac-tailscale-ip>`, then open
+`http://<mac-tailscale-ip>:5173/campus.html`. Rendering uses the visiting device's GPU.
+
+Validation: `npm run test:campus`, `npm run build`, and, with Vite running,
+`npm run check:campus`. Set `CAMPUS_URL` if the server is not on localhost:5173.
+The browser check writes screenshots and measured results to `out/campus/`.
+`npm run check:campus-loading` also measures startup long tasks and animation-frame gaps,
+and rejects main-thread tasks lasting a second or more. CPU generation yields between
+small batches while preserving the same geometry, materials and random sequence; glass
+probes are captured separately. This improves responsiveness, not the amount of work:
+cold GPU/driver compilation and slower client CPUs can still increase startup latency.
 
 ## Rendering stills
 

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#263f3a" />
+  <meta name="description" content="澄境科技园：一个以代码构建的现代园区，探索建筑、光与自然的关系。" />
+  <title>澄境科技园 · WebGPU</title>
+  <link rel="stylesheet" href="/src/campus/style.css" />
+</head>
+<body>
+  <main id="experience" aria-label="澄境科技园三维漫游">
+    <canvas id="scene" aria-label="可交互的园区三维场景" tabindex="0"></canvas>
+    <header class="masthead">
+      <div class="identity"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><div><h1>澄境科技园</h1><p>VERDANT CAMPUS · WEBGPU</p></div></div>
+      <div class="header-tools"><span class="weather"><span aria-hidden="true">☀</span> 晴日 · 建筑漫游</span><button id="snapshot" class="icon-button" type="button" aria-label="保存截图" title="保存截图">▣</button><button id="fullscreen" class="icon-button" type="button" aria-label="进入全屏" title="进入全屏">⛶</button></div>
+    </header>
+    <section class="loading" id="loading" aria-live="polite"><div class="loading-inner"><span class="loading-kicker">A PLACE TO GROW</span><h2>让自然，走进建筑。</h2><p id="loading-status">正在构建园区…</p><div class="loading-track"><div id="loading-progress"></div></div><small>所有建筑与景观，由代码生成。</small><button id="retry" type="button" hidden>重新加载</button><a id="original-version" href="./campus.html" hidden>打开原版园区</a></div></section>
+    <div class="scene-caption" aria-live="polite"><span class="chapter-number" id="chapter-number">01 / 06</span><h2 id="chapter-title">抵达 · 花园中的园区</h2><p id="chapter-detail">两座庭院，连接工作与日常</p></div>
+    <aside class="quality-panel" aria-label="画质设置"><span class="control-label">画质</span><div class="segmented" role="group" aria-label="画质档位"><button data-quality="performance" aria-pressed="false">流畅</button><button data-quality="balanced" aria-pressed="true">平衡</button><button data-quality="quality" aria-pressed="false">画质</button></div><output id="performance" class="performance" aria-label="实时帧率及渲染分辨率">准备渲染</output></aside>
+    <nav class="playback" aria-label="漫游控制"><div class="playback-top"><div class="playback-buttons"><button id="play" class="play-button" type="button" aria-label="暂停漫游">Ⅱ</button><button id="restart" class="icon-button" type="button" aria-label="重新播放" title="重新播放">↺</button><span class="playback-label" id="mode-label">自动漫游</span></div><div class="time-display"><output id="elapsed">00:00</output><span>/ 01:00</span></div><button id="free-camera" class="mode-button" type="button" aria-pressed="false">自由探索 <span aria-hidden="true">↗</span></button></div><input id="timeline" type="range" min="0" max="60" step="0.05" value="0" aria-label="漫游播放进度" /><div class="chapters" aria-label="选择镜头"><button data-shot="0" aria-current="true">园区全景</button><button data-shot="1">花园门廊</button><button data-shot="2">阳光庭院</button><button data-shot="3">办公花园</button><button data-shot="4">光与阴影</button><button data-shot="5">共生之境</button></div></nav>
+    <p class="interaction-hint" id="hint">空格 暂停 / 播放 <span>·</span> F 自由探索</p>
+    <div class="notice" id="notice" role="status"></div>
+    <noscript>此三维场景需要启用 JavaScript。</noscript>
+  </main>
+  <script type="module" src="/src/campus-webgpu/main.js"></script>
+</body>
+</html>

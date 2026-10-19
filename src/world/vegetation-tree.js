@@ -437,7 +437,7 @@ export function genCherry(rng, o) {
     const out = V3(Math.cos(az), 0, Math.sin(az));
     let dir = V3(out.x * 1.15, 1, out.z * 1.15).normalize();
     const len = fitInEnvelope(s.p, dir, h * rng.range(0.7, 0.85), env);
-    const scaf = makeBranch(growCurve(rng, s.p, dir, len, rT * 0.62, 0.02, { seg: 0.25, wobble: 0.5, up: 0.0, droop: 0.4, droopPow: 1.4, outward: out, outPush: 0.12 }), 1, s.pd);
+    const scaf = makeBranch(growCurve(rng, s.p, dir, len, rT * 0.62, 0.02, { seg: 0.25, wobble: o.scaffoldWobble ?? 0.5, up: 0.0, droop: 0.4 * (o.droopScale ?? 1), droopPow: 1.4, outward: out, outPush: 0.12 }), 1, s.pd);
     branches.push(scaf);
     const nL2 = Math.round(rng.range(8, 11) * (0.7 + 0.3 * det));
     let laz = rng.range(0, TAU);
@@ -451,7 +451,7 @@ export function genCherry(rng, o) {
       d.normalize();
       const L = fitInEnvelope(ss.p, d, h * rng.range(0.28, 0.4) * (1 - 0.4 * tt), env);
       if (L < 0.35) continue;
-      const l2 = makeBranch(growCurve(rng, ss.p, d, L, Math.min(ss.r * 0.72, rT * 0.32), 0.008, { seg: 0.2, wobble: 0.65, up: 0.1, droop: 0.7, droopPow: 1.3, outward: out, outPush: 0.1 }), 2, ss.pd);
+      const l2 = makeBranch(growCurve(rng, ss.p, d, L, Math.min(ss.r * 0.72, rT * 0.32), 0.008, { seg: 0.2, wobble: 0.65, up: 0.1, droop: 0.7 * (o.droopScale ?? 1), droopPow: 1.3, outward: out, outPush: 0.1 }), 2, ss.pd);
       branches.push(l2);
       // level 3
       const plen = L;
@@ -464,7 +464,7 @@ export function genCherry(rng, o) {
         d3.normalize();
         const L3 = fitInEnvelope(s3.p, d3, rng.range(0.5, 1.3) * (1 - 0.3 * t3), env);
         if (L3 < 0.15) continue;
-        const l3 = makeBranch(growCurve(rng, s3.p, d3, L3, Math.max(0.005, Math.min(s3.r * 0.7, 0.025)), 0.004, { seg: 0.25, wobble: 0.8, up: 0.15, droop: 0.6 }), 3, s3.pd);
+        const l3 = makeBranch(growCurve(rng, s3.p, d3, L3, Math.max(0.005, Math.min(s3.r * 0.7, 0.025)), 0.004, { seg: 0.25, wobble: 0.8, up: 0.15, droop: 0.6 * (o.droopScale ?? 1) }), 3, s3.pd);
         branches.push(l3);
         twigs.push({ br: l3, t0: 0.1 });
       }
