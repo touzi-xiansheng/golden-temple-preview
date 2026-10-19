@@ -1,0 +1,1 @@
+export{t as buildStoneLantern}from"./props-stone-DJvaVY1J.js";

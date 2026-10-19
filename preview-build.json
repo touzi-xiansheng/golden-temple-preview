@@ -1,0 +1,8 @@
+{
+  "sourceRepository": "touzi-xiansheng/golden-temple-preview",
+  "sourceBranch": "source/webgpu-preview",
+  "sourceCommit": "9fe99d6c8375fc637da9d36deb52c69ad6c4b918",
+  "entry": "campus-webgpu.html",
+  "status": "experimental",
+  "buildCommand": "npm run build -- --base=/golden-temple-preview/"
+}
