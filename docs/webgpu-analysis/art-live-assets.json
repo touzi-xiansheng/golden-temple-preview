@@ -1,0 +1,100 @@
+{
+  "at": "2026-10-19T09:50:15.088Z",
+  "base": "https://touzi-xiansheng.github.io/golden-temple-preview/",
+  "sourceCommit": "700e224f05e712746e2a5bad6bac7cc8956579f4",
+  "files": [
+    {
+      "path": "index.html",
+      "sha256": "23383f91426fc0e76014899192b63bb82ec21549980c8da25dc9c61b1c07bb8f"
+    },
+    {
+      "path": "campus.html",
+      "sha256": "d047deeaf8fc83a5347e792202ce9b44102d36d40b0c035334c540c33444595c"
+    },
+    {
+      "path": "campus-webgpu.html",
+      "sha256": "6ccbd56b2ecc3ab9ddde1b867d06a994d1fef3fb84c9fe32b16480b4253aae08"
+    },
+    {
+      "path": "webgpu-lab.html",
+      "sha256": "c3fb17cfd3051b479010c9ba7803987ceb4270dd05494b469384cf957de7c966"
+    },
+    {
+      "path": "assets/temple-CacCM6da.js",
+      "sha256": "cdfc2ea50441c81ea47962741e9eaa263a8a43700d964c1a8975fb6c4a460fe5"
+    },
+    {
+      "path": "assets/three.core-DuvWXBVy.js",
+      "sha256": "ce55011d97ee6d9eeeac0b6472d36b33aefc7abb6ef44c07f4a144e8f7cfc2a9"
+    },
+    {
+      "path": "assets/three.module-By_ZExND.js",
+      "sha256": "c1bda4c0249430d36f73c945dfd3894435bab54daae82c4b7a65d5b530e6ae20"
+    },
+    {
+      "path": "assets/modulepreload-polyfill-P2Xu9kJm.js",
+      "sha256": "418c206484b89b68ef5f067277831e583fc9193a62aadf4de269acaaeb12a85f"
+    },
+    {
+      "path": "assets/BufferGeometryUtils-Bl0DW3-j.js",
+      "sha256": "14d1b64aad652c153eb42c125b79097944cef4e6f9d4a95733d52dc9eb6b52c7"
+    },
+    {
+      "path": "assets/RoundedBoxGeometry-BiBwjk7E.js",
+      "sha256": "45cfea49154918ce41e9cde06e0db8a96c3954b0af286911da757e7e33f0d178"
+    },
+    {
+      "path": "assets/geom-C12jUWl1.js",
+      "sha256": "4586605b9f25100ada09811a6cdef1abe8b2ce905d8c887283fc5003ac20a156"
+    },
+    {
+      "path": "assets/glsl-g9hpiSYu.js",
+      "sha256": "e0820f4d9a57a8d130086e491fc5a9a05e5c564b93889d846a8de08629a0b491"
+    },
+    {
+      "path": "assets/sky-CE_hpqjI.js",
+      "sha256": "8383122ff95a53dd3eba35aefaace6a67bf00d1be95b4e706fca7f309b04f65e"
+    },
+    {
+      "path": "assets/Pass-CXM1VNzz.js",
+      "sha256": "f622a1bbc5f028fb9456aaabf3558cafd3a19131bff507ace348c7a49937d31b"
+    },
+    {
+      "path": "assets/shots-CFEcEcFb.js",
+      "sha256": "1f614063141a30e96eae1476ab2785f0f0fbba09456327d74bb974653e06ada9"
+    },
+    {
+      "path": "assets/preload-helper-9vEx8zwa.js",
+      "sha256": "67c6302741b6e43958bd1524e386d87bbc98e3c3d3825dfb10381f032226c6ed"
+    },
+    {
+      "path": "assets/campus-DCKpWSow.js",
+      "sha256": "d6372453fc4d409d90dd8d115b617341a9cbbd31ec098279aa5f9b8153df2f35"
+    },
+    {
+      "path": "assets/vegetation-tree-BVrkfeHc.js",
+      "sha256": "b06141da5ea92f5f61ed4e15d9e50a028d8b73e16e66a99de7ca88b017b8c0e8"
+    },
+    {
+      "path": "assets/LightProbeGridUtils-DmVHGRFQ.js",
+      "sha256": "99dc837528a23e2302ae131e81ef6c8aaa9a654ac0eb47424c8d378e93ea6592"
+    },
+    {
+      "path": "assets/LightProbeGridUtils-Csy05UQj.css",
+      "sha256": "4265bdf87846f0efecdd0c7c7f1ca3fd04ecc543dd8cc8c8a230d929a69add2e"
+    },
+    {
+      "path": "assets/campusWebGPU-BczZmaDj.js",
+      "sha256": "1261bb8f501f5a317f04647bac936831420e033cce89db4f7ca4105e36842f51"
+    },
+    {
+      "path": "assets/three.tsl-DJhDxPQQ.js",
+      "sha256": "b61efedac3202053088094f7fc08159edca4c1466f1aacb284fa2870b5f9bf0c"
+    },
+    {
+      "path": "assets/webgpuLab-C3i_Im7-.js",
+      "sha256": "402049f0f498d742357ffa6d98e29035295f95368cbd26a1c8a99e643314f543"
+    }
+  ],
+  "passed": true
+}

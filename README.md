@@ -59,7 +59,7 @@ snapshot of the local development version; local edits need a fresh build and
 upload to appear online. The complete development source is kept on the preview
 repository's [`source/webgpu-preview` branch](https://github.com/touzi-xiansheng/golden-temple-preview/tree/source/webgpu-preview).
 
-The WebGPU entry requires a WebGPU-capable desktop browser and GPU; GitHub Pages
+The WebGPU entry targets a WebGPU-capable desktop browser and GPU; GitHub Pages
 supplies HTTPS. It preserves the seven buildings, plants and render resolution.
 Fixed daylight, 907 diffuse probes and two small local wood-ceiling environments
 are generated at startup. Four 512-pixel glass probes provide broad coverage; one

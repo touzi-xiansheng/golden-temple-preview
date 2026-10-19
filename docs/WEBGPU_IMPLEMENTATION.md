@@ -37,6 +37,8 @@
 
 [最终生产检查](webgpu-analysis/art-production.json) 覆盖六视角、三档画质、自由相机与返回漫游，无页面/GPU 错误、警告或外部资产请求；仍为 7 栋、271 meshes、9,179,037 triangles、1,159,231 instances。首屏耗时会受驱动缓存显著影响，暖缓存复验约 16.6 秒，较冷的一轮约 44 秒，不作为受控加载性能对比。旧 WebGL 园区与寺庙 HTML 及其直接引用构建资源逐字节保持一致。
 
+已发布到 [GitHub Pages 预览](https://touzi-xiansheng.github.io/golden-temple-preview/campus-webgpu.html?rev=700e224)：应用源码为 `700e224`，静态部署为 `c6091af`，Pages 工作流成功。[线上资源核对](webgpu-analysis/art-live-assets.json) 确认四个入口及直接引用资源共 23 个文件与本地验收构建逐字节一致。[线上运动复验](webgpu-analysis/art-motion-live.json) 使用上述桌面测试配置，六段 p95 为 17.9–18.4 ms，绝对及相对门槛均通过，未记录页面/GPU 错误。首次进入反射镜头峰值 24.7 ms；第 10 秒自然切镜仍有 58.7 ms 峰值，自由相机进入/返回峰值为 22.8/21.9 ms。线上该次首屏约 44.1 秒，初始化等待和个别切镜停顿仍需继续优化，不能只用稳态帧间隔代表完整体验。
+
 | 视角 | 旧版 | 本轮 |
 |---|---|---|
 | 庭院 | ![旧庭院](webgpu-analysis/art-before-25.png) | ![新庭院](webgpu-analysis/art-after-25.png) |
