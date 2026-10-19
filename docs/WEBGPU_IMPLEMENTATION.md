@@ -30,6 +30,8 @@ node tools/webgpu-check.mjs --lab --lighting --materials
 
 成对结果见 [修改前](webgpu-analysis/realism-motion-before.json) 和 [修改后](webgpu-analysis/realism-motion-after.json)。六段中位数均约 16.6ms；修改前 p95 为 17.7–19.7ms，修改后为 17.9–20.0ms，六段均通过绝对及相对门槛。两个自然切镜窗口的最大间隔为 20.8/21.8ms，进入/退出自由相机为 22.8/21.0ms。样本较短，只证明该设备本次采样未出现明显退步，不宣称新增视觉效果提升了帧率。
 
+发布后的 [线上复核](webgpu-analysis/realism-motion-live.json) 无页面/GPU错误，六段均低于 25ms；但最后一段 p95 为 20.4ms，比旧版单次基线的相对门槛 19.7ms 高 0.7ms，因此该报告明确保留为失败。随后用同一服务器提供两个确切静态构建，按旧/新/新/旧/旧/新顺序重新加载，最后一段每轮预热 1.2 秒、采样 5 秒。[六轮结果](webgpu-analysis/realism-last-shot-repeat.json) 中旧版 p95 为 18.3/18.5/19.5ms，新版为 18.5/18.5/18.5ms，两者中位数均为 18.5ms；未复现持续回退。这支持“短样本波动”的解释，但不抹掉线上首次相对门槛失败，也不构成统计学上的 95% 置信区间。
+
 生产构建成功，Node 测试 26 项通过、1 项可选 GPU 测试跳过；另行运行了上述 18 项真实 GPU 校准。[生产页完整检查](webgpu-analysis/realism-production.json) 覆盖六视角、三档画质与自由相机，未记录页面/GPU错误或站外资产请求。
 
 固定相机原始截图（相同曝光与环境强度，未后期调色）：
