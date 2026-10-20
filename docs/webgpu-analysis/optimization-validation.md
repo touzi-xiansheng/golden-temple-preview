@@ -68,3 +68,11 @@ Node：WebGPU 56 通过、1 项可选 GPU 校准跳过；共享园区 74 通过�
 可选 GPU 校准没有在本轮重跑；本轮没有改变材质光照公式或 shader 采样次数。没有 Windows/Safari、移动端、长时温度、功耗或实际显存峰值测量。可选 TRAA 的旧设备顶点缓冲限制不属于本轮验收，默认仍为 MSAA。
 
 暂停后持续渲染、完整加载耗时、远景玻璃近似和外围简化仍可后续优化，本轮不声称全部写实问题已消除。
+
+## 发布与线上复验
+
+应用源码 `403a9a61c0858053f9574345f7f8d5feac5092dc` 已推送至 `source/webgpu-preview`，静态部署提交为 `66cd79d85bbab01a58f46e2ca26a7a25b36cfdf3`。[GitHub Pages 工作流](https://github.com/touzi-xiansheng/golden-temple-preview/actions/runs/39387473522) 成功，可[打开本轮预览](https://touzi-xiansheng.github.io/golden-temple-preview/campus-webgpu.html?rev=403a9a6)。
+
+[线上资源核对](optimization-live-assets.json) 验证四个入口、构建元数据及递归依赖共 24 个文件，与验收部署目录逐字节一致。仅更新两个园区 HTML、三个构建资源和元数据；寺庙入口、许可证、`.nojekyll` 和既有资源保留。
+
+[线上真实 GPU 复验](optimization-interaction-live.json) 通过两轮三档画质往返、12 次六镜头回访、12 次相机进入/拖动返回及世界高度限制。运行时注入故障后帧数保持 476，启动预热边界注入故障后提交数保持 8417，均保留错误状态。没有重做线上性能配对；性能结论仍限定于上面的本地同机试验。
