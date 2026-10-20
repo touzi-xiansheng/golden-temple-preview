@@ -54,14 +54,17 @@ try {
     return {...summarizeMotion(samples),...state,firstFrame:samples[0],observedShots:[...new Set(samples.map(row=>row.shot))],events};
   }
 
-  // Measure the first interactive entry before steady windows warm this camera path.
-  await page.evaluate(()=>{window.__campus.pause();window.__campus.setTime(39.6);});
-  await waitForStableCampus(page);
-  await page.evaluate(()=>{window.__motionProbe.reset();document.getElementById('play').click();});
-  await page.waitForFunction(()=>window.__motionProbe.samples.filter(row=>row.shot===4).length>=18,{timeout:15000});
-  const firstReflectionCut={kind:'first-reflection-cut',at:40,...await collect()};
-  report.transitions.push(firstReflectionCut);console.log('FIRST REFLECTION CUT',JSON.stringify(firstReflectionCut));
-  assert.ok(firstReflectionCut.events.some(event=>event.from===3&&event.to===4),'First reflection cut was not sampled on both sides');
+  // Both entrances must be measured before steady windows can warm their materials.
+  for(const [at,kind] of [[10,'first-entrance-cut'],[40,'first-reflection-cut']]) {
+    await page.evaluate(time=>{window.__campus.pause();window.__campus.setTime(time);},at-.4);
+    await waitForStableCampus(page);
+    await page.evaluate(()=>{window.__motionProbe.reset();document.getElementById('play').click();});
+    const afterShot=at/10;
+    await page.waitForFunction(shot=>window.__motionProbe.samples.filter(row=>row.shot===shot).length>=18,{timeout:15000},afterShot);
+    const sample={kind,at,...await collect()};
+    report.transitions.push(sample);console.log('FIRST CUT',JSON.stringify(sample));
+    assert.ok(sample.events.some(event=>event.from===afterShot-1&&event.to===afterShot),`First cut at ${at}s was not sampled on both sides`);
+  }
 
   for(const time of [2,12,22,32,42,52]) {
     await page.evaluate(time=>{const app=window.__campus;app.pause();app.setTime(time);document.getElementById('play').click();},time);

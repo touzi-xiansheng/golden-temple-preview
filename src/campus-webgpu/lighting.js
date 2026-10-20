@@ -23,6 +23,13 @@ export const campusDiffuseIntensity = uniform(1).onRenderUpdate(({ scene }) => s
 export const GROUND_ALBEDO = new Color('#54643b');
 const bindings = new WeakMap();
 
+// Keep the background graph identical across main/planar/cube views. Swapping
+// Scene.background textures makes r186 replace its background material graph
+// on every capture, even though only the sampled cube needs to change.
+export function createCampusBackgroundNode(visibleTexture, captureTexture, mainCamera) {
+  return cubeTexture(visibleTexture).onRenderUpdate(({camera})=>camera===mainCamera?visibleTexture:captureTexture);
+}
+
 function validateProbe(bounds, resolution, blendDistance) {
   if (!bounds?.isBox3 || bounds.isEmpty() ||
       ![...bounds.min, ...bounds.max].every(Number.isFinite) ||
@@ -148,7 +155,7 @@ export function createLighting({ renderer, scene, camera, quality = 'balanced', 
   }
   if (!Object.hasOwn(SHADOW_SIZES, quality)) throw new RangeError('Unknown lighting quality');
   const previous = {
-    background: scene.background, environment: scene.environment,
+    background: scene.background, backgroundNode: scene.backgroundNode, environment: scene.environment,
     backgroundIntensity: scene.backgroundIntensity, environmentIntensity: scene.environmentIntensity,
     fogNode: scene.fogNode,
   };
@@ -164,7 +171,7 @@ export function createLighting({ renderer, scene, camera, quality = 'balanced', 
   const staticShadows = cacheShadows ? createStaticShadows(sun,scene,SUN_DIRECTION) : null;
   const materials = new Set(), probes = [], bakeScenes = new Set();
   const stats = { ready: false, skyMs: 0, probeBakeMs: 0, probes: 0, cubeViews: 0, baking: false, quality, groundBounce, groundAlbedo: GROUND_ALBEDO.toArray(), shadowMode:cacheShadows?'cached':'cascades', shadowCache:staticShadows?.stats };
-  let disposed = false, environment = null, background = null, captureBackground = null, haze = null;
+  let disposed = false, environment = null, background = null, captureBackground = null, backgroundNode = null, haze = null;
 
   const lighting = {
     sun, materials, probes, stats,
@@ -173,6 +180,7 @@ export function createLighting({ renderer, scene, camera, quality = 'balanced', 
     get environment() { return environment; },
     get background() { return background; },
     get captureBackground() { return captureBackground; },
+    get backgroundNode() { return backgroundNode; },
     update(_camera,{shot=-1}={}) { staticShadows?.update(shot); },
     setQuality(value) {
       if (!Object.hasOwn(SHADOW_SIZES, value)) throw new RangeError('Unknown lighting quality');
@@ -278,12 +286,13 @@ export function createLighting({ renderer, scene, camera, quality = 'balanced', 
         scene.background = previous.background;
         scene.backgroundIntensity = previous.backgroundIntensity;
       }
+      if (backgroundNode && scene.backgroundNode === backgroundNode) scene.backgroundNode = previous.backgroundNode;
       if (environment && scene.environment === environment.texture) {
         scene.environment = previous.environment;
         scene.environmentIntensity = previous.environmentIntensity;
       }
       if (haze && scene.fogNode === haze) scene.fogNode = previous.fogNode;
-      environment?.dispose(); background?.dispose(); captureBackground?.dispose();
+      backgroundNode?.dispose(); environment?.dispose(); background?.dispose(); captureBackground?.dispose();
       stats.ready = false;
     },
   };
@@ -334,6 +343,8 @@ export function createLighting({ renderer, scene, camera, quality = 'balanced', 
         }
       }
       scene.background = background.texture;
+      backgroundNode = createCampusBackgroundNode(background.texture,captureBackground.texture,camera);
+      scene.backgroundNode = backgroundNode;
       scene.environment = environment.texture;
       scene.backgroundIntensity = 1;
       scene.environmentIntensity = 1;

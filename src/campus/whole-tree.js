@@ -3,7 +3,7 @@ import {rng} from '../core/rng.js';
 import {sampleBranch,envRho} from '../world/vegetation-tree.js';
 
 // Whole growth graph. Radii and leaf spacing are metres; cohorts are a design hypothesis, not measured botanical age.
-export function buildCampusBroadleaf(tree,crownField,space=null) {
+export function buildCampusBroadleaf(tree,crownField,space=null,{refined=false}={}) {
   const random=rng(space?space.seed:'campus-whole-tree-ti6-v1'),base=new THREE.Vector3(tree.x,tree.ground||0,tree.z);
   // The no-options call deliberately preserves the accepted ti6 graph and AO.
   const form=space?rng(space.seed+':form'):null;
@@ -18,7 +18,12 @@ export function buildCampusBroadleaf(tree,crownField,space=null) {
     const y=p.y-base.y;
     if(y<clearance||y>ceiling)return false;
     const crownWidth=y<lower?.74+.26*(y-clearance)/(lower-clearance):y<middleHeight?1:Math.max(.12,Math.sqrt(Math.max(0,1-((y-middleHeight)/capHeight)**2)));
-    return ((p.x-base.x)/rx)**2+((p.z-base.z)/rz)**2<crownWidth*crownWidth;
+    // Broad crown lobes constrain connected growth, rather than moving leaves
+    // after generation and separating them from their petioles. Never expand
+    // the accepted clearance envelope towards buildings or pedestrian paths.
+    const azimuth=Math.atan2(p.z-base.z,p.x-base.x);
+    const lobe=refined?.92+.08*Math.cos(3*azimuth+tree.x*.31+tree.z*.17):1;
+    return ((p.x-base.x)/rx)**2+((p.z-base.z)/rz)**2<(crownWidth*lobe)**2;
   };
   const frame=tangent=>{
     const Z=up.clone().addScaledVector(tangent,-up.dot(tangent));
@@ -124,7 +129,9 @@ export function buildCampusBroadleaf(tree,crownField,space=null) {
       const w=random.float(.075,.125),l=random.float(.135,.225),matrix=new THREE.Matrix4().makeBasis(X.multiplyScalar(w),Y.clone().multiplyScalar(l),Z.multiplyScalar(l));matrix.setPosition(p);
       const petiole=branches.length;
       branches.push({pts:[node.p,p],rads:[Math.min(.0005,node.r*.28),Math.min(.00022,node.r*.15)],pd:[node.pd,node.pd+petioleLength],level:branch.level+1,parent,t,radial:3,petiole:true});stages.petiole++;
-      const color=new THREE.Color(0x365c2c).lerp(new THREE.Color(0x718849),random.float(0,.72)).multiplyScalar(random.float(.87,1.1));
+      const tint=random.float(0,.72),value=random.float(.87,1.1);
+      const origin=branch.pts[0],cohort=.36+.24*Math.sin(origin.x*.81+origin.y*.65+origin.z*.73);
+      const color=new THREE.Color(0x365c2c).lerp(new THREE.Color(0x718849),refined?cohort*.75+tint*.25:tint).multiplyScalar(refined?1+(value-1)*.4:value);
       const ao=space?1:.4+.6*THREE.MathUtils.smoothstep(envRho(p,crownField(p)),.2,1.05);
       leaves.push({matrix,color,normal,ao});bindings.push({parent,segment:t*(branch.pts.length-1),t,petiole});
     }

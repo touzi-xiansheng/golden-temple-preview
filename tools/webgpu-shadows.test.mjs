@@ -55,3 +55,33 @@ test('free exploration uses a fixed scene envelope instead of freezing a view-de
     assert.equal(sun.shadow.needsUpdate,false);
   } finally {await close();}
 });
+
+test('aerial and free views reuse exactly the same shadow coverage without dropping a pending bake', async () => {
+  const {lighting,camera,close}=fixture();
+  try {
+    const shadow=lighting.sun.shadow,stats=lighting.stats.shadowCache;
+    const projection=shadow.camera.projectionMatrix.clone(),position=lighting.sun.position.clone();
+    const initial=stats.invalidations,texelMetres=stats.texelMetres;
+    lighting.update(camera,{shot:0});
+    assert.equal(shadow.needsUpdate,true,'the initial pending bake must survive a reused transition');
+    shadow.needsUpdate=false;
+    for(const shot of [5,0,-1,5]) {
+      lighting.update(camera,{shot});
+      assert.equal(shadow.needsUpdate,false);
+      assert.equal(stats.invalidations,initial);
+      assert.equal(stats.texelMetres,texelMetres);
+      assert.ok(shadow.camera.projectionMatrix.equals(projection));
+      assert.ok(lighting.sun.position.equals(position));
+    }
+    assert.equal(stats.reusedTransitions,5);
+    // Changing resolution still rebakes even though the coverage is identical.
+    lighting.setQuality('performance');
+    assert.equal(shadow.needsUpdate,true);assert.equal(stats.invalidations,initial+1);
+    assert.equal(stats.texelMetres,texelMetres*4);
+    shadow.needsUpdate=false;lighting.update(camera,{shot:4});
+    assert.equal(shadow.needsUpdate,true);assert.equal(stats.invalidations,initial+2);
+    assert.equal(stats.coverage,'shot-4');
+    shadow.needsUpdate=false;lighting.update(camera,{shot:0});
+    assert.equal(shadow.needsUpdate,true,'returning from a genuinely different map must rebake');
+  } finally {await close();}
+});

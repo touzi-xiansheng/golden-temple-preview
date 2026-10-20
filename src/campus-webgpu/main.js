@@ -26,6 +26,7 @@ async function start() {
   stage('正在连接 WebGPU…', 5);
   let stopped = false;
   const runtime = await createRenderer(canvas, { onError: failed, onLost: info => { stopped = true; failed(new Error(`图形设备连接已中断：${info.message}。请重新加载。`)); } });
+  const rendererInitMs = performance.now()-started;
   const { renderer } = runtime;
   const camera = new PerspectiveCamera(46, 1, .2, 9000);
   let time = Math.max(0, Number(query.get('t')) || 0) % DURATION;
@@ -75,7 +76,8 @@ async function start() {
     time=Math.max(0,Math.min(DURATION-.001,number)); if(free)setFree(false); applyTour(); view?.resetHistory();
   }
   applyTour(); resize();
-  world = await createCampusScene({stage,yieldControl,contacts:query.get('contacts')!=='0'});
+  world = await createCampusScene({stage,yieldControl,contacts:query.get('contacts')!=='0',refined:query.get('aesthetics')!=='0'});
+  world.stats.timings.rendererInitMs=rendererInitMs;
   stage('正在建立日光、阴影与程序天空…',60); await yieldControl();
   let tick = performance.now();
   lighting = createLighting({renderer,scene:world.scene,camera,quality,cacheShadows:query.get('shadows')!=='dynamic',groundBounce:query.get('groundBounce')!=='0'}); await lighting.ready;
@@ -95,8 +97,15 @@ async function start() {
   }
   view = createView(renderer,world.scene,camera,{aa:query.get('aa')==='traa'?'traa':'msaa'});
   setQuality(quality);
-  stage('正在编译 WebGPU 材质与渲染管线…',85); await yieldControl(); tick=performance.now();
-  await renderer.compileAsync(world.scene,camera);
+  stage('正在准备 WebGPU 材质与渲染管线…',85); await yieldControl(); tick=performance.now();
+  // Keep precompilation: interleaved complete-startup measurements found no
+  // benefit from removing it. The opt-out is retained for diagnostics.
+  const startupCompilation=world.stats.startupCompilation={defaultPrecompile:query.get('precompile')!=='0',
+    programCountSource:'renderer.info.memory.programs',programsBefore:renderer.info.memory.programs,warmup:[]};
+  const precompileStarted=performance.now();
+  if(startupCompilation.defaultPrecompile)await renderer.compileAsync(world.scene,camera);
+  world.stats.timings.defaultPrecompileMs=startupCompilation.defaultPrecompile?performance.now()-precompileStarted:0;
+  startupCompilation.programsAfterDefaultPrecompile=renderer.info.memory.programs;
   const renderOnce = () => {
     renderer.info.reset();
     const shadowRevision=lighting.stats.shadowCache?.invalidations;
@@ -107,17 +116,32 @@ async function start() {
   if(reflections?.stats.enabled) {
     stage('正在准备近景玻璃反射…',92);await yieldControl();
     const warmupStarted=performance.now(),initialCamera=camera.clone();
-    // Warm both the reflected and main MSAA paths before the first arcade cut.
-    for(const time of [4*SHOT_SECONDS,4.5*SHOT_SECONDS]) {
-      const frame=sampleTour(time);
+    // These three views cover the measured first-entry pipeline misses.
+    for(const warmupTime of [SHOT_SECONDS,4*SHOT_SECONDS,4.5*SHOT_SECONDS]) {
+      const pointStarted=performance.now(),programsBefore=renderer.info.memory.programs;
+      const frame=sampleTour(warmupTime);
       camera.position.copy(frame.position);camera.lookAt(frame.target);camera.fov=frame.fov;camera.updateProjectionMatrix();
       lighting.update(camera,{shot:frame.index});reflections.update(camera,{force:true});view.frame();
-      await renderer.backend.device.queue.onSubmittedWorkDone();await new Promise(requestAnimationFrame);
+      const submitMs=performance.now()-pointStarted,queueStarted=performance.now();
+      await renderer.backend.device.queue.onSubmittedWorkDone();
+      const queueWaitMs=performance.now()-queueStarted;
+      await new Promise(requestAnimationFrame);
+      startupCompilation.warmup.push({time:warmupTime,submitMs,queueWaitMs,totalMs:performance.now()-pointStarted,
+        programsBefore,programsAfter:renderer.info.memory.programs});
     }
     camera.copy(initialCamera);
+    view.resetHistory();
     reflections.invalidate();world.stats.timings.reflectionWarmupMs=performance.now()-warmupStarted;
   }
-  renderOnce(); await renderer.backend.device.queue.onSubmittedWorkDone();
+  const initialViewStarted=performance.now();
+  renderOnce();
+  world.stats.timings.initialViewSubmitMs=performance.now()-initialViewStarted;
+  const initialQueueStarted=performance.now();
+  await renderer.backend.device.queue.onSubmittedWorkDone();
+  world.stats.timings.initialViewQueueWaitMs=performance.now()-initialQueueStarted;
+  startupCompilation.programsAtReady=renderer.info.memory.programs;
+  // Retain the original aggregate for comparisons; this includes warmup and
+  // initial-view rendering/GPU completion, not just shader compilation.
   world.stats.timings.compileMs=performance.now()-tick;
   if(runtime.errors.length)throw new Error(runtime.errors[0]);
   world.stats.timings.firstFrameMs=performance.now()-started;
@@ -152,6 +176,14 @@ async function start() {
     requestAnimationFrame(loop);
   }
   playbackUI();stage('园区已准备就绪',100);$('loading').classList.add('done');window.__ERROR=null;window.__READY=true;
+  world.stats.timings.fullReadyMs=performance.now()-started;
+  const firstVisible=()=>{
+    if(stopped || window.__ERROR)return;
+    const overlay=getComputedStyle($('loading'));
+    if(overlay.visibility==='hidden' && Number(overlay.opacity)<=.01)world.stats.timings.firstVisibleMs=performance.now()-started;
+    else requestAnimationFrame(firstVisible);
+  };
+  requestAnimationFrame(firstVisible);
   console.info('[webgpu] ready',JSON.stringify({capabilities:runtime.capabilities,stats:world.stats}));requestAnimationFrame(loop);
 }
 start().catch(failed);

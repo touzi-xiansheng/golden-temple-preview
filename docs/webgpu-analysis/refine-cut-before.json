@@ -1,0 +1,1611 @@
+{
+  "method": "CPU-only diagnostic; includes instrumentation overhead, no GPU waits",
+  "frames": [
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.0999999046325684,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.0999999046325684,
+      "shadowInvalidations": 12,
+      "programs": 565,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 2.8000000715255737,
+          "exclusiveMs": 2.8000000715255737,
+          "drawCalls": 224,
+          "triangles": 8833009
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3,
+          "exclusiveMs": 0.19999992847442627,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 2.8000000715255737,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 2.8000000715255737,
+      "shadowInvalidations": 12,
+      "programs": 565,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 2.700000047683716,
+          "exclusiveMs": 2.700000047683716,
+          "drawCalls": 224,
+          "triangles": 8833009
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 2.8000000715255737,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.0999999046325684,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.0999999046325684,
+      "shadowInvalidations": 12,
+      "programs": 565,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3,
+          "exclusiveMs": 3,
+          "drawCalls": 224,
+          "triangles": 8833009
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.0999999046325684,
+          "exclusiveMs": 0.09999990463256836,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.100000023841858,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.100000023841858,
+      "shadowInvalidations": 12,
+      "programs": 565,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3,
+          "exclusiveMs": 3,
+          "drawCalls": 224,
+          "triangles": 8833009
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.100000023841858,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.100000023841858,
+      "reflectionUpdateMs": 0.10000002384185791,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3,
+      "shadowInvalidations": 12,
+      "programs": 565,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 2.899999976158142,
+          "exclusiveMs": 2.899999976158142,
+          "drawCalls": 224,
+          "triangles": 8833009
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 2.5,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 2.5,
+      "shadowInvalidations": 12,
+      "programs": 565,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 2.399999976158142,
+          "exclusiveMs": 2.399999976158142,
+          "drawCalls": 224,
+          "triangles": 8833009
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 2.5,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.100000023841858,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.100000023841858,
+      "shadowInvalidations": 12,
+      "programs": 565,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3,
+          "exclusiveMs": 3,
+          "drawCalls": 224,
+          "triangles": 8833009
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.100000023841858,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3,
+      "shadowInvalidations": 12,
+      "programs": 565,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 2.899999976158142,
+          "exclusiveMs": 2.899999976158142,
+          "drawCalls": 224,
+          "triangles": 8833009
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.1999999284744263,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.1999999284744263,
+      "shadowInvalidations": 12,
+      "programs": 565,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3,
+          "exclusiveMs": 3,
+          "drawCalls": 224,
+          "triangles": 8833009
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.100000023841858,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.100000023841858,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.100000023841858,
+      "shadowInvalidations": 12,
+      "programs": 565,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3,
+          "exclusiveMs": 3,
+          "drawCalls": 224,
+          "triangles": 8833009
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.100000023841858,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.1999999284744263,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.1999999284744263,
+      "shadowInvalidations": 12,
+      "programs": 565,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3.0999999046325684,
+          "exclusiveMs": 3.0999999046325684,
+          "drawCalls": 224,
+          "triangles": 8833009
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.1999999284744263,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3,
+      "shadowInvalidations": 12,
+      "programs": 565,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3,
+          "exclusiveMs": 3,
+          "drawCalls": 224,
+          "triangles": 8833009
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3,
+      "shadowInvalidations": 12,
+      "programs": 565,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 2.899999976158142,
+          "exclusiveMs": 2.899999976158142,
+          "drawCalls": 224,
+          "triangles": 8833009
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.299999952316284,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.299999952316284,
+      "shadowInvalidations": 12,
+      "programs": 565,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3.100000023841858,
+          "exclusiveMs": 3.100000023841858,
+          "drawCalls": 224,
+          "triangles": 8833009
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.299999952316284,
+          "exclusiveMs": 0.19999992847442627,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.299999952316284,
+      "reflectionUpdateMs": 0.10000002384185791,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.1999999284744263,
+      "shadowInvalidations": 12,
+      "programs": 565,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3.100000023841858,
+          "exclusiveMs": 3.100000023841858,
+          "drawCalls": 224,
+          "triangles": 8833009
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.1999999284744263,
+          "exclusiveMs": 0.09999990463256836,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.200000047683716,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.200000047683716,
+      "shadowInvalidations": 12,
+      "programs": 565,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3,
+          "exclusiveMs": 3,
+          "drawCalls": 224,
+          "triangles": 8833009
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.200000047683716,
+          "exclusiveMs": 0.20000004768371582,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3,
+      "shadowInvalidations": 12,
+      "programs": 565,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 2.899999976158142,
+          "exclusiveMs": 2.899999976158142,
+          "drawCalls": 224,
+          "triangles": 8833009
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.399999976158142,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.399999976158142,
+      "shadowInvalidations": 12,
+      "programs": 565,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3.200000047683716,
+          "exclusiveMs": 3.200000047683716,
+          "drawCalls": 224,
+          "triangles": 8833009
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.399999976158142,
+          "exclusiveMs": 0.19999992847442627,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.299999952316284,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.1999999284744263,
+      "shadowInvalidations": 12,
+      "programs": 565,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3.0999999046325684,
+          "exclusiveMs": 3.0999999046325684,
+          "drawCalls": 224,
+          "triangles": 8833009
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.1999999284744263,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.100000023841858,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3,
+      "shadowInvalidations": 12,
+      "programs": 565,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3,
+          "exclusiveMs": 3,
+          "drawCalls": 223,
+          "triangles": 8819173
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.100000023841858,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.100000023841858,
+      "shadowInvalidations": 12,
+      "programs": 565,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3,
+          "exclusiveMs": 3,
+          "drawCalls": 223,
+          "triangles": 8819173
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.100000023841858,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.299999952316284,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.299999952316284,
+      "shadowInvalidations": 12,
+      "programs": 565,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3.100000023841858,
+          "exclusiveMs": 3.100000023841858,
+          "drawCalls": 223,
+          "triangles": 8819173
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.299999952316284,
+          "exclusiveMs": 0.19999992847442627,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.100000023841858,
+      "reflectionUpdateMs": 0.10000002384185791,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3,
+      "shadowInvalidations": 12,
+      "programs": 565,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3,
+          "exclusiveMs": 3,
+          "drawCalls": 223,
+          "triangles": 8819173
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 42.60000002384186,
+      "reflectionUpdateMs": 39.299999952316284,
+      "reflectionCaptureMs": 39.199999928474426,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 3.3000000715255737,
+      "shadowInvalidations": 13,
+      "programs": 566,
+      "passes": [
+        {
+          "kind": "shadow",
+          "inclusiveMs": 2.100000023841858,
+          "exclusiveMs": 2.100000023841858,
+          "drawCalls": 165,
+          "triangles": 7805900
+        },
+        {
+          "kind": "reflection",
+          "inclusiveMs": 39.199999928474426,
+          "exclusiveMs": 37.09999990463257,
+          "drawCalls": 123,
+          "triangles": 5680595
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 3.200000047683716,
+          "exclusiveMs": 3.200000047683716,
+          "drawCalls": 201,
+          "triangles": 8299524
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.3000000715255737,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 5.699999928474426,
+      "reflectionUpdateMs": 2.5999999046325684,
+      "reflectionCaptureMs": 2.5,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 3.100000023841858,
+      "shadowInvalidations": 13,
+      "programs": 566,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 2.4000000953674316,
+          "exclusiveMs": 2.4000000953674316,
+          "drawCalls": 123,
+          "triangles": 5680595
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 3,
+          "exclusiveMs": 3,
+          "drawCalls": 201,
+          "triangles": 8299524
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.100000023841858,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 4.699999928474426,
+      "reflectionUpdateMs": 2.0999999046325684,
+      "reflectionCaptureMs": 2,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 2.600000023841858,
+      "shadowInvalidations": 13,
+      "programs": 566,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 2,
+          "exclusiveMs": 2,
+          "drawCalls": 123,
+          "triangles": 5680595
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 2.600000023841858,
+          "exclusiveMs": 2.600000023841858,
+          "drawCalls": 201,
+          "triangles": 8299524
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 2.600000023841858,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 5.700000047683716,
+      "reflectionUpdateMs": 2.700000047683716,
+      "reflectionCaptureMs": 2.600000023841858,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 3,
+      "shadowInvalidations": 13,
+      "programs": 566,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 2.600000023841858,
+          "exclusiveMs": 2.600000023841858,
+          "drawCalls": 123,
+          "triangles": 5680595
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 2.9000000953674316,
+          "exclusiveMs": 2.9000000953674316,
+          "drawCalls": 201,
+          "triangles": 8299524
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3,
+          "exclusiveMs": 0.09999990463256836,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 5.600000023841858,
+      "reflectionUpdateMs": 2.600000023841858,
+      "reflectionCaptureMs": 2.600000023841858,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 3,
+      "shadowInvalidations": 13,
+      "programs": 566,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 2.600000023841858,
+          "exclusiveMs": 2.600000023841858,
+          "drawCalls": 123,
+          "triangles": 5680595
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 3,
+          "exclusiveMs": 3,
+          "drawCalls": 201,
+          "triangles": 8299524
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 5.299999952316284,
+      "reflectionUpdateMs": 2.5,
+      "reflectionCaptureMs": 2.399999976158142,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 2.799999952316284,
+      "shadowInvalidations": 13,
+      "programs": 566,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 2.399999976158142,
+          "exclusiveMs": 2.399999976158142,
+          "drawCalls": 123,
+          "triangles": 5680595
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 2.799999952316284,
+          "exclusiveMs": 2.799999952316284,
+          "drawCalls": 201,
+          "triangles": 8299524
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 2.799999952316284,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 6.100000023841858,
+      "reflectionUpdateMs": 2.799999952316284,
+      "reflectionCaptureMs": 2.6999999284744263,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 3.3000000715255737,
+      "shadowInvalidations": 13,
+      "programs": 566,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 2.6999999284744263,
+          "exclusiveMs": 2.6999999284744263,
+          "drawCalls": 123,
+          "triangles": 5680595
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 3.200000047683716,
+          "exclusiveMs": 3.200000047683716,
+          "drawCalls": 201,
+          "triangles": 8299524
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.3000000715255737,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 6.100000023841858,
+      "reflectionUpdateMs": 2.899999976158142,
+      "reflectionCaptureMs": 2.700000047683716,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 3.200000047683716,
+      "shadowInvalidations": 13,
+      "programs": 566,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 2.700000047683716,
+          "exclusiveMs": 2.700000047683716,
+          "drawCalls": 122,
+          "triangles": 5679235
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 3.100000023841858,
+          "exclusiveMs": 3.100000023841858,
+          "drawCalls": 201,
+          "triangles": 8299524
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.100000023841858,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 5.800000071525574,
+      "reflectionUpdateMs": 2.700000047683716,
+      "reflectionCaptureMs": 2.5,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 3.100000023841858,
+      "shadowInvalidations": 13,
+      "programs": 566,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 2.5,
+          "exclusiveMs": 2.5,
+          "drawCalls": 123,
+          "triangles": 5680595
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 3,
+          "exclusiveMs": 3,
+          "drawCalls": 201,
+          "triangles": 8299524
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.100000023841858,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 5.199999928474426,
+      "reflectionUpdateMs": 2.299999952316284,
+      "reflectionCaptureMs": 2.1999999284744263,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 2.899999976158142,
+      "shadowInvalidations": 13,
+      "programs": 566,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 2.1999999284744263,
+          "exclusiveMs": 2.1999999284744263,
+          "drawCalls": 123,
+          "triangles": 5680595
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 2.6999999284744263,
+          "exclusiveMs": 2.6999999284744263,
+          "drawCalls": 201,
+          "triangles": 8299524
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 2.899999976158142,
+          "exclusiveMs": 0.20000004768371582,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 6,
+      "reflectionUpdateMs": 2.8000000715255737,
+      "reflectionCaptureMs": 2.700000047683716,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 3.1999999284744263,
+      "shadowInvalidations": 13,
+      "programs": 566,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 2.700000047683716,
+          "exclusiveMs": 2.700000047683716,
+          "drawCalls": 123,
+          "triangles": 5680595
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 3.1999999284744263,
+          "exclusiveMs": 3.1999999284744263,
+          "drawCalls": 201,
+          "triangles": 8299524
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.1999999284744263,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 5.799999952316284,
+      "reflectionUpdateMs": 2.5,
+      "reflectionCaptureMs": 2.5,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 3.299999952316284,
+      "shadowInvalidations": 13,
+      "programs": 566,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 2.5,
+          "exclusiveMs": 2.5,
+          "drawCalls": 122,
+          "triangles": 5679235
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 3.299999952316284,
+          "exclusiveMs": 3.299999952316284,
+          "drawCalls": 201,
+          "triangles": 8299524
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.299999952316284,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 6,
+      "reflectionUpdateMs": 2.8000000715255737,
+      "reflectionCaptureMs": 2.700000047683716,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 3.0999999046325684,
+      "shadowInvalidations": 13,
+      "programs": 566,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 2.700000047683716,
+          "exclusiveMs": 2.700000047683716,
+          "drawCalls": 122,
+          "triangles": 5679235
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 3.0999999046325684,
+          "exclusiveMs": 3.0999999046325684,
+          "drawCalls": 201,
+          "triangles": 8299524
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.0999999046325684,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 6.099999904632568,
+      "reflectionUpdateMs": 2.6999999284744263,
+      "reflectionCaptureMs": 2.600000023841858,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 3.399999976158142,
+      "shadowInvalidations": 13,
+      "programs": 566,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 2.600000023841858,
+          "exclusiveMs": 2.600000023841858,
+          "drawCalls": 122,
+          "triangles": 5679235
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 3.200000047683716,
+          "exclusiveMs": 3.200000047683716,
+          "drawCalls": 201,
+          "triangles": 8299524
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.399999976158142,
+          "exclusiveMs": 0.19999992847442627,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 5.700000047683716,
+      "reflectionUpdateMs": 2.600000023841858,
+      "reflectionCaptureMs": 2.5,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 3.100000023841858,
+      "shadowInvalidations": 13,
+      "programs": 566,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 2.5,
+          "exclusiveMs": 2.5,
+          "drawCalls": 122,
+          "triangles": 5679235
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 3,
+          "exclusiveMs": 3,
+          "drawCalls": 201,
+          "triangles": 8299524
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 5.399999976158142,
+      "reflectionUpdateMs": 2.399999976158142,
+      "reflectionCaptureMs": 2.399999976158142,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 3,
+      "shadowInvalidations": 13,
+      "programs": 566,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 2.399999976158142,
+          "exclusiveMs": 2.399999976158142,
+          "drawCalls": 122,
+          "triangles": 5679235
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 3,
+          "exclusiveMs": 3,
+          "drawCalls": 201,
+          "triangles": 8299524
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 5.799999952316284,
+      "reflectionUpdateMs": 2.600000023841858,
+      "reflectionCaptureMs": 2.5,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 3.1999999284744263,
+      "shadowInvalidations": 13,
+      "programs": 566,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 2.5,
+          "exclusiveMs": 2.5,
+          "drawCalls": 122,
+          "triangles": 5679235
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 3.100000023841858,
+          "exclusiveMs": 3.100000023841858,
+          "drawCalls": 201,
+          "triangles": 8299524
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.1999999284744263,
+          "exclusiveMs": 0.09999990463256836,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 5.700000047683716,
+      "reflectionUpdateMs": 2.600000023841858,
+      "reflectionCaptureMs": 2.600000023841858,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 3,
+      "shadowInvalidations": 13,
+      "programs": 566,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 2.600000023841858,
+          "exclusiveMs": 2.600000023841858,
+          "drawCalls": 122,
+          "triangles": 5679235
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 3,
+          "exclusiveMs": 3,
+          "drawCalls": 201,
+          "triangles": 8299524
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    }
+  ],
+  "pipeline": [
+    {
+      "frame": 23,
+      "shot": 1,
+      "pass": "reflection",
+      "object": "shrub-interiors:-2,-3",
+      "material": "MeshStandardMaterial / WebGPU",
+      "kind": "createRenderPipeline",
+      "cpuMs": 0.10000002384185791,
+      "asynchronous": false
+    }
+  ],
+  "nodeBuilds": [
+    {
+      "frame": 23,
+      "shot": 1,
+      "pass": "reflection",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.7000000476837158,
+      "asynchronous": false
+    },
+    {
+      "frame": 23,
+      "shot": 1,
+      "pass": "reflection",
+      "object": "individual-foliage:-1,-2",
+      "material": "MeshStandardMaterial / WebGPU",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 19.5,
+      "asynchronous": false
+    },
+    {
+      "frame": 23,
+      "shot": 1,
+      "pass": "reflection",
+      "object": "shrub-interiors:-2,-3",
+      "material": "MeshStandardMaterial / WebGPU",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 14.299999952316284,
+      "asynchronous": false
+    },
+    {
+      "frame": 23,
+      "shot": 1,
+      "pass": "main",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.3999999761581421,
+      "asynchronous": false
+    },
+    {
+      "frame": 24,
+      "shot": 1,
+      "pass": "reflection",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.5,
+      "asynchronous": false
+    },
+    {
+      "frame": 24,
+      "shot": 1,
+      "pass": "main",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.5,
+      "asynchronous": false
+    },
+    {
+      "frame": 25,
+      "shot": 1,
+      "pass": "reflection",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.3999999761581421,
+      "asynchronous": false
+    },
+    {
+      "frame": 25,
+      "shot": 1,
+      "pass": "main",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.2999999523162842,
+      "asynchronous": false
+    },
+    {
+      "frame": 26,
+      "shot": 1,
+      "pass": "reflection",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.5,
+      "asynchronous": false
+    },
+    {
+      "frame": 26,
+      "shot": 1,
+      "pass": "main",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.2999999523162842,
+      "asynchronous": false
+    },
+    {
+      "frame": 27,
+      "shot": 1,
+      "pass": "reflection",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.5,
+      "asynchronous": false
+    },
+    {
+      "frame": 27,
+      "shot": 1,
+      "pass": "main",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.40000009536743164,
+      "asynchronous": false
+    },
+    {
+      "frame": 28,
+      "shot": 1,
+      "pass": "reflection",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.3999999761581421,
+      "asynchronous": false
+    },
+    {
+      "frame": 28,
+      "shot": 1,
+      "pass": "main",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.2999999523162842,
+      "asynchronous": false
+    },
+    {
+      "frame": 29,
+      "shot": 1,
+      "pass": "reflection",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.6000000238418579,
+      "asynchronous": false
+    },
+    {
+      "frame": 29,
+      "shot": 1,
+      "pass": "main",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.5,
+      "asynchronous": false
+    },
+    {
+      "frame": 30,
+      "shot": 1,
+      "pass": "reflection",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.5,
+      "asynchronous": false
+    },
+    {
+      "frame": 30,
+      "shot": 1,
+      "pass": "main",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.40000009536743164,
+      "asynchronous": false
+    },
+    {
+      "frame": 31,
+      "shot": 1,
+      "pass": "reflection",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.6000000238418579,
+      "asynchronous": false
+    },
+    {
+      "frame": 31,
+      "shot": 1,
+      "pass": "main",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.5,
+      "asynchronous": false
+    },
+    {
+      "frame": 32,
+      "shot": 1,
+      "pass": "reflection",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.5,
+      "asynchronous": false
+    },
+    {
+      "frame": 32,
+      "shot": 1,
+      "pass": "main",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.3999999761581421,
+      "asynchronous": false
+    },
+    {
+      "frame": 33,
+      "shot": 1,
+      "pass": "reflection",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.5,
+      "asynchronous": false
+    },
+    {
+      "frame": 33,
+      "shot": 1,
+      "pass": "main",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.3999999761581421,
+      "asynchronous": false
+    },
+    {
+      "frame": 34,
+      "shot": 1,
+      "pass": "reflection",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.3999999761581421,
+      "asynchronous": false
+    },
+    {
+      "frame": 34,
+      "shot": 1,
+      "pass": "main",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.30000007152557373,
+      "asynchronous": false
+    },
+    {
+      "frame": 35,
+      "shot": 1,
+      "pass": "reflection",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.5,
+      "asynchronous": false
+    },
+    {
+      "frame": 35,
+      "shot": 1,
+      "pass": "main",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.5,
+      "asynchronous": false
+    },
+    {
+      "frame": 36,
+      "shot": 1,
+      "pass": "reflection",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.6000000238418579,
+      "asynchronous": false
+    },
+    {
+      "frame": 36,
+      "shot": 1,
+      "pass": "main",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.3999999761581421,
+      "asynchronous": false
+    },
+    {
+      "frame": 37,
+      "shot": 1,
+      "pass": "reflection",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.5,
+      "asynchronous": false
+    },
+    {
+      "frame": 37,
+      "shot": 1,
+      "pass": "main",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.5,
+      "asynchronous": false
+    },
+    {
+      "frame": 38,
+      "shot": 1,
+      "pass": "reflection",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.5,
+      "asynchronous": false
+    },
+    {
+      "frame": 38,
+      "shot": 1,
+      "pass": "main",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.3999999761581421,
+      "asynchronous": false
+    },
+    {
+      "frame": 39,
+      "shot": 1,
+      "pass": "reflection",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.6000000238418579,
+      "asynchronous": false
+    },
+    {
+      "frame": 39,
+      "shot": 1,
+      "pass": "main",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.3999999761581421,
+      "asynchronous": false
+    },
+    {
+      "frame": 40,
+      "shot": 1,
+      "pass": "reflection",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.5999999046325684,
+      "asynchronous": false
+    },
+    {
+      "frame": 40,
+      "shot": 1,
+      "pass": "main",
+      "object": "Background.mesh",
+      "material": "Background.material",
+      "kind": "nodeBuilderCacheMiss",
+      "cpuMs": 0.3999999761581421,
+      "asynchronous": false
+    }
+  ],
+  "errors": [],
+  "url": "http://127.0.0.1:4186/golden-temple-preview/campus-webgpu.html?paused",
+  "prewarmTimes": [
+    2,
+    12,
+    22,
+    32,
+    42,
+    52
+  ],
+  "staticPrewarm": false,
+  "browser": "Chrome/155.0.8059.84",
+  "pageErrors": []
+}

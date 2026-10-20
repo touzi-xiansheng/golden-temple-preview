@@ -1,0 +1,14 @@
+{
+  "url": "http://127.0.0.1:4186/golden-temple-preview/campus-webgpu.html?aa=traa&paused=1",
+  "at": "2026-10-20T03:31:55.286Z",
+  "method": "Optional TRAA startup/seek smoke only, no performance or temporal-quality claim",
+  "errors": [
+    "THREE.WebGPURenderer: Render pipeline creation failed (renderPipeline_MeshStandardMaterial / WebGPU_142): Vertex buffer count (9) exceeds the maximum number of vertex buffers (8).\n - While validating vertex state.\n - While calling [Device].CreateRenderPipeline([RenderPipelineDescriptor \"\"renderPipeline_MeshStandardMaterial / WebGPU_142\"\"]).\n",
+    "THREE.WebGPURenderer: Render pipeline creation failed (renderPipeline_Solar control glass / headquarters / WebGPU_95): Vertex buffer count (9) exceeds the maximum number of vertex buffers (8).\n - While validating vertex state.\n - While calling [Device].CreateRenderPipeline([RenderPipelineDescriptor \"\"renderPipeline_Solar control glass / headquarters / WebGPU_95\"\"]).\n",
+    "THREE.WebGPURenderer: Uncaptured WebGPU GPUValidationError: [Invalid RenderPipeline \"renderPipeline_MeshStandardMaterial / WebGPU_142\"] is invalid due to a previous error.\n - While encoding [RenderPassEncoder (unlabeled)].SetPipeline([Invalid RenderPipeline \"renderPipeline_MeshStandardMaterial / WebGPU_142\"]).\n - While finishing [CommandEncoder \"renderContext_9\"].\n",
+    "[webgpu] [Invalid RenderPipeline \"renderPipeline_MeshStandardMaterial / WebGPU_142\"] is invalid due to a previous error.\n - While encoding [RenderPassEncoder (unlabeled)].SetPipeline([Invalid RenderPipeline \"renderPipeline_MeshStandardMaterial / WebGPU_142\"]).\n - While finishing [CommandEncoder \"renderContext_9\"].\n",
+    "THREE.WebGPURenderer: Uncaptured WebGPU GPUValidationError: [Invalid CommandBuffer from CommandEncoder \"renderContext_9\"] is invalid due to a previous error.\n - While calling [Queue].Submit([[Invalid CommandBuffer from CommandEncoder \"renderContext_9\"]])\n",
+    "[webgpu] [Invalid CommandBuffer from CommandEncoder \"renderContext_9\"] is invalid due to a previous error.\n - While calling [Queue].Submit([[Invalid CommandBuffer from CommandEncoder \"renderContext_9\"]])\n"
+  ],
+  "states": []
+}

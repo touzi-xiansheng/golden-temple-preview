@@ -6,14 +6,14 @@ import { runBuild } from '../campus/loading.js';
 import { createCampusMaterials } from './materials.js';
 import { createContactOcclusion } from './contact-occlusion.js';
 
-export async function createCampusScene({ stage, yieldControl, contacts = true }) {
+export async function createCampusScene({ stage, yieldControl, contacts = true, refined = true }) {
   const scene = new Scene(); scene.name = 'Verdant WebGPU campus';
   const timings = {}, started = performance.now();
   stage('正在生成七栋建筑与立面构造…', 12); await yieldControl();
   const architecture = buildBuildings(); scene.add(architecture);
   timings.architectureMs = performance.now() - started;
   let tick = performance.now();
-  const landscape = await runBuild(buildLandscapeSteps(), { yieldControl, onProgress: message => stage(message || '正在生成庭院与外围林地…', 35) });
+  const landscape = await runBuild(buildLandscapeSteps({refined}), { yieldControl, onProgress: message => stage(message || '正在生成庭院与外围林地…', 35) });
   scene.add(landscape);
   const props = buildCampusProps(); scene.add(props);
   timings.landscapeMs = performance.now() - tick;
@@ -36,7 +36,7 @@ export async function createCampusScene({ stage, yieldControl, contacts = true }
     meshes++; const count = object.isInstancedMesh ? object.count : 1; instances += count;
     triangles += (object.geometry.index?.count || object.geometry.attributes.position.count) / 3 * count;
   });
-  const stats = { buildings: architecture.userData.buildingCount, meshes, triangles, instances, landscape: landscape.userData.stats, contacts: contactOcclusion?.stats, timings };
+  const stats = { buildings: architecture.userData.buildingCount, refined, meshes, triangles, instances, landscape: landscape.userData.stats, contacts: contactOcclusion?.stats, timings };
   let disposed = false;
   return { scene, architecture, landscape, props, materials, stats,
     dispose() {

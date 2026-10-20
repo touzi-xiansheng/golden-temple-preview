@@ -1,5 +1,5 @@
 import {
-  BufferAttribute, Color, DirectionalLight, DoubleSide, FloatType, InstancedMesh, LinearSRGBColorSpace, Matrix4, Mesh, MeshBasicNodeMaterial,
+  BufferAttribute, BufferGeometry, Color, DirectionalLight, DoubleSide, FloatType, InstancedMesh, LinearSRGBColorSpace, Matrix4, Mesh, MeshBasicNodeMaterial,
   NoToneMapping, OrthographicCamera, PlaneGeometry, PMREMGenerator, RenderTarget, Scene,
 } from 'three/webgpu';
 import { diffuseColor, getGeometryRoughness, roughness, vec3, vec4 } from 'three/tsl';
@@ -28,13 +28,14 @@ export async function runMaterialCalibration(renderer) {
   camera.position.z = 3; scene.background = new Color(0, 0, 0);
   const geometry = new PlaneGeometry(2, 2), mesh = new Mesh(geometry);
   resources.push(geometry, mesh.material); scene.add(mesh);
+  let pixels;
   const draw = async (material, strength = 1) => {
     mesh.material = material; scene.environmentIntensity = strength;
     // Light nodes update once per Animation frame, independently of Info.reset().
     await new Promise(requestAnimationFrame);
     renderer.info.reset();
     renderer.setRenderTarget(target); renderer.render(scene, camera);
-    const pixels = await renderer.readRenderTargetPixelsAsync(target, 0, 0, size, size);
+    pixels = await renderer.readRenderTargetPixelsAsync(target, 0, 0, size, size);
     const result = [0, 0, 0];
     for (let y = 30; y < 34; y++) for (let x = 30; x < 34; x++) {
       for (let channel = 0; channel < 3; channel++) result[channel] += pixels[(y * size + x) * 4 + channel] / 16;
@@ -147,6 +148,83 @@ export async function runMaterialCalibration(renderer) {
     check('ordinary rooms receive actual window-facing sunlight without a constant glow',
       roomAddition.every(value => value > .0001) && maximumError(darkRoom, darkBacking) < .000002,
       { sunRoom, sunBacking, roomAddition, darkRoom, darkBacking });
+
+    const patternFactory = createCampusMaterials(); factories.push(patternFactory);
+    const pattern = patternFactory.convert(glassSources.glass, mesh);
+    pattern.outputNode = pattern.campusRoomNode;
+    const rgb = values => Array.from(values).filter((_, index) => index % 4 !== 3);
+    const arrangements = [], responses = [];
+    for (const [name, seed, curtain] of [['workstations', .25, .5], ['meeting', .5, .5], ['lounge', .75, .9]]) {
+      setAttribute('paneDetail', [0, .5, seed, curtain]);
+      await draw(pattern, 0); arrangements.push({ name, values: rgb(pixels) });
+      const daylight = await draw(roomGlass, .45);
+      await draw(roomGlass, 0);
+      responses.push({ name, daylight, darkMaximum: Math.max(...rgb(pixels).map(Math.abs)) });
+    }
+    const differences = arrangements.slice(1).map((entry, index) =>
+      entry.values.reduce((sum, value, channel) => sum + Math.abs(value - arrangements[index].values[channel]), 0) / entry.values.length);
+    check('three shared room layouts produce distinct bounded surface patterns',
+      differences.every(value => value > .002) && arrangements.every(entry => entry.values.every(value => Number.isFinite(value) && value >= 0 && value <= .65)),
+      { meanAbsoluteDifferences: differences, ranges: arrangements.map(entry => ({ name: entry.name, min: Math.min(...entry.values), max: Math.max(...entry.values) })) });
+    check('every room arrangement receives daylight and remains dark without incident light',
+      responses.every(entry => entry.daylight.every(value => value > .0001) && entry.darkMaximum < .000002), { actual: responses });
+
+    // A physical 2m opening and two adjacent 1m panes must see the same room.
+    setAttribute('paneDetail', [0, .5, .75, .9]); setAttribute('paneRoom', [0, 2, 1, 2]);
+    await draw(pattern, 0); const continuous = pixels.slice();
+    const split = new BufferGeometry(), splitData = { position: [], normal: [], uv: [], paneDetail: [], paneRoom: [], paneSize: [], paneType: [] };
+    for (const offset of [-.5, .5]) for (const [u, v] of [[0, 0], [1, 0], [1, 1], [0, 0], [1, 1], [0, 1]]) {
+      splitData.position.push(u - .5 + offset, v * 2 - 1, 0); splitData.normal.push(0, 0, 1); splitData.uv.push(u, v);
+      splitData.paneDetail.push(0, .5, .75, .9); splitData.paneRoom.push(offset, 2, 1, 2); splitData.paneSize.push(1, 2); splitData.paneType.push(0);
+    }
+    for (const [name, values] of Object.entries(splitData)) split.setAttribute(name, new BufferAttribute(new Float32Array(values), values.length / 12));
+    resources.push(split); mesh.geometry = split; pattern.needsUpdate = true;
+    await draw(pattern, 0);
+    let continuityError = 0;
+    for (let y = 2; y < size - 2; y++) for (let x = 2; x < size - 2; x++) {
+      if (x === 31 || x === 32) continue;
+      for (let channel = 0; channel < 3; channel++) {
+        const index = (y * size + x) * 4 + channel;
+        continuityError = Math.max(continuityError, Math.abs(pixels[index] - continuous[index]));
+      }
+    }
+    check('adjacent panes preserve the same room furniture and curtain coordinates', continuityError < .0001, { maximumError: continuityError });
+    mesh.geometry = geometry;
+    setAttribute('paneDetail', [1, .5, .5, .5]); setAttribute('paneRoom', [0, 3, 1, 2]);
+    Object.assign(camera, { left: -.1, right: .1, top: .1, bottom: -.1 }); camera.updateProjectionMatrix();
+    await draw(pattern, 0);
+    const slatBase = .25 * .74, resolvedSlats = [];
+    for (let y = 10; y < 54; y++) for (let x = 20; x < 44; x++) resolvedSlats.push(pixels[(y * size + x) * 4] / slatBase);
+    Object.assign(camera, { left: -1, right: 1, top: 1, bottom: -1 }); camera.updateProjectionMatrix();
+    await draw(pattern, 0);
+    // WebGPU rows run downward; the old 34..51 region crossed the blind's lower edge.
+    // This symmetric inset stays inside its coverage in either readback orientation.
+    const minifiedSlats = [], minifiedCoverage = [];
+    for (let y = 24; y < 40; y++) for (let x = 20; x < 44; x++) {
+      const index = (y * size + x) * 4;
+      minifiedSlats.push(pixels[index] / slatBase); minifiedCoverage.push(pixels[index + 3]);
+    }
+    const slatRange = [Math.min(...resolvedSlats), Math.max(...resolvedSlats)];
+    const slatMeanError = Math.max(...minifiedSlats.map(value => Math.abs(value - .86)));
+    check('resolved blinds retain subtle slats while minified repeats converge to their mean',
+      slatRange[0] >= .825 - .0001 && slatRange[1] <= .895 + .0001 && slatRange[1] - slatRange[0] > .02 && slatMeanError < .0001
+        && minifiedCoverage.every(value => Math.abs(value - 1) < .0001),
+      { resolvedRange: slatRange, minifiedMeanError: slatMeanError, minifiedCoverage: [Math.min(...minifiedCoverage), Math.max(...minifiedCoverage)] });
+    setAttribute('paneDetail', [0, .5, .5, .5]); setAttribute('paneRoom', [0, 3, 1, 2]);
+
+    const finishes = [];
+    for (const key of ['stone', 'wood', 'arcadePaving', 'soffit']) {
+      const source = glassSources[key], finish = patternFactory.convert(source, mesh);
+      finish.outputNode = vec4(diffuseColor.rgb, roughness);
+      await draw(finish, 0);
+      const reflectance = source.color.toArray(), ratios = rgb(pixels).map((value, index) => value / reflectance[index % 3]);
+      const roughnessValues = Array.from(pixels).filter((_, index) => index % 4 === 3);
+      finishes.push({ name: source.name, minRatio: Math.min(...ratios), maxRatio: Math.max(...ratios),
+        minRoughness: Math.min(...roughnessValues), maxRoughness: Math.max(...roughnessValues) });
+    }
+    check('construction-aligned mineral and timber finishes retain bounded reflectance and roughness',
+      finishes.every(entry => entry.minRatio > .84 && entry.maxRatio < 1.16 && entry.maxRatio - entry.minRatio > .002
+        && entry.minRoughness >= .18 && entry.maxRoughness <= .98), { actual: finishes });
 
     const paletteSource = foliageMaterial({ bend: 0 }), paletteGeometry = new PlaneGeometry(.7, .7);
     const paletteMesh = new InstancedMesh(paletteGeometry, paletteSource, 4);

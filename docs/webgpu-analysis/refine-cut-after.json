@@ -1,0 +1,1219 @@
+{
+  "method": "CPU-only diagnostic; includes instrumentation overhead, no GPU waits",
+  "frames": [
+    {
+      "shot": 0,
+      "cpuSubmitMs": 4.300000071525574,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 4.300000071525574,
+      "shadowInvalidations": 12,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 4.200000047683716,
+          "exclusiveMs": 4.200000047683716,
+          "drawCalls": 224,
+          "triangles": 8783227
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 4.200000047683716,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 4.100000023841858,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 4.100000023841858,
+      "shadowInvalidations": 12,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3.899999976158142,
+          "exclusiveMs": 3.899999976158142,
+          "drawCalls": 224,
+          "triangles": 8783227
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 4.100000023841858,
+          "exclusiveMs": 0.20000004768371582,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.9000000953674316,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.9000000953674316,
+      "shadowInvalidations": 12,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3.9000000953674316,
+          "exclusiveMs": 3.9000000953674316,
+          "drawCalls": 224,
+          "triangles": 8783227
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.9000000953674316,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.5,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.5,
+      "shadowInvalidations": 12,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3.4000000953674316,
+          "exclusiveMs": 3.4000000953674316,
+          "drawCalls": 224,
+          "triangles": 8783227
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.5,
+          "exclusiveMs": 0.09999990463256836,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.5999999046325684,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.5999999046325684,
+      "shadowInvalidations": 12,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3.5,
+          "exclusiveMs": 3.5,
+          "drawCalls": 224,
+          "triangles": 8783227
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.5999999046325684,
+          "exclusiveMs": 0.09999990463256836,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.399999976158142,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.399999976158142,
+      "shadowInvalidations": 12,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3.299999952316284,
+          "exclusiveMs": 3.299999952316284,
+          "drawCalls": 224,
+          "triangles": 8783227
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.399999976158142,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.8000000715255737,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.8000000715255737,
+      "shadowInvalidations": 12,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3.700000047683716,
+          "exclusiveMs": 3.700000047683716,
+          "drawCalls": 224,
+          "triangles": 8783227
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.8000000715255737,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.5,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.5,
+      "shadowInvalidations": 12,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3.399999976158142,
+          "exclusiveMs": 3.399999976158142,
+          "drawCalls": 224,
+          "triangles": 8783227
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.5,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.5,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.5,
+      "shadowInvalidations": 12,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3.399999976158142,
+          "exclusiveMs": 3.399999976158142,
+          "drawCalls": 224,
+          "triangles": 8783227
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.5,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.399999976158142,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.399999976158142,
+      "shadowInvalidations": 12,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3.200000047683716,
+          "exclusiveMs": 3.200000047683716,
+          "drawCalls": 224,
+          "triangles": 8783227
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.399999976158142,
+          "exclusiveMs": 0.19999992847442627,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.399999976158142,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.399999976158142,
+      "shadowInvalidations": 12,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3.399999976158142,
+          "exclusiveMs": 3.399999976158142,
+          "drawCalls": 224,
+          "triangles": 8783227
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.399999976158142,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.600000023841858,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.600000023841858,
+      "shadowInvalidations": 12,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3.5,
+          "exclusiveMs": 3.5,
+          "drawCalls": 224,
+          "triangles": 8783227
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.600000023841858,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.5,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.5,
+      "shadowInvalidations": 12,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3.399999976158142,
+          "exclusiveMs": 3.399999976158142,
+          "drawCalls": 224,
+          "triangles": 8783227
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.5,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.299999952316284,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.299999952316284,
+      "shadowInvalidations": 12,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3.299999952316284,
+          "exclusiveMs": 3.299999952316284,
+          "drawCalls": 224,
+          "triangles": 8783227
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.299999952316284,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.600000023841858,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.600000023841858,
+      "shadowInvalidations": 12,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3.5,
+          "exclusiveMs": 3.5,
+          "drawCalls": 224,
+          "triangles": 8783227
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.600000023841858,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.4000000953674316,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.3000000715255737,
+      "shadowInvalidations": 12,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3.100000023841858,
+          "exclusiveMs": 3.100000023841858,
+          "drawCalls": 224,
+          "triangles": 8783227
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.3000000715255737,
+          "exclusiveMs": 0.20000004768371582,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.5,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.5,
+      "shadowInvalidations": 12,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3.4000000953674316,
+          "exclusiveMs": 3.4000000953674316,
+          "drawCalls": 224,
+          "triangles": 8783227
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.4000000953674316,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.3000000715255737,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.3000000715255737,
+      "shadowInvalidations": 12,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3.3000000715255737,
+          "exclusiveMs": 3.3000000715255737,
+          "drawCalls": 224,
+          "triangles": 8783227
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.3000000715255737,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.399999976158142,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.399999976158142,
+      "shadowInvalidations": 12,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3.299999952316284,
+          "exclusiveMs": 3.299999952316284,
+          "drawCalls": 224,
+          "triangles": 8783227
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.399999976158142,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.399999976158142,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.399999976158142,
+      "shadowInvalidations": 12,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3.399999976158142,
+          "exclusiveMs": 3.399999976158142,
+          "drawCalls": 223,
+          "triangles": 8769391
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.399999976158142,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.5,
+      "reflectionUpdateMs": 0.09999990463256836,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.4000000953674316,
+      "shadowInvalidations": 12,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3.4000000953674316,
+          "exclusiveMs": 3.4000000953674316,
+          "drawCalls": 223,
+          "triangles": 8769391
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.4000000953674316,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.5,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.5,
+      "shadowInvalidations": 12,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3.399999976158142,
+          "exclusiveMs": 3.399999976158142,
+          "drawCalls": 223,
+          "triangles": 8769391
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.5,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 0,
+      "cpuSubmitMs": 3.700000047683716,
+      "reflectionUpdateMs": 0,
+      "reflectionCaptureMs": 0,
+      "reflectionPlane": null,
+      "viewCpuMs": 3.700000047683716,
+      "shadowInvalidations": 12,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "main",
+          "inclusiveMs": 3.700000047683716,
+          "exclusiveMs": 3.700000047683716,
+          "drawCalls": 223,
+          "triangles": 8769391
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.700000047683716,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 8.800000071525574,
+      "reflectionUpdateMs": 5.600000023841858,
+      "reflectionCaptureMs": 5.600000023841858,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 3.100000023841858,
+      "shadowInvalidations": 13,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "shadow",
+          "inclusiveMs": 3.3000000715255737,
+          "exclusiveMs": 3.3000000715255737,
+          "drawCalls": 165,
+          "triangles": 7756116
+        },
+        {
+          "kind": "reflection",
+          "inclusiveMs": 5.5,
+          "exclusiveMs": 2.1999999284744263,
+          "drawCalls": 123,
+          "triangles": 5633839
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 3,
+          "exclusiveMs": 3,
+          "drawCalls": 201,
+          "triangles": 8250190
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 3.100000023841858,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 4.800000071525574,
+      "reflectionUpdateMs": 2.100000023841858,
+      "reflectionCaptureMs": 2,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 2.700000047683716,
+      "shadowInvalidations": 13,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 2,
+          "exclusiveMs": 2,
+          "drawCalls": 123,
+          "triangles": 5633839
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 2.700000047683716,
+          "exclusiveMs": 2.700000047683716,
+          "drawCalls": 201,
+          "triangles": 8250190
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 2.700000047683716,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 4.199999928474426,
+      "reflectionUpdateMs": 1.899999976158142,
+      "reflectionCaptureMs": 1.899999976158142,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 2.299999952316284,
+      "shadowInvalidations": 13,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 1.899999976158142,
+          "exclusiveMs": 1.899999976158142,
+          "drawCalls": 123,
+          "triangles": 5633839
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 2.1999999284744263,
+          "exclusiveMs": 2.1999999284744263,
+          "drawCalls": 201,
+          "triangles": 8250190
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 2.299999952316284,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 4.799999952316284,
+      "reflectionUpdateMs": 2.200000047683716,
+      "reflectionCaptureMs": 2.100000023841858,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 2.5999999046325684,
+      "shadowInvalidations": 13,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 2.100000023841858,
+          "exclusiveMs": 2.100000023841858,
+          "drawCalls": 123,
+          "triangles": 5633839
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 2.5,
+          "exclusiveMs": 2.5,
+          "drawCalls": 201,
+          "triangles": 8250190
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 2.5999999046325684,
+          "exclusiveMs": 0.09999990463256836,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 4.700000047683716,
+      "reflectionUpdateMs": 2.100000023841858,
+      "reflectionCaptureMs": 2,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 2.600000023841858,
+      "shadowInvalidations": 13,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 2,
+          "exclusiveMs": 2,
+          "drawCalls": 123,
+          "triangles": 5633839
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 2.600000023841858,
+          "exclusiveMs": 2.600000023841858,
+          "drawCalls": 201,
+          "triangles": 8250190
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 2.600000023841858,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 4.399999976158142,
+      "reflectionUpdateMs": 1.899999976158142,
+      "reflectionCaptureMs": 1.7999999523162842,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 2.5,
+      "shadowInvalidations": 13,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 1.7999999523162842,
+          "exclusiveMs": 1.7999999523162842,
+          "drawCalls": 123,
+          "triangles": 5633839
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 2.399999976158142,
+          "exclusiveMs": 2.399999976158142,
+          "drawCalls": 201,
+          "triangles": 8250190
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 2.5,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 4.600000023841858,
+      "reflectionUpdateMs": 2.100000023841858,
+      "reflectionCaptureMs": 2.100000023841858,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 2.5,
+      "shadowInvalidations": 13,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 2.100000023841858,
+          "exclusiveMs": 2.100000023841858,
+          "drawCalls": 123,
+          "triangles": 5633839
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 2.5,
+          "exclusiveMs": 2.5,
+          "drawCalls": 201,
+          "triangles": 8250190
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 2.5,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 4.400000095367432,
+      "reflectionUpdateMs": 1.9000000953674316,
+      "reflectionCaptureMs": 1.9000000953674316,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 2.5,
+      "shadowInvalidations": 13,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 1.9000000953674316,
+          "exclusiveMs": 1.9000000953674316,
+          "drawCalls": 123,
+          "triangles": 5633839
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 2.4000000953674316,
+          "exclusiveMs": 2.4000000953674316,
+          "drawCalls": 201,
+          "triangles": 8250190
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 2.5,
+          "exclusiveMs": 0.09999990463256836,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 4.299999952316284,
+      "reflectionUpdateMs": 1.899999976158142,
+      "reflectionCaptureMs": 1.7999999523162842,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 2.399999976158142,
+      "shadowInvalidations": 13,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 1.7999999523162842,
+          "exclusiveMs": 1.7999999523162842,
+          "drawCalls": 122,
+          "triangles": 5632479
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 2.399999976158142,
+          "exclusiveMs": 2.399999976158142,
+          "drawCalls": 201,
+          "triangles": 8250190
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 2.399999976158142,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 3.799999952316284,
+      "reflectionUpdateMs": 1.5999999046325684,
+      "reflectionCaptureMs": 1.5999999046325684,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 2.200000047683716,
+      "shadowInvalidations": 13,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 1.5999999046325684,
+          "exclusiveMs": 1.5999999046325684,
+          "drawCalls": 123,
+          "triangles": 5633839
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 2.200000047683716,
+          "exclusiveMs": 2.200000047683716,
+          "drawCalls": 201,
+          "triangles": 8250190
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 2.200000047683716,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 4.199999928474426,
+      "reflectionUpdateMs": 1.899999976158142,
+      "reflectionCaptureMs": 1.8000000715255737,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 2.299999952316284,
+      "shadowInvalidations": 13,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 1.8000000715255737,
+          "exclusiveMs": 1.8000000715255737,
+          "drawCalls": 123,
+          "triangles": 5633839
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 2.1999999284744263,
+          "exclusiveMs": 2.1999999284744263,
+          "drawCalls": 201,
+          "triangles": 8250190
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 2.299999952316284,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 3.9000000953674316,
+      "reflectionUpdateMs": 1.7000000476837158,
+      "reflectionCaptureMs": 1.7000000476837158,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 2.200000047683716,
+      "shadowInvalidations": 13,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 1.600000023841858,
+          "exclusiveMs": 1.600000023841858,
+          "drawCalls": 123,
+          "triangles": 5633839
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 2.100000023841858,
+          "exclusiveMs": 2.100000023841858,
+          "drawCalls": 201,
+          "triangles": 8250190
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 2.200000047683716,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 4.100000023841858,
+      "reflectionUpdateMs": 1.899999976158142,
+      "reflectionCaptureMs": 1.7999999523162842,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 2.200000047683716,
+      "shadowInvalidations": 13,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 1.7999999523162842,
+          "exclusiveMs": 1.7999999523162842,
+          "drawCalls": 122,
+          "triangles": 5632479
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 2.100000023841858,
+          "exclusiveMs": 2.100000023841858,
+          "drawCalls": 201,
+          "triangles": 8250190
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 2.200000047683716,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 3.9000000953674316,
+      "reflectionUpdateMs": 1.600000023841858,
+      "reflectionCaptureMs": 1.600000023841858,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 2.3000000715255737,
+      "shadowInvalidations": 13,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 1.600000023841858,
+          "exclusiveMs": 1.600000023841858,
+          "drawCalls": 122,
+          "triangles": 5632479
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 2.3000000715255737,
+          "exclusiveMs": 2.3000000715255737,
+          "drawCalls": 201,
+          "triangles": 8250190
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 2.3000000715255737,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 3.899999976158142,
+      "reflectionUpdateMs": 1.7999999523162842,
+      "reflectionCaptureMs": 1.6999999284744263,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 2.100000023841858,
+      "shadowInvalidations": 13,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 1.6999999284744263,
+          "exclusiveMs": 1.6999999284744263,
+          "drawCalls": 122,
+          "triangles": 5632479
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 2,
+          "exclusiveMs": 2,
+          "drawCalls": 201,
+          "triangles": 8250190
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 2.100000023841858,
+          "exclusiveMs": 0.10000002384185791,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 3.899999976158142,
+      "reflectionUpdateMs": 1.6999999284744263,
+      "reflectionCaptureMs": 1.6999999284744263,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 2.200000047683716,
+      "shadowInvalidations": 13,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 1.6999999284744263,
+          "exclusiveMs": 1.6999999284744263,
+          "drawCalls": 122,
+          "triangles": 5632479
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 2.200000047683716,
+          "exclusiveMs": 2.200000047683716,
+          "drawCalls": 201,
+          "triangles": 8250190
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 2.200000047683716,
+          "exclusiveMs": 0,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 4.100000023841858,
+      "reflectionUpdateMs": 1.7000000476837158,
+      "reflectionCaptureMs": 1.7000000476837158,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 2.399999976158142,
+      "shadowInvalidations": 13,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 1.7000000476837158,
+          "exclusiveMs": 1.7000000476837158,
+          "drawCalls": 122,
+          "triangles": 5632479
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 2.3000000715255737,
+          "exclusiveMs": 2.3000000715255737,
+          "drawCalls": 201,
+          "triangles": 8250190
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 2.399999976158142,
+          "exclusiveMs": 0.09999990463256836,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    },
+    {
+      "shot": 1,
+      "cpuSubmitMs": 3.899999976158142,
+      "reflectionUpdateMs": 1.7000000476837158,
+      "reflectionCaptureMs": 1.600000023841858,
+      "reflectionPlane": "-1.000,0.000,-0.000,9.127",
+      "viewCpuMs": 2.1999999284744263,
+      "shadowInvalidations": 13,
+      "programs": 571,
+      "passes": [
+        {
+          "kind": "reflection",
+          "inclusiveMs": 1.600000023841858,
+          "exclusiveMs": 1.600000023841858,
+          "drawCalls": 122,
+          "triangles": 5632479
+        },
+        {
+          "kind": "main",
+          "inclusiveMs": 2.100000023841858,
+          "exclusiveMs": 2.100000023841858,
+          "drawCalls": 201,
+          "triangles": 8250190
+        },
+        {
+          "kind": "post",
+          "inclusiveMs": 2.1999999284744263,
+          "exclusiveMs": 0.09999990463256836,
+          "drawCalls": 1,
+          "triangles": 1
+        }
+      ]
+    }
+  ],
+  "pipeline": [],
+  "nodeBuilds": [],
+  "errors": [],
+  "url": "http://127.0.0.1:5185/campus-webgpu.html",
+  "prewarmTimes": [
+    2,
+    12,
+    22,
+    32,
+    42,
+    52
+  ],
+  "staticPrewarm": false,
+  "browser": "Chrome/155.0.8059.84",
+  "pageErrors": []
+}

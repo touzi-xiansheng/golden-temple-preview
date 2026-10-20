@@ -8,6 +8,13 @@ import {
 const transmission = cosine => float(.957).mul(float(1).sub(float(1).sub(cosine.clamp()).pow(5)));
 export const roomDaylightGain = uniform(.65);
 
+const periodicBand = (coordinate, inner, outer) => {
+  const footprint = coordinate.fwidth().max(1e-5), halfPixel = footprint.mul(.5);
+  const band = smoothstep(float(inner).sub(halfPixel), float(outer).add(halfPixel), coordinate.fract().sub(.5).abs()).oneMinus();
+  return mix(inner + outer, band, smoothstep(.25, .75, footprint).oneMinus());
+};
+const periodicSine = phase => phase.mul(Math.PI * 2).sin().mul(smoothstep(.25, .5, phase.fwidth()).oneMinus());
+
 class CampusGlassMaterial extends MeshPhysicalNodeMaterial {
   setupVariants(builder) {
     super.setupVariants(builder);
@@ -70,37 +77,70 @@ export function createGlassMaterial(source, context = false) {
     const safeRay = ray.add(1e-7).sign().mul(max(ray.abs(), vec3(1e-4)));
     const exit = max(low.sub(origin).div(safeRay), high.sub(origin).div(safeRay));
     const distance = min(exit.x, min(exit.y, exit.z)), hit = origin.add(ray.mul(distance));
-    const result = vec4(mix(vec3(.17, .18, .17), vec3(.23, .20, .16), detail.y).mul(detail.w.mul(.15).add(.43)), 0).toVar();
+    // y/z/w are shared by a room's panes; x intentionally remains a per-pane blind.
+    const office = detail.z.lessThan(.3933), meeting = detail.z.lessThan(.6067);
+    const result = vec4(mix(vec3(.38, .40, .37), vec3(.46, .405, .33), detail.y), 0).toVar();
+    const surfaceDistance = distance.toVar(), surfaceDepth = hit.z.negate().toVar();
+    // Evaluate derivatives before divergent room-face branches; unresolved repeats converge to their coverage mean.
+    const ceilingCell = hit.xz.div(.6), floorCell = hit.xz.div(.8), lightCell = hit.xz.div(vec2(1.8, 2.4));
+    const ceilingJoint = periodicBand(ceilingCell.x, .47, .5).mul(periodicBand(ceilingCell.y, .47, .5)).oneMinus().toVar();
+    const floorJoint = periodicBand(floorCell.x, .47, .5).mul(periodicBand(floorCell.y, .47, .5)).oneMinus().toVar();
+    const ceilingPanel = periodicBand(lightCell.x, .12, .15).mul(periodicBand(lightCell.y, .2, .23)).toVar();
     If(exit.y.lessThan(min(exit.x, exit.z)), () => {
       If(ray.y.greaterThan(0), () => {
-        const grid = hit.xz.div(.6).fract().sub(.5).abs();
-        result.rgb.assign(vec3(.145, .15, .142).mul(float(1).sub(smoothstep(.47, .5, max(grid.x, grid.y)).mul(.12))));
-        const lightCell = hit.xz.div(vec2(1.8, 2.4)).fract().sub(.5).abs();
-        const panel = smoothstep(.12, .15, lightCell.x).oneMinus().mul(smoothstep(.2, .23, lightCell.y).oneMinus());
-        result.rgb.addAssign(vec3(.2, .19, .16).mul(panel).mul(detail.w.greaterThan(.86).select(1, 0)));
+        result.rgb.assign(vec3(.43, .44, .415).mul(float(1).sub(ceilingJoint.mul(.07))));
+        // An unlit diffuser is a pale reflecting surface, never an emissive lamp.
+        result.rgb.assign(mix(result.rgb, vec3(.58, .57, .52), ceilingPanel.mul(detail.w.greaterThan(.86).select(1, 0))));
       }).Else(() => {
-        result.rgb.assign(mix(vec3(.045, .052, .048), vec3(.085, .070, .048), detail.y));
-        const floorTile = hit.xz.div(.8).fract().sub(.5).abs();
-        result.rgb.mulAssign(float(1).sub(smoothstep(.47, .5, max(floorTile.x, floorTile.y)).mul(.08)));
+        result.rgb.assign(mix(vec3(.11, .125, .115), vec3(.19, .15, .10), detail.y));
+        result.rgb.mulAssign(float(1).sub(floorJoint.mul(.08)));
       });
     }).ElseIf(exit.z.lessThanEqual(exit.x), () => {
-      const door = hit.x.sub(detail.z.sub(.5).mul(layout.y)).abs().lessThan(.38).and(hit.y.lessThan(low.y.add(2.15)));
-      result.rgb.mulAssign(door.select(.4, 1));
+      const doorX = layout.y.mul(detail.y.lessThan(.5).select(-.33, .33));
+      const door = hit.x.sub(doorX).abs().lessThan(.38).and(hit.y.lessThan(low.y.add(2.15)));
+      result.rgb.assign(mix(result.rgb, vec3(.12, .095, .065), door.select(1, 0)));
+      const panel = hit.x.add(doorX.mul(.45)).abs().lessThan(layout.y.mul(.24))
+        .and(hit.y.greaterThan(low.y.add(1.15))).and(hit.y.lessThan(low.y.add(2.05))).and(door.not());
+      result.rgb.assign(mix(result.rgb, office.select(vec3(.21, .24, .21), meeting.select(vec3(.50, .51, .47), vec3(.18, .23, .20))), panel.select(1, 0)));
       result.rgb.mulAssign(float(1).sub(smoothstep(low.y.add(.1), low.y.add(.16), hit.y).oneMinus().mul(.45)));
     }).Else(() => { result.rgb.mulAssign(.74); });
-    const deskDistance = low.y.add(.74).sub(origin.y).div(safeRay.y), desk = origin.add(ray.mul(deskDistance));
-    If(deskDistance.greaterThan(0).and(deskDistance.lessThan(distance)).and(desk.x.abs().lessThan(layout.y.mul(.37)))
-      .and(desk.z.lessThan(-1.6)).and(desk.z.greaterThan(-2.5)), () => { result.rgb.assign(vec3(.18, .145, .095)); });
-    result.rgb.mulAssign(max(hit.z.negate().sub(.4), 0).mul(-.18).exp().mul(.82).add(.18));
-    const blindDistance = float(-.18).sub(origin.z).div(safeRay.z), blindHit = origin.add(ray.mul(blindDistance));
-    const coverage = max(detail.x.sub(.68), 0).mul(2.5), blindY = blindHit.y.div(size.y).add(.5);
-    const phase = blindHit.y.div(.035), aa = smoothstep(.25, .8, phase.fwidth()).oneMinus();
-    If(blindDistance.greaterThan(0).and(blindDistance.lessThan(distance)).and(blindHit.x.sub(layout.x).abs().lessThan(size.x.mul(.5)))
-      .and(blindY.greaterThan(coverage.oneMinus())).and(blindY.lessThan(1)), () => {
-      result.rgb.assign(mix(vec3(.22, .23, .21), vec3(.28, .265, .22), detail.y).mul(phase.mul(Math.PI * 2).sin().mul(aa).mul(.14).add(.86)));
+    const deskHeight = meeting.select(.74, .43);
+    const deskDistance = low.y.add(deskHeight).sub(origin.y).div(safeRay.y), desk = origin.add(ray.mul(deskDistance));
+    const deskWidth = office.select(layout.y.mul(.38), meeting.select(min(layout.y.mul(.36), 1.5), min(layout.y.mul(.25), .65)));
+    const deskNear = office.select(-1.6, meeting.select(-1.4, -1.25)), deskFar = office.select(-2.45, meeting.select(-3.15, -1.9));
+    If(deskDistance.greaterThan(0).and(deskDistance.lessThan(surfaceDistance)).and(desk.x.abs().lessThan(deskWidth))
+      .and(office.not().or(desk.x.abs().greaterThan(.12))).and(desk.z.lessThan(deskNear)).and(desk.z.greaterThan(deskFar)), () => {
+      result.rgb.assign(office.select(vec3(.26, .205, .13), meeting.select(vec3(.31, .27, .20), vec3(.17, .13, .08))));
+      surfaceDistance.assign(deskDistance); surfaceDepth.assign(desk.z.negate());
+    });
+    const seatZ = office.select(-2.7, meeting.select(-3.4, -2.35));
+    const seatDistance = seatZ.sub(origin.z).div(safeRay.z), seat = origin.add(ray.mul(seatDistance));
+    const seatX = office.select(seat.x.abs().sub(layout.y.mul(.22)).abs().lessThan(.23),
+      meeting.select(seat.x.abs().lessThan(.28), seat.x.abs().lessThan(min(layout.y.mul(.35), 1.3))));
+    If(seatDistance.greaterThan(0).and(seatDistance.lessThan(surfaceDistance)).and(seatX)
+      .and(seat.y.greaterThan(low.y.add(.43))).and(seat.y.lessThan(low.y.add(meeting.select(1.12, .92)))), () => {
+      result.rgb.assign(office.select(vec3(.075, .085, .08), meeting.select(vec3(.13, .11, .085), vec3(.15, .19, .165))));
+      surfaceDepth.assign(seatZ.negate());
+    });
+    result.rgb.mulAssign(max(surfaceDepth.sub(.4), 0).mul(-.18).exp().mul(.82).add(.18));
+    const curtainDistance = float(-.24).sub(origin.z).div(safeRay.z), curtain = origin.add(ray.mul(curtainDistance));
+    const fold = periodicSine(curtain.x.div(.045)).toVar();
+    If(detail.w.greaterThan(.72).and(curtainDistance.greaterThan(0)).and(curtainDistance.lessThan(distance))
+      .and(curtain.x.abs().greaterThan(layout.y.mul(.5).sub(detail.z.mul(.35).add(.25))))
+      .and(curtain.y.greaterThan(low.y.add(.04))).and(curtain.y.lessThan(high.y.sub(.08))), () => {
+      result.rgb.assign(mix(vec3(.38, .40, .365), vec3(.45, .405, .32), detail.y)
+        .mul(fold.mul(.08).add(.92)));
       result.a.assign(1);
     });
-    result.rgb.mulAssign(detail.w.mul(.36).add(.56));
+    const blindDistance = float(-.18).sub(origin.z).div(safeRay.z), blindHit = origin.add(ray.mul(blindDistance));
+    const coverage = max(detail.x.sub(.68), 0).mul(2.5), blindY = blindHit.y.div(size.y).add(.5);
+    const slat = periodicSine(blindHit.y.div(.035)).toVar();
+    If(blindDistance.greaterThan(0).and(blindDistance.lessThan(distance)).and(blindHit.x.sub(layout.x).abs().lessThan(size.x.mul(.5)))
+      .and(blindY.greaterThan(coverage.oneMinus())).and(blindY.lessThan(1)), () => {
+      result.rgb.assign(mix(vec3(.22, .23, .21), vec3(.28, .265, .22), detail.y).mul(slat.mul(.035).add(.86)));
+      result.a.assign(1);
+    });
+    result.rgb.mulAssign(mix(detail.w.mul(.12).add(.88), detail.w.mul(.36).add(.56), result.a));
     return vision.select(result, vec4(0));
   })();
   material.campusRoomNode = room;

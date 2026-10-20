@@ -205,7 +205,7 @@ function createResearchRecess(glass) {
   return {addBuilding,emit};
 }
 
-export function buildContextDistricts(terrainMesh) {
+export function buildContextDistricts(terrainMesh, { refined = false } = {}) {
   const started=performance.now(),group=new THREE.Group();group.name='context-districts';
   const ground=createGroundSampler([terrainMesh],[-1320,1520,-1520,1070]);
   const casters=[],receivers=[terrainMesh],buildings=[],roads=[],trees=[],plantingExclusions=[],forecourts=[];
@@ -357,7 +357,10 @@ export function buildContextDistricts(terrainMesh) {
     }
     else if(engineering) {lane(b,'x',-430,350,675);lane(b,'z',675,-605,-430);parking(b,590,-580,174,44,'east');surface(b,asphalt,[402,665,-464,-403],'#616660',.04);plantingExclusions.push([402,665,-464,-403]);}
     else {lane(b,'x',62,350,630);parking(b,520,62,204,50,'through');}
-    for(const [id,x,z,w,d,h] of district.buildings) {
+    for(const [id,x,z,w,d,originalHeight] of district.buildings) {
+      // Whole-building heights vary together with openings and shadow proxies;
+      // footprints/access remain fixed so neighbours cannot invade the woodland.
+      const h=refined?({a1:12,a2:20,a3:16,a4:22,b1:9,b2:13,b3:11,b4:9,c1:12,c2:8}[id]??originalHeight):originalHeight;
       const samples=[];
       for(let ix=0;ix<=4;ix++)for(let iz=0;iz<=4;iz++)samples.push(ground.heightAt(x-w/2+w*ix/4,z-d/2+d*iz/4));
       const base=Math.max(...samples)+.18,bottom=Math.min(...samples)-.2,roof=base+h;

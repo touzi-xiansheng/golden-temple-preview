@@ -99,6 +99,32 @@ test('glass reflection replaces its environment input without contaminating room
   factory.dispose();
 });
 
+test('room variation reuses shared room coordinates without rewriting legacy pane inputs', () => {
+  const root = buildBuildings(), factory = createCampusMaterials(), snapshots = [], rooms = new Map();
+  root.traverse(object => {
+    if (!object.material?.userData.campusGlass) return;
+    const attributes = object.geometry.attributes, detail = attributes.paneDetail, layout = attributes.paneRoom;
+    snapshots.push({ object, attributes: Object.fromEntries(['paneDetail', 'paneRoom', 'paneSize', 'paneType']
+      .map(name => [name, attributes[name].array.slice()])) });
+    for (let index = 0; index < object.count; index++) {
+      if (attributes.paneType.getX(index) !== 0) continue;
+      const key = [detail.getY(index), detail.getZ(index), detail.getW(index), layout.getY(index), layout.getZ(index), layout.getW(index)].join(',');
+      if (!rooms.has(key)) rooms.set(key, new Set());
+      rooms.get(key).add(layout.getX(index));
+    }
+  });
+  assert.ok([...rooms.values()].filter(panes => panes.size > 1).length > 100, 'production rooms span multiple panes');
+  factory.apply(root);
+  for (const { object, attributes } of snapshots) {
+    for (const [name, values] of Object.entries(attributes)) assert.deepEqual(object.geometry.attributes[name].array, values);
+    assert.ok(object.material.campusRoomNode.isNode);
+    assert.equal(object.material.emissiveNode, null);
+    assert.equal(object.material.emissive.getHex(), 0);
+  }
+  factory.dispose();
+  root.traverse(object => { object.geometry?.dispose(); });
+});
+
 test('required glass attributes and unfamiliar shader hooks fail explicitly', () => {
   const source = buildingMaterials().glass, factory = createCampusMaterials();
   assert.throws(() => factory.convert(source, new Mesh(new PlaneGeometry(), source)), /missing paneDetail/);

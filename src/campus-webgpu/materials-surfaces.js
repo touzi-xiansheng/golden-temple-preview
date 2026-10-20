@@ -76,9 +76,21 @@ export function mineralSurface(material, source, object) {
   const relief = aggregate.sub(.5).mul(resolved(p.mul(scale)))
     .sub(max(float(.43).sub(pores), 0).mul(resolved(p.mul(scale).mul(3.7))).mul(1.5));
   const grainContrast = soffit ? .16 : wood ? .20 : .055;
-  material.colorNode = materialColor.mul(coarse.mul(.08).add(.96).add(aggregate.sub(.5).mul(resolved(p.mul(scale))).mul(grainContrast)));
-  material.roughnessNode = materialRoughness.add(coarse.sub(.5).mul(.1)).add(relief.mul(roughnessVariation)).clamp(.18, .98);
-  material.normalNode = heightNormal(relief.mul(reliefMetres));
+  let structure = float(0);
+  if (wood) {
+    // Follow the sawn board's long axis, using the same metre UVs on full/cut soffits.
+    const rings = p.xy.add(vec2(1.3, .7)).length().div(.018)
+      .add(filteredNoise(p.mul(vec3(.4, .4, .14))).mul(.65));
+    structure = rings.mul(Math.PI * 2).sin().mul(resolved(p.mul(vec3(1 / .018, 1 / .018, .2))));
+  } else if (source.name.includes('limestone')) {
+    // Subtle bedding follows the stone's horizontal cut; existing panel colours/joints remain authoritative.
+    structure = filteredNoise(p.mul(vec3(.25, 6, .25)).add(coarse.mul(.16))).sub(.5).mul(2);
+  }
+  const finish = coarse.mul(.08).add(.96).add(aggregate.sub(.5).mul(resolved(p.mul(scale))).mul(grainContrast));
+  material.colorNode = materialColor.mul(finish.add(structure.mul(wood ? .035 : .025)));
+  material.roughnessNode = materialRoughness.add(coarse.sub(.5).mul(.1)).add(relief.mul(roughnessVariation))
+    .add(structure.mul(wood ? -.018 : .012)).clamp(.18, .98);
+  material.normalNode = heightNormal(relief.mul(reliefMetres).add(structure.mul(wood ? .000025 : .000015)));
 }
 
 export function barkSurface(material, source, object) {
@@ -169,14 +181,14 @@ export function foliageSurface(material, source, object, lighting) {
 export function groundSurface(material, source, uniforms) {
   const p = positionWorld.xz, p3 = vec3(p.x, 0, p.y), kind = source.name.slice(7);
   const fine = filteredNoise(p3.mul(45)), coarse = filteredNoise(p3.mul(.7));
-  let base = materialColor.rgb.mul(fine.sub(.5).mul(.24).add(1));
+  let base = materialColor.rgb.mul(fine.sub(.5).mul(kind === 'paving' ? .10 : .24).add(1));
   let height = float(0);
   if (kind === 'paving') {
     const row = p.y.div(.6).floor(), tile = vec2(p.x.div(1.2).add(row.mod(2).mul(.5)), p.y.div(.6));
     const grid = tile.fract().sub(.5).abs(), aa = tile.fwidth();
     const joint = max(smoothstep(float(.497).sub(aa.x), float(.497).add(aa.x), grid.x), smoothstep(float(.494).sub(aa.y), float(.494).add(aa.y), grid.y));
     const tileShade = hash(vec3(tile.floor(), 0));
-    base = base.mul(mix(.94, 1.06, tileShade)).mul(mix(1, .68, joint));
+    base = base.mul(mix(.97, 1.03, tileShade)).mul(mix(1, .68, joint));
     height = joint.oneMinus().mul(.0035);
     material.roughnessNode = materialRoughness.add(joint.mul(.035)).sub(tileShade.sub(.5).mul(.08)).clamp(.78, 1);
   } else if (kind === 'lawn') {

@@ -258,7 +258,7 @@ export function buildVegetation(trees, contextTrees, shrubs, districtTrees = [])
   return finishBuild(buildVegetationSteps(trees, contextTrees, shrubs, districtTrees));
 }
 
-export function* buildVegetationSteps(trees, contextTrees, shrubs, districtTrees = []) {
+export function* buildVegetationSteps(trees, contextTrees, shrubs, districtTrees = [], { refined = false } = {}) {
   const group=new THREE.Group();group.name='campus-vegetation';
   const random=rng('courtyard-canopies'),up=new THREE.Vector3(0,1,0);
   const trunks=new Map(),branches=[],flowerStems=[],clonalPetioles=[],shrubStems=[],matureStems=[],leaves=[],shrubLeaves=[],detailedShrubLeaves=[],groundLeaves=[],fill=[],distant=[],cores=[],flowers=[],tufts=[],shortTufts=[];
@@ -302,7 +302,7 @@ export function* buildVegetationSteps(trees, contextTrees, shrubs, districtTrees
     let wholePlan=null;
     const base=new THREE.Vector3(x,ground,z),lean=new THREE.Vector3(treeRng.float(-0.45,0.45),0,treeRng.float(-0.45,0.45));
     // Reduce inherited droop before the clearance remap can stretch a low crown into a long bare trunk.
-    const options={h,base,lean,spread:tree.radius/h,detail:tree.hero?0.25:0.16,shellDensity:1.35,leaders:form===2?2:3,scaffolds:4,clump:0.38,scaffoldWobble:.22,droopScale:.3};
+    const options={h,base,lean,spread:tree.radius/h,detail:tree.hero?0.25:0.16,shellDensity:1.35,leaders:form===2?2:3,scaffolds:4,clump:refined?0.48:0.38,scaffoldWobble:.22,droopScale:.3};
     const skeleton=(form===1?genCherry:genMaple)(treeRng,options);treeForms[wholeTree?'broadleaf':['broadleaf','vase','upright'][form]]++;
     const junctions=captureTreeJunctions(skeleton.branches);
     const trunk=skeleton.branches[0],fork=trunk.pts.at(-1).y-ground,newFork=treeRng.float(3.15,3.55);
@@ -359,13 +359,15 @@ export function* buildVegetationSteps(trees, contextTrees, shrubs, districtTrees
         const Y=node.T.clone().multiplyScalar(0.35).addScaledVector(side,0.8);Y.y-=treeRng.float(0.05,0.25);Y.normalize();
         const N=up.clone().add(new THREE.Vector3(treeRng.float(-0.7,0.7),treeRng.float(-0.1,0.2),treeRng.float(-0.7,0.7))).normalize();
         const depth=THREE.MathUtils.smoothstep(envRho(node.p,crownEnv(node.p)),0.2,1.05);
-        color.set(palette[0]).lerp(tip,treeRng.float(0,0.72)).multiplyScalar(treeRng.float(0.87,1.1));
+        const leafTint=treeRng.float(0,0.72),leafValue=treeRng.float(0.87,1.1);
+        const cohort=.36+.24*Math.sin(center.x*.81+center.y*.65+center.z*.73);
+        color.set(palette[0]).lerp(tip,refined?cohort*.75+leafTint*.25:leafTint).multiplyScalar(refined?1+(leafValue-1)*.4:leafValue);
         const p=node.p.clone().addScaledVector(side,treeRng.float(0.025,0.075));
         leaf(p,Y,N,treeRng.float(0.075,0.125),treeRng.float(0.135,0.225),color,0.4+depth*0.6);
       }
     }
     if(wholeTree) {
-      wholePlan=buildCampusBroadleaf(tree,crownEnv,grownTree?{seed:'campus-whole-tree:'+x+':'+z,height:h,radius:tree.radius,clearance:tree.clearance??3}:null);
+      wholePlan=buildCampusBroadleaf(tree,crownEnv,grownTree?{seed:'campus-whole-tree:'+x+':'+z,height:h,radius:tree.radius,clearance:tree.clearance??3}:null,{refined});
       if(grownTree)tree.crownEnvelope=wholePlan.crownEnvelope;
       leaves.length=wholeStart.leaves;fill.length=wholeStart.cards;
       leaves.push(...wholePlan.leaves);

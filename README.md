@@ -65,20 +65,24 @@ Fixed daylight, 907 diffuse probes and two small local wood-ceiling environments
 are generated at startup. Four 512-pixel glass probes provide broad coverage; one
 nearby facade can receive a live planar reflection cropped to its visible region.
 Stationary views reuse that capture. Balanced and quality modes use a cached 4096²
-sun shadow, refreshed at camera cuts and actual shadow-size changes.
+sun shadow, refreshed when world coverage or shadow size changes. Aerial and free
+views reuse the same coverage.
 
-The current pass reduces the blue daylight cast, uses real path geometry for bounce
-lighting, separates diffuse intensity from material reflections, and makes apparent
-interiors respond to daylight instead of a constant glow. Thin leaves transmit only
-back light; moderate per-leaf colour compression preserves their mean. Everything
-remains procedurally generated, with no external models, photographs or HDRIs.
+The daylight pass reduces the blue cast, uses real path geometry for bounce lighting,
+and keeps apparent interiors lit by incident light. The latest refinement adds three
+shared room layouts, filters fine blind patterns, groups crown colours by shoot, and
+adds subtle timber/stone structure and varied neighbouring heights. A stable sky
+node and targeted entrance prewarming remove measured first-use material rebuilding.
+Everything remains procedural, with no external models, photographs or HDRIs.
 
-The [implementation evidence](docs/WEBGPU_IMPLEMENTATION.md) records 26 real-GPU
-calibrations, matched screenshots and paired 1080p motion checks. The six steady
-sections passed the reference-device budget and baseline comparison. Initial shader
-work still takes seconds; the tested warm-cache build reached its first complete
-frame in about 16.6 seconds, including reflection prewarming. This is not a cold-start
-or cross-device guarantee, and occasional camera-cut stalls remain recorded.
+The [implementation evidence](docs/WEBGPU_IMPLEMENTATION.md) records 31 real-GPU
+calibrations, matched screenshots and paired 1080p motion checks. The
+[latest validation](docs/webgpu-analysis/refinement-validation.md) separates
+generation, complete startup, continuous motion and camera-cut measurements.
+Terrain lookup and grass clipping reduce measured CPU generation by about 12%
+with identical geometry. Full startup still takes seconds: the tested local build
+reached its first complete frame in about 17.5 seconds, including reflection
+prewarming. This is not a cold-start or cross-device guarantee.
 The scene assumes fixed sunlight and static geometry; dynamic lighting requires
 rebaking the relevant caches. Distant glass, simplified interiors and foliage remain
 visual approximations. The calibrated GPU visibility module is not enabled in the campus.
@@ -97,10 +101,14 @@ the entry, report label and reference-device frame-time budget (25ms by default)
 Set `BASELINE_REPORT=out/webgpu/motion-<label>.json` for a paired comparison made with
 the same version of the tool. `REFLECTION_UPGRADE=1` explicitly permits only the
 probe-to-portal mode change in that comparison, retaining the other matching checks.
-It records first entry into the reflection shot, natural cuts and free-camera
+It records first entry into the entrance and reflection shots, natural cuts and free-camera
 transitions separately. `?groundBounce=0` and `?contacts=0` isolate the two lighting
-approximations. On the development server, `node tools/webgpu-check.mjs --lab --lighting --materials`
+approximations. `?aesthetics=0` disables the refined geometry generation;
+`?precompile=0` opts out of startup precompilation for diagnostics. On the development
+server, `node tools/webgpu-check.mjs --lab --lighting --materials`
 runs the standalone real-GPU lighting and production-material checks.
+The optional `?aa=traa` experiment fails on the reference device's eight-vertex-buffer
+limit in both the previous and current build; use the default MSAA path.
 
 ## Quick start
 

@@ -58,7 +58,7 @@ test('homogeneous portal clipping survives a facade crossing the near plane and 
   assert.equal(projectReflectionPortal(facade(),cameraAt([0,0,-8],[0,0,-10]),1920,1080),null);
 });
 
-function reflectionFixture() {
+function reflectionFixture({managedBackground=false}={}) {
   const object=new InstancedMesh(new BoxGeometry(),new MeshBasicMaterial(),1);
   object.setMatrixAt(0,new Matrix4().makeScale(6,6,.1).setPosition(0,3,-53));
   const scene=new Scene();scene.add(object);
@@ -66,9 +66,9 @@ function reflectionFixture() {
   let target=null,mrt={id:'mrt'},calls=0,fail=false,dimensions=[1920,1080];
   const renderer={toneMapping:3,autoClear:false,info:{render:{drawCalls:0,triangles:0}},
     getDrawingBufferSize:size=>size.set(...dimensions),getRenderTarget:()=>target,setRenderTarget:value=>{target=value;},
-    getMRT:()=>mrt,setMRT:value=>{mrt=value;},render(){calls++;if(fail)throw new Error('capture failed');this.info.render.drawCalls+=7;this.info.render.triangles+=70;}};
+    getMRT:()=>mrt,setMRT:value=>{mrt=value;},render(){calls++;this.lastBackground=scene.background;if(fail)throw new Error('capture failed');this.info.render.drawCalls+=7;this.info.render.triangles+=70;}};
   const materials={glass:[{object,material:object.material}],setGlassReflection(){}};
-  const reflections=createReflections({renderer,scene,materials,lighting:{captureBackground:{texture:captureBackground}}});
+  const reflections=createReflections({renderer,scene,materials,lighting:{backgroundNode:managedBackground?{}:null,captureBackground:{texture:captureBackground}}});
   const camera=cameraAt([0,3,-45],[0,3,-53]);
   return {reflections,camera,renderer,scene,originalBackground,get calls(){return calls;},fail(value=true){fail=value;},resize(){dimensions=[1280,720];},dispose(){reflections.dispose();object.geometry.dispose();object.material.dispose();}};
 }
@@ -99,5 +99,15 @@ test('failed capture restores renderer state and disables the old capture instea
     assert.equal(f.scene.background,f.originalBackground);
     f.fail(false);f.reflections.update(f.camera);
     assert.equal(f.reflections.stats.capturesThisUpdate,1,'failed forced capture must remain retryable for a stationary viewer');
+  } finally {f.dispose();}
+});
+
+test('managed per-render background binding keeps the scene background identity unchanged during planar capture',()=>{
+  const f=reflectionFixture({managedBackground:true});
+  try {
+    f.reflections.update(f.camera);
+    assert.equal(f.calls,1);
+    assert.equal(f.renderer.lastBackground,f.originalBackground);
+    assert.equal(f.scene.background,f.originalBackground);
   } finally {f.dispose();}
 });

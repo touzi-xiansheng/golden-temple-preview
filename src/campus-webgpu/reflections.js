@@ -63,7 +63,7 @@ export function createReflections({renderer,scene,materials,lighting,planar=true
   async function captureProbes({yieldControl=()=>Promise.resolve(),onProgress=()=>{}}={}) {
     const cube=new CubeRenderTarget(512,{type:HalfFloatType}), camera=new CubeCamera(.2,2500,cube), pmrem=new PMREMGenerator(renderer);
     const previous=renderer.getRenderTarget(),background=scene.background;
-    scene.background=lighting.captureBackground.texture;
+    if(!lighting.backgroundNode)scene.background=lighting.captureBackground.texture;
     const assignments=[];
     try {
       const byProbe=new Map();
@@ -119,7 +119,8 @@ export function createReflections({renderer,scene,materials,lighting,planar=true
         slot.target.scissor.set(0,0,configured.width,configured.height);slot.target.scissorTest=true;
         const captureStart=performance.now(),beforeCalls=renderer.info?.render?.drawCalls||0,beforeTriangles=renderer.info?.render?.triangles||0;
         try {
-          renderer.setMRT(null);renderer.toneMapping=NoToneMapping;renderer.autoClear=true;scene.background=lighting.captureBackground.texture;
+          renderer.setMRT(null);renderer.toneMapping=NoToneMapping;renderer.autoClear=true;
+          if(!lighting.backgroundNode)scene.background=lighting.captureBackground.texture;
           renderer.setRenderTarget(slot.target);renderer.render(scene,slot.camera);
           // Publish the texture, transform and domain atomically. A failed or
           // degenerate capture leaves only the static probe fallback enabled.

@@ -8,6 +8,7 @@ import { createTurfTextures } from './turf-texture.js';
 import { createMulchTextures } from './mulch-texture.js';
 import { CONTEXT_EXTENT, contextTerrainHeight, planContextWoodland, woodlandGroundMask } from './site-context.js';
 import { buildContextDistricts, CONTEXT_JUNCTION } from './context-districts.js';
+import { createGroundSampler } from './context-visibility.js';
 import { sampleTour, TOUR, SHOT_SECONDS } from './tour.js';
 import { buildMownTurfSteps } from './mown-turf.js';
 import { finishBuild } from './loading.js';
@@ -405,8 +406,17 @@ function cutSouthBorderLawn(garden, soil) {
   return {lawnOutlines,soilOutline};
 }
 
-function filterSouthBorderGrass(group,prefix,outline,oldOutlines) {
-  const added=p=>southBorderContour(p.x,p.z,outline).inside&&!oldOutlines.some(o=>southBorderContour(p.x,p.z,o).inside);
+function filterSouthBorderGrass(group,prefix,outline,oldOutlines,refined=false) {
+  // Grass clipping only needs polygon membership, not distance to every edge.
+  const contains=refined?(p,points)=>{
+    let inside=false;
+    for(let i=0,j=points.length-1;i<points.length;j=i++) {
+      const a=points[j],b=points[i];
+      if((a.z>p.z)!==(b.z>p.z)&&p.x<(b.x-a.x)*(p.z-a.z)/(b.z-a.z)+a.x)inside=!inside;
+    }
+    return inside;
+  }:(p,points)=>southBorderContour(p.x,p.z,points).inside;
+  const added=p=>contains(p,outline)&&!oldOutlines.some(o=>contains(p,o));
   const bounds=new THREE.Box2().setFromPoints(outline.map(p=>new THREE.Vector2(p.x,p.z)));
   const cutEdges=[outline,...oldOutlines].flatMap(points=>points.map((p,i)=>[p,points[(i+1)%points.length]]));
   function crosses(a,b,c,d) {
@@ -447,7 +457,7 @@ export function buildLandscape() {
   return finishBuild(buildLandscapeSteps());
 }
 
-export function* buildLandscapeSteps() {
+export function* buildLandscapeSteps({ refined = false } = {}) {
   const group = new THREE.Group(); group.name = 'campus-landscape';
   const b = new Builder(), random = rng('campus-site');
   const paths = [], beds = [], turfSurfaces=[], southDeferred=[], southeastDeferred=[];
@@ -516,12 +526,22 @@ export function* buildLandscapeSteps() {
   }
   const terrain=new THREE.BufferGeometry(); terrain.setAttribute('position',new THREE.Float32BufferAttribute(terrainPositions,3)); terrain.setIndex(terrainIndices); terrain.computeVertexNormals();
   const terrainMesh=new THREE.Mesh(terrain,lawn); terrainMesh.receiveShadow=true; terrainMesh.name='continuous-meadow-and-low-rolling-ground'; group.add(terrainMesh);
-  const contextDistricts=buildContextDistricts(terrainMesh);group.add(contextDistricts.object);
+  const contextDistricts=buildContextDistricts(terrainMesh,{refined});group.add(contextDistricts.object);
   lawn.userData.districtLanduse=contextDistricts.landuse;
   group.userData.contextDistricts=contextDistricts;
   yield;
+  // Index the rendered terrain only where the approach and woodland query it.
+  // Keep the original raycast path for the legacy generator.
+  const queryBounds=new THREE.Box3().setFromPoints(accessPoints).expandByScalar(5);
+  const groundSampler=refined?createGroundSampler([terrainMesh],[
+    Math.min(CONTEXT_EXTENT.minX,queryBounds.min.x),Math.max(CONTEXT_EXTENT.maxX,queryBounds.max.x),
+    Math.min(CONTEXT_EXTENT.minZ,queryBounds.min.z),Math.max(CONTEXT_EXTENT.maxZ,queryBounds.max.z),
+  ]):null;
   const groundRay=new THREE.Raycaster(new THREE.Vector3(),new THREE.Vector3(0,-1,0));
-  function groundAt(x,z) { groundRay.ray.origin.set(x,200,z); const hit=groundRay.intersectObject(terrainMesh,false)[0]; return (hit?.point.y??terrainHeight(x,z))-0.035; }
+  function groundAt(x,z) {
+    if(groundSampler)return groundSampler.heightAt(x,z)-.035;
+    groundRay.ray.origin.set(x,200,z);const hit=groundRay.intersectObject(terrainMesh,false)[0];return(hit?.point.y??terrainHeight(x,z))-.035;
+  }
 
 
   ring(asphalt,223,191,13.5,7,0.015,0.04);
@@ -773,24 +793,24 @@ export function* buildLandscapeSteps() {
   yield;
   markDetailedShrubs(shrubs);
   if(southBorder)for(const move of southBorder.moves)if(move.original.kind==='shrub')move.original.detail=move.southBorderDetail;
-  const vegetation=yield* buildVegetationSteps(trees,contextTrees,shrubs,contextDistricts.trees);group.add(vegetation);
+  const vegetation=yield* buildVegetationSteps(trees,contextTrees,shrubs,contextDistricts.trees,{refined});group.add(vegetation);
   group.userData.matureShrubs=vegetation.userData.matureShrubs??[];
   const sampleTurfSurface=createTurfSurfaceSampler(turfSurfaces,terrainPositions[1],garden.z-garden.walkRz-garden.walkWidth/2);
   const originalTurfSampler=createTurfSurfaceSampler(originalTurfSurfaces,terrainPositions[1],garden.z-garden.walkRz-garden.walkWidth/2);
   const turf=yield* buildMownTurfSteps(southBorder?originalTurfSampler:sampleTurfSurface,lawn.userData.turfMap);group.add(turf);
   if(southBorder){
-    const short=filterSouthBorderGrass(vegetation,'lawn-edge',southBorder.outline,southBorder.oldOutlines);
+    const short=filterSouthBorderGrass(vegetation,'lawn-edge',southBorder.outline,southBorder.oldOutlines,refined);
     yield '正在整理草坪边界…';
-    const mown=filterSouthBorderGrass(turf,'mown-turf',southBorder.outline,southBorder.oldOutlines);
+    const mown=filterSouthBorderGrass(turf,'mown-turf',southBorder.outline,southBorder.oldOutlines,refined);
     yield;
     vegetation.userData.stats.shortGrassTufts-=short.length;vegetation.userData.stats.vegetationBatches=vegetation.children.length;
     turf.userData.stats.mownTurfTufts-=mown.length;turf.userData.stats.mownTurfBlades-=mown.length*12;turf.userData.stats.mownTurfTriangles-=mown.length*36;turf.userData.stats.mownTurfBatches=turf.children.length;
     group.userData.southBorder={plants:108,groups:[19,14],outline:southBorder.outline,shortGrassRemoved:short.length,mownTurfRemoved:mown.length};
   }
   if(southeastSample){
-    const short=filterSouthBorderGrass(vegetation,'lawn-edge',southeastSample.outline,[southeastSample.oldBed]);
+    const short=filterSouthBorderGrass(vegetation,'lawn-edge',southeastSample.outline,[southeastSample.oldBed],refined);
     yield;
-    const mown=filterSouthBorderGrass(turf,'mown-turf',southeastSample.outline,[southeastSample.oldBed]);
+    const mown=filterSouthBorderGrass(turf,'mown-turf',southeastSample.outline,[southeastSample.oldBed],refined);
     yield;
     vegetation.userData.stats.shortGrassTufts-=short.length;vegetation.userData.stats.vegetationBatches=vegetation.children.length;
     turf.userData.stats.mownTurfTufts-=mown.length;turf.userData.stats.mownTurfBlades-=mown.length*12;turf.userData.stats.mownTurfTriangles-=mown.length*36;turf.userData.stats.mownTurfBatches=turf.children.length;
