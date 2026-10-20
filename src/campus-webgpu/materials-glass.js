@@ -18,7 +18,7 @@ const periodicSine = phase => phase.mul(Math.PI * 2).sin().mul(smoothstep(.25, .
 class CampusGlassMaterial extends MeshPhysicalNodeMaterial {
   setupVariants(builder) {
     super.setupVariants(builder);
-    // These 512px probes support the legacy .038 floor; retain geometric filtering.
+    // Local probes are at least 512px; retain the legacy floor and geometric filtering.
     const surface = this.roughnessNode ? float(this.roughnessNode) : materialRoughness;
     roughness.assign(surface.max(.038).add(getGeometryRoughness()).min(1));
   }

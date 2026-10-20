@@ -12,6 +12,7 @@ import { SunLight } from 'three/addons/lights/SunLight.js';
 import { SunLightNode } from 'three/addons/lights/SunLightNode.js';
 import { LightProbeGrid } from 'three/addons/lighting/LightProbeGrid.js';
 import { createStaticShadows } from './static-shadows.js';
+import { observeShadowResources } from './shadow-resource-observer.js';
 
 const SUN_DIRECTION = new Vector3(0.35, 0.72, 0.66843).normalize();
 const SHADOW_SIZES = { performance: 1024, balanced: 4096, quality: 4096 };
@@ -128,7 +129,7 @@ export function applyCampusLighting(material, lighting, { probes = null } = {}) 
   const existing = bindings.get(material);
   if (existing?.lighting === lighting) return material;
   if (existing) throw new Error('Material is already attached to another lighting owner');
-  const original = material.setupEnvironment, originalCacheKey = material.customProgramCacheKey;
+  const original = material.setupEnvironment, originalCacheKey = material.customProgramCacheKey, originalObserver = material.setupObserver;
   material.setupEnvironment = function(builder) {
     const environment = original.call(this, builder);
     if (!environment?.envNode) throw new Error('Campus materials require an environment texture');
@@ -143,7 +144,10 @@ export function applyCampusLighting(material, lighting, { probes = null } = {}) 
       ...probe.bounds.min, ...probe.bounds.max].join(',')).join('|');
     return `${originalCacheKey.call(this)}:campus-lighting:${lighting.environment?.texture.uuid || 'pending'}:${layout}`;
   };
-  bindings.set(material, { original, originalCacheKey, lighting });
+  material.setupObserver = function(builder) {
+    return observeShadowResources(originalObserver.call(this,builder),()=>lighting.stats.shadowResourceGeneration);
+  };
+  bindings.set(material, { original, originalCacheKey, originalObserver, lighting });
   lighting.materials.add(material);
   material.needsUpdate = true;
   return material;
@@ -170,7 +174,7 @@ export function createLighting({ renderer, scene, camera, quality = 'balanced', 
   sun.shadow.autoUpdate = true;
   const staticShadows = cacheShadows ? createStaticShadows(sun,scene,SUN_DIRECTION) : null;
   const materials = new Set(), probes = [], bakeScenes = new Set();
-  const stats = { ready: false, skyMs: 0, probeBakeMs: 0, probes: 0, cubeViews: 0, baking: false, quality, groundBounce, groundAlbedo: GROUND_ALBEDO.toArray(), shadowMode:cacheShadows?'cached':'cascades', shadowCache:staticShadows?.stats };
+  const stats = { ready: false, skyMs: 0, probeBakeMs: 0, probes: 0, cubeViews: 0, baking: false, quality, groundBounce, groundAlbedo: GROUND_ALBEDO.toArray(), shadowMode:cacheShadows?'cached':'cascades', shadowCache:staticShadows?.stats, shadowResourceGeneration:0 };
   let disposed = false, environment = null, background = null, captureBackground = null, backgroundNode = null, haze = null;
 
   const lighting = {
@@ -188,6 +192,7 @@ export function createLighting({ renderer, scene, camera, quality = 'balanced', 
       const size = SHADOW_SIZES[value], shadow = sun.shadow;
       if (shadow.mapSize.x !== size) {
         shadow.mapSize.setScalar(size);
+        stats.shadowResourceGeneration++;
         const extents = shadow.getFrameExtents();
         // setSize disposes GPU storage while preserving the target retained by SunShadowNode.
         shadow.map?.setSize(size * extents.x, size * extents.y);
@@ -273,6 +278,7 @@ export function createLighting({ renderer, scene, camera, quality = 'balanced', 
         const binding = bindings.get(material);
         material.setupEnvironment = binding.original;
         material.customProgramCacheKey = binding.originalCacheKey;
+        material.setupObserver = binding.originalObserver;
         material.needsUpdate = true;
         bindings.delete(material);
       }

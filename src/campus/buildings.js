@@ -368,8 +368,14 @@ export function buildBuildings({ bevels = true } = {}) {
     entrances.push({ id: b.id, x: e.x, z: e.z, nx: e.nx, nz: e.nz, recessed: !!b.arcade });
     place(m.recess, 0, height/2 + 0.16, -0.48, width, height, 0.12);
     place(m.darkStone, 0, 0.08, 0.98, width+1.4, 0.16, 2.35);
-    if (!b.arcade) place(m.concrete, 0, 0.04, 2.28, width+1.8, 0.08, 0.3);
-    // Adjacent flush approach keeps the raised landing accessible without a stair-only entrance.
+    // Keep the ramp wholly on the existing approach; the gallery path is diagonal.
+    const rampCenter = b.kind==='headquarters' ? 2.25 : b.kind==='gallery' ? 3 : 0;
+    if (!b.arcade) {
+      if (b.kind==='commons') place(m.concrete, 0, 0.04, 2.28, width+1.8, 0.08, 0.3);
+      else for (const [left,right] of [[-width/2-.9,rampCenter-.6],[rampCenter+.6,width/2+.9]]) {
+        place(m.concrete, (left+right)/2, 0.04, 2.28, right-left, 0.08, 0.3);
+      }
+    }
     const ramp = new THREE.BufferGeometry();
     const rx = width/2+1.35;
     const local = [[rx-.6,.005,2.4],[rx+.6,.005,2.4],[rx+.6,.16,.32],
@@ -383,12 +389,27 @@ export function buildBuildings({ bevels = true } = {}) {
       const faces=[[0,2,1],[0,3,2],[4,5,6],[4,6,7],[0,1,5],[0,5,4],
         [3,7,6],[3,6,2],[0,4,7],[0,7,3],[1,2,6],[1,6,5]];
       positions=faces.flatMap(face=>face.flatMap(index=>points[index]));
+    } else if (!b.arcade) {
+      // A closed 4.09% wedge joins the outermost .16m surface to the .075m road.
+      // The gallery's full-width base projects beyond its recessed foyer landing.
+      const base = entrancePoint(BUILDINGS.find(value=>value.id===b.id), .08);
+      const top = Math.max(.98+2.35/2, (base.x-e.x)*e.nx+(base.z-e.z)*e.nz), foot = top+2.08;
+      const points = [[rampCenter-.6,.075,foot],[rampCenter+.6,.075,foot],
+        [rampCenter+.6,.16,top],[rampCenter-.6,.16,top],
+        [rampCenter-.6,.055,foot],[rampCenter+.6,.055,foot],
+        [rampCenter+.6,.055,top],[rampCenter-.6,.055,top]];
+      const faces = [[0,1,2],[0,2,3],[4,6,5],[4,7,6],[0,5,1],[0,4,5],
+        [3,2,6],[3,6,7],[0,3,7],[0,7,4],[1,5,6],[1,6,2]];
+      positions = faces.flatMap(face=>face.flatMap(index=>{
+        const [u,y,v]=points[index]; return [e.x+tx*u+e.nx*v,y,e.z+tz*u+e.nz*v];
+      }));
     }
     const vertices = new Float32Array(positions);
     rampTriangles+=vertices.length/9;
     ramp.setAttribute('position', new THREE.BufferAttribute(vertices,3));
     ramp.computeVertexNormals();
     const rampMesh = new THREE.Mesh(ramp, m.concrete);
+    rampMesh.name = `Entry ramp ${b.id}`;
     rampMesh.receiveShadow = true; root.add(rampMesh);
     for (const s of [-1, 1]) {
       place(m.darkStone, s*(width/2+.22), height/2+.16, -0.05, .44, height+.1, .85);

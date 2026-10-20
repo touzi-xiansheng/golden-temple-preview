@@ -5,19 +5,28 @@ import { mix, positionWorld, smoothstep, texture, vec2 } from 'three/tsl';
 export function createContactOcclusion(architecture, trees, { size = 2048 } = {}) {
   const bounds = [-60, -85, 60, 95], stamps = [];
   const matrix = new Matrix4(), world = new Matrix4(), box = new Box3();
+  const stamp = () => {
+    // Raised slabs, steps and broad ground sheets are receivers, not contact occluders.
+    if (box.min.y > .25 || box.max.y < .65 || box.max.y - box.min.y < .5) return;
+    const hx = (box.max.x - box.min.x) / 2, hz = (box.max.z - box.min.z) / 2;
+    if (hx < .025 || hz < .025) return;
+    stamps.push({ x: (box.min.x + box.max.x) / 2, z: (box.min.z + box.max.z) / 2,
+      hx, hz, feather: .42, strength: .38, round: false });
+  };
   architecture.updateMatrixWorld(true);
   architecture.traverse(object => {
-    if (!object.isInstancedMesh || /glass|glaz|sedum|foliage/i.test(object.material?.name || '')) return;
-    object.geometry.computeBoundingBox();
-    for (let index = 0; index < object.count; index++) {
-      object.getMatrixAt(index, matrix); world.multiplyMatrices(object.matrixWorld, matrix);
-      box.copy(object.geometry.boundingBox).applyMatrix4(world);
-      // Raised slabs, steps and broad ground sheets are receivers, not contact occluders.
-      if (box.min.y > .25 || box.max.y < .65 || box.max.y - box.min.y < .5) continue;
-      const hx = (box.max.x - box.min.x) / 2, hz = (box.max.z - box.min.z) / 2;
-      if (hx < .025 || hz < .025) continue;
-      stamps.push({ x: (box.min.x + box.max.x) / 2, z: (box.min.z + box.max.z) / 2,
-        hx, hz, feather: .42, strength: .38, round: false });
+    if (!object.isMesh || /glass|glaz|sedum|foliage/i.test(object.material?.name || '')) return;
+    if (object.isInstancedMesh) {
+      object.geometry.computeBoundingBox();
+      for (let index = 0; index < object.count; index++) {
+        object.getMatrixAt(index, matrix); world.multiplyMatrices(object.matrixWorld, matrix);
+        box.copy(object.geometry.boundingBox).applyMatrix4(world); stamp();
+      }
+    } else if (object.userData.componentBounds) {
+      // Merged bevel batches span several buildings; only their individual solids touch the ground.
+      for (const component of object.userData.componentBounds) {
+        box.copy(component).applyMatrix4(object.matrixWorld); stamp();
+      }
     }
   });
   for (const tree of trees) {

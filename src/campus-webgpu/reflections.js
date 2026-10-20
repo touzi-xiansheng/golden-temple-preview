@@ -62,6 +62,8 @@ export function createReflections({renderer,scene,materials,lighting,planar=true
 
   async function captureProbes({yieldControl=()=>Promise.resolve(),onProgress=()=>{}}={}) {
     const cube=new CubeRenderTarget(512,{type:HalfFloatType}), camera=new CubeCamera(.2,2500,cube), pmrem=new PMREMGenerator(renderer);
+    // The HQ fills the garden shot; resolve its reflected foliage without enlarging every probe.
+    const hqCube=new CubeRenderTarget(1024,{type:HalfFloatType}), hqCamera=new CubeCamera(.2,2500,hqCube);
     const previous=renderer.getRenderTarget(),background=scene.background;
     if(!lighting.backgroundNode)scene.background=lighting.captureBackground.texture;
     const assignments=[];
@@ -72,12 +74,13 @@ export function createReflections({renderer,scene,materials,lighting,planar=true
         if(!byProbe.has(probe.id))byProbe.set(probe.id,{probe,records:[]});byProbe.get(probe.id).records.push(record);
       }
       for(const {probe,records} of byProbe.values()) {
-        camera.position.fromArray(probe.position);camera.update(renderer,scene);
-        const target=pmrem.fromCubemap(cube.texture);captures.push(target);assignments.push({records,target});
+        const captureCamera=probe.id==='headquarters'?hqCamera:camera;
+        captureCamera.position.fromArray(probe.position);captureCamera.update(renderer,scene);
+        const target=pmrem.fromCubemap(captureCamera.renderTarget.texture);captures.push(target);assignments.push({records,target});
         renderer.setRenderTarget(previous);stats.probeCount++;onProgress(stats.probeCount,byProbe.size);await yieldControl();
       }
       for(const {records,target} of assignments)for(const {material} of records){material.envMap=target.texture;material.needsUpdate=true;}
-    } finally {renderer.setRenderTarget(previous);scene.background=background;cube.dispose();pmrem.dispose();}
+    } finally {renderer.setRenderTarget(previous);scene.background=background;cube.dispose();hqCube.dispose();pmrem.dispose();}
   }
 
   function update(camera,{force=false}={}) {

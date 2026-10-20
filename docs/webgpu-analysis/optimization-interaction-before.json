@@ -1,0 +1,137 @@
+{
+  "url": "http://localhost:5183/campus-webgpu.html?paused=1",
+  "camera": [
+    {
+      "time": 5,
+      "repeat": false,
+      "positionMetres": 2.5618982671915014e-14,
+      "angleRadians": 2.9802322387695312e-8,
+      "height": 57.00000000000002
+    },
+    {
+      "time": 5,
+      "repeat": true,
+      "positionMetres": 2.1903931764111086,
+      "angleRadians": 0.01665185680826918,
+      "height": 69.64868825141554
+    },
+    {
+      "time": 15,
+      "repeat": false,
+      "positionMetres": 5.227946801967984,
+      "angleRadians": 0.08980446860186245,
+      "height": 12.2103280267619
+    },
+    {
+      "time": 15,
+      "repeat": true,
+      "positionMetres": 5.201074000701261,
+      "angleRadians": 0.08934215857103274,
+      "height": 11.100176461470646
+    },
+    {
+      "time": 25,
+      "repeat": false,
+      "positionMetres": 3.3967165453765173,
+      "angleRadians": 0.0857990477882316,
+      "height": 8.723232784389808
+    },
+    {
+      "time": 25,
+      "repeat": true,
+      "positionMetres": 3.39671657734908,
+      "angleRadians": 0.08579904859692764,
+      "height": 8.723233916252632
+    },
+    {
+      "time": 35,
+      "repeat": false,
+      "positionMetres": 4.338600802653347,
+      "angleRadians": 0.12453828602985537,
+      "height": 9.217615669138272
+    },
+    {
+      "time": 35,
+      "repeat": true,
+      "positionMetres": 4.3386008063796355,
+      "angleRadians": 0.12453828613719367,
+      "height": 9.21761586121835
+    },
+    {
+      "time": 45,
+      "repeat": false,
+      "positionMetres": 1.168888184624645,
+      "angleRadians": 0.03895548780326935,
+      "height": 5.550089779696406
+    },
+    {
+      "time": 45,
+      "repeat": true,
+      "positionMetres": 1.168888207812928,
+      "angleRadians": 0.03895548857616398,
+      "height": 5.550090151682993
+    },
+    {
+      "time": 55,
+      "repeat": false,
+      "positionMetres": 1.9394193229095986,
+      "angleRadians": 0.01665187246456213,
+      "height": 54.29465823136828
+    },
+    {
+      "time": 55,
+      "repeat": true,
+      "positionMetres": 1.9394179152493987,
+      "angleRadians": 0.016651860367668078,
+      "height": 54.29465017329632
+    }
+  ],
+  "quality": [],
+  "errors": [],
+  "cycles": 1,
+  "browser": "Chrome/155.0.8059.84",
+  "capabilities": {
+    "backend": "webgpu",
+    "secureContext": true,
+    "adapter": {
+      "vendor": "apple",
+      "architecture": "metal-3",
+      "device": "",
+      "description": "",
+      "isFallbackAdapter": false
+    },
+    "features": [
+      "bgra8unorm-storage",
+      "clip-distances",
+      "core-features-and-limits",
+      "depth-clip-control",
+      "depth32float-stencil8",
+      "dual-source-blending",
+      "float32-blendable",
+      "float32-filterable",
+      "indirect-first-instance",
+      "rg11b10ufloat-renderable",
+      "shader-f16",
+      "subgroups",
+      "texture-compression-astc",
+      "texture-compression-astc-sliced-3d",
+      "texture-compression-bc",
+      "texture-compression-bc-sliced-3d",
+      "texture-compression-etc2",
+      "texture-formats-tier1",
+      "texture-formats-tier2",
+      "timestamp-query"
+    ],
+    "compatibilityMode": false,
+    "limits": {
+      "maxTextureDimension2D": 8192,
+      "maxTextureDimension3D": 2048,
+      "maxStorageBufferBindingSize": 134217728,
+      "maxBufferSize": 268435456,
+      "maxStorageBuffersPerShaderStage": 8,
+      "maxComputeWorkgroupSizeX": 256
+    }
+  },
+  "passed": false,
+  "failure": "Error: Destroyed texture [Texture \"ShadowDepthTexture\"] used in a submit.\n - While calling [Queue].Submit([[CommandBuffer from CommandEncoder \"renderContext_8\"]])\n\n    at evaluate (evaluate at waitForStableCampus (file:///Users/tzz/orca/projects/golden-temple/tools/lib/webgpu-checks.mjs:11:15), <anonymous>:12:32)\n    at #evaluate (file:///Users/tzz/orca/projects/golden-temple/node_modules/puppeteer-core/lib/puppeteer/cdp/ExecutionContext.js:402:19)\n    at async ExecutionContext.evaluate (file:///Users/tzz/orca/projects/golden-temple/node_modules/puppeteer-core/lib/puppeteer/cdp/ExecutionContext.js:288:16)\n    at async IsolatedWorld.evaluate (file:///Users/tzz/orca/projects/golden-temple/node_modules/puppeteer-core/lib/puppeteer/cdp/IsolatedWorld.js:104:16)\n    at async CdpFrame.evaluate (file:///Users/tzz/orca/projects/golden-temple/node_modules/puppeteer-core/lib/puppeteer/api/Frame.js:364:20)\n    at async CdpPage.evaluate (file:///Users/tzz/orca/projects/golden-temple/node_modules/puppeteer-core/lib/puppeteer/api/Page.js:832:20)\n    at async file:///Users/tzz/orca/projects/golden-temple/tools/webgpu-interaction-check.mjs:61:21"
+}

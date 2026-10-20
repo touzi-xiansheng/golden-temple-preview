@@ -1,0 +1,132 @@
+[
+  {
+    "label": "control",
+    "options": {},
+    "timings": {
+      "architectureMs": 144.89999997615814,
+      "landscapeMs": 6012.800000071526,
+      "materialsMs": 33.89999997615814,
+      "rendererInitMs": 9.400000095367432,
+      "lightingMs": 447.7000000476837,
+      "reflectionsMs": 3926.6999999284744,
+      "defaultPrecompileMs": 136.89999997615814,
+      "reflectionWarmupMs": 4983.799999952316,
+      "initialViewSubmitMs": 675.7000000476837,
+      "initialViewQueueWaitMs": 45.39999997615814,
+      "compileMs": 5842,
+      "firstFrameMs": 16435.700000047684,
+      "fullReadyMs": 16436,
+      "firstVisibleMs": 17113.800000071526
+    },
+    "memory": {
+      "attributes": 2758,
+      "attributesSize": 1415107504,
+      "geometries": 253,
+      "indexAttributes": 198,
+      "indexAttributesSize": 17750304,
+      "indirectStorageAttributes": 0,
+      "indirectStorageAttributesSize": 0,
+      "programs": 570,
+      "programsSize": 4994314,
+      "readbackBuffers": 0,
+      "readbackBuffersSize": 0,
+      "renderTargets": 19,
+      "storageAttributes": 0,
+      "storageAttributesSize": 0,
+      "textures": 44,
+      "texturesSize": 338570813,
+      "uniformBuffers": 2078,
+      "uniformBuffersSize": 5718224,
+      "total": 1782141159
+    },
+    "errors": []
+  },
+  {
+    "label": "resolution",
+    "options": {
+      "resolution": true
+    },
+    "timings": {
+      "architectureMs": 138.40000009536743,
+      "landscapeMs": 6050,
+      "materialsMs": 36.200000047683716,
+      "rendererInitMs": 7.800000071525574,
+      "lightingMs": 445.90000009536743,
+      "reflectionsMs": 3927.5,
+      "defaultPrecompileMs": 298.60000002384186,
+      "reflectionWarmupMs": 5056.199999928474,
+      "initialViewSubmitMs": 681.3999999761581,
+      "initialViewQueueWaitMs": 52.200000047683716,
+      "compileMs": 6088.399999976158,
+      "firstFrameMs": 16712.100000023842,
+      "fullReadyMs": 16712.300000071526,
+      "firstVisibleMs": 17395.399999976158
+    },
+    "memory": {
+      "attributes": 2758,
+      "attributesSize": 1415107504,
+      "geometries": 253,
+      "indexAttributes": 198,
+      "indexAttributesSize": 17750304,
+      "indirectStorageAttributes": 0,
+      "indirectStorageAttributesSize": 0,
+      "programs": 570,
+      "programsSize": 4994314,
+      "readbackBuffers": 0,
+      "readbackBuffersSize": 0,
+      "renderTargets": 19,
+      "storageAttributes": 0,
+      "storageAttributesSize": 0,
+      "textures": 44,
+      "texturesSize": 414068285,
+      "uniformBuffers": 2078,
+      "uniformBuffersSize": 5718224,
+      "total": 1857638631
+    },
+    "errors": []
+  },
+  {
+    "label": "shadows",
+    "options": {
+      "shadows": true
+    },
+    "timings": {
+      "architectureMs": 142.79999995231628,
+      "landscapeMs": 6138.700000047684,
+      "materialsMs": 35.39999997615814,
+      "rendererInitMs": 3,
+      "lightingMs": 450.89999997615814,
+      "reflectionsMs": 4050.100000023842,
+      "defaultPrecompileMs": 163.60000002384186,
+      "reflectionWarmupMs": 5162.299999952316,
+      "initialViewSubmitMs": 702.7999999523163,
+      "initialViewQueueWaitMs": 54.5,
+      "compileMs": 6083.5,
+      "firstFrameMs": 16922.799999952316,
+      "fullReadyMs": 16923.100000023842,
+      "firstVisibleMs": 17598.299999952316
+    },
+    "memory": {
+      "attributes": 2758,
+      "attributesSize": 1415107504,
+      "geometries": 253,
+      "indexAttributes": 198,
+      "indexAttributesSize": 17750304,
+      "indirectStorageAttributes": 0,
+      "indirectStorageAttributesSize": 0,
+      "programs": 570,
+      "programsSize": 4994979,
+      "readbackBuffers": 0,
+      "readbackBuffersSize": 0,
+      "renderTargets": 19,
+      "storageAttributes": 0,
+      "storageAttributesSize": 0,
+      "textures": 44,
+      "texturesSize": 338570813,
+      "uniformBuffers": 2078,
+      "uniformBuffersSize": 5718224,
+      "total": 1782141824
+    },
+    "errors": []
+  }
+]

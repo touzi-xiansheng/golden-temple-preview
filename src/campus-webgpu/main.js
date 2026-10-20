@@ -14,7 +14,10 @@ if(query.has('debug'))Node.captureStackTrace=true;
 const stage = (message, progress) => { $('loading-status').textContent = message; $('loading-progress').style.width = `${progress}%`; };
 const yieldControl = () => new Promise(resolve => setTimeout(resolve, 0));
 if (query.has('clean')) document.body.classList.add('clean');
+let stopped = false;
 function failed(error) {
+  if (stopped) return;
+  stopped = true;
   window.__ERROR = error?.message || String(error); window.__READY = false;
   console.error('[webgpu]', error); stage(window.__ERROR, 100);
   $('loading').classList.remove('done'); $('retry').hidden = false; $('original-version').hidden = false;
@@ -24,8 +27,7 @@ $('retry').onclick = () => location.reload();
 async function start() {
   const started = performance.now(), canvas = $('scene');
   stage('正在连接 WebGPU…', 5);
-  let stopped = false;
-  const runtime = await createRenderer(canvas, { onError: failed, onLost: info => { stopped = true; failed(new Error(`图形设备连接已中断：${info.message}。请重新加载。`)); } });
+  const runtime = await createRenderer(canvas, { onError: failed, onLost: info => failed(new Error(`图形设备连接已中断：${info.message}。请重新加载。`)) });
   const rendererInitMs = performance.now()-started;
   const { renderer } = runtime;
   const camera = new PerspectiveCamera(46, 1, .2, 9000);
@@ -36,7 +38,12 @@ async function start() {
   let dimensions, view, lighting, world, reflections, indirect;
   const controls = new OrbitControls(camera, canvas); controls.enabled = false;
   controls.enableDamping = true; controls.dampingFactor = .075;
-  controls.minDistance = .3; controls.maxDistance = 650; controls.maxPolarAngle = Math.PI / 2 - .015;
+  controls.minDistance = .3; controls.maxDistance = 650;
+  // Tour cameras look upward; constrain world height instead of the target plane.
+  function updateControls() {
+    controls.update();
+    if (camera.position.y < .3) { camera.position.y = .3; camera.lookAt(controls.target); }
+  }
   function playbackUI() {
     $('play').textContent = playing && !free ? 'Ⅱ' : '▶';
     $('play').setAttribute('aria-label', playing && !free ? '暂停漫游' : '播放漫游');
@@ -67,8 +74,12 @@ async function start() {
   }
   function setFree(value) {
     free = !!value; controls.enabled = free; view?.resetHistory();
-    if (free) { controls.update(); $('chapter-title').textContent='探索 · 你的视角'; $('chapter-detail').textContent='旋转、靠近，发现建筑的细节'; }
-    else { currentShot=-1; applyTour(); }
+    if (free) { updateControls(); $('chapter-title').textContent='探索 · 你的视角'; $('chapter-detail').textContent='旋转、靠近，发现建筑的细节'; }
+    else {
+      // Drain pending drag/pan damping before the tour takes ownership.
+      controls.enableDamping=false; controls.update(); controls.enableDamping=true;
+      currentShot=-1; applyTour();
+    }
     playbackUI();
   }
   function seek(value) {
@@ -107,6 +118,7 @@ async function start() {
   world.stats.timings.defaultPrecompileMs=startupCompilation.defaultPrecompile?performance.now()-precompileStarted:0;
   startupCompilation.programsAfterDefaultPrecompile=renderer.info.memory.programs;
   const renderOnce = () => {
+    if (stopped) return;
     renderer.info.reset();
     const shadowRevision=lighting.stats.shadowCache?.invalidations;
     lighting.update?.(camera,{shot:free?-1:currentShot});
@@ -118,6 +130,7 @@ async function start() {
     const warmupStarted=performance.now(),initialCamera=camera.clone();
     // These three views cover the measured first-entry pipeline misses.
     for(const warmupTime of [SHOT_SECONDS,4*SHOT_SECONDS,4.5*SHOT_SECONDS]) {
+      if(stopped)throw new Error(window.__ERROR || 'WebGPU startup stopped');
       const pointStarted=performance.now(),programsBefore=renderer.info.memory.programs;
       const frame=sampleTour(warmupTime);
       camera.position.copy(frame.position);camera.lookAt(frame.target);camera.fov=frame.fov;camera.updateProjectionMatrix();
@@ -144,6 +157,7 @@ async function start() {
   // initial-view rendering/GPU completion, not just shader compilation.
   world.stats.timings.compileMs=performance.now()-tick;
   if(runtime.errors.length)throw new Error(runtime.errors[0]);
+  if(stopped)throw new Error(window.__ERROR || 'WebGPU startup stopped');
   world.stats.timings.firstFrameMs=performance.now()-started;
   let previous=performance.now(), sampleStart=previous, frameCount=0, fps=0, frameTimes=[];
   const pause=()=>{playing=false;playbackUI();};
@@ -169,7 +183,7 @@ async function start() {
     if(stopped)return;
     const dt=Math.min(.1,(now-previous)/1000);previous=now;
     if(!document.hidden){
-      if(playing&&!free){time=(time+dt)%DURATION;applyTour();}else if(free)controls.update();
+      if(playing&&!free){time=(time+dt)%DURATION;applyTour();}else if(free)updateControls();
       renderOnce();frameTimes.push(dt*1000);if(frameTimes.length>180)frameTimes.shift();frameCount++;
       if(now-sampleStart>=1000){fps=Math.round(frameCount*1000/(now-sampleStart));frameCount=0;sampleStart=now;$('performance').textContent=`${dimensions.width} × ${dimensions.height} · ${fps} FPS`;}
     }

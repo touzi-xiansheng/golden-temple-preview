@@ -62,7 +62,7 @@ repository's [`source/webgpu-preview` branch](https://github.com/touzi-xiansheng
 The WebGPU entry targets a WebGPU-capable desktop browser and GPU; GitHub Pages
 supplies HTTPS. It preserves the seven buildings, plants and render resolution.
 Fixed daylight, 907 diffuse probes and two small local wood-ceiling environments
-are generated at startup. Four 512-pixel glass probes provide broad coverage; one
+are generated at startup. Three 512-pixel glass probes and one 1024-pixel HQ probe provide broad coverage; one
 nearby facade can receive a live planar reflection cropped to its visible region.
 Stationary views reuse that capture. Balanced and quality modes use a cached 4096²
 sun shadow, refreshed when world coverage or shadow size changes. Aerial and free
@@ -77,8 +77,12 @@ Everything remains procedural, with no external models, photographs or HDRIs.
 
 The [implementation evidence](docs/WEBGPU_IMPLEMENTATION.md) records 31 real-GPU
 calibrations, matched screenshots and paired 1080p motion checks. The
-[latest validation](docs/webgpu-analysis/refinement-validation.md) separates
+[refinement validation](docs/webgpu-analysis/refinement-validation.md) separates
 generation, complete startup, continuous motion and camera-cut measurements.
+The [latest audit fixes](docs/webgpu-analysis/optimization-validation.md) cover repeated
+quality changes, continuous camera handoff, missing column contacts and connected
+entrance ramps. The HQ reflection improvement adds 72 MiB to the renderer's texture
+memory counter; the report preserves the initial performance failure and paired retest.
 Terrain lookup and grass clipping reduce measured CPU generation by about 12%
 with identical geometry. Full startup still takes seconds: the tested local build
 reached its first complete frame in about 17.5 seconds, including reflection
@@ -98,6 +102,8 @@ environments. `?shadows=dynamic` selects the experimental live cascades.
 Run `npm run check:webgpu-motion` against a running server to check all six
 moving tour sections. `WEBGPU_URL`, `PROFILE_LABEL` and `FRAME_BUDGET_MS` select
 the entry, report label and reference-device frame-time budget (25ms by default).
+Run `npm run check:webgpu-interaction` for ten quality round trips through all six
+views, camera continuity and fatal-error stopping; `QUALITY_CYCLES` controls repetitions.
 Set `BASELINE_REPORT=out/webgpu/motion-<label>.json` for a paired comparison made with
 the same version of the tool. `REFLECTION_UPGRADE=1` explicitly permits only the
 probe-to-portal mode change in that comparison, retaining the other matching checks.
