@@ -71,3 +71,14 @@ Chrome 155 / Apple Metal 3，1920×1080、DPR 1、balanced、4×MSAA、固定阴
 未改变静态反射探针分辨率、主阴影范围和树几何；未加入新的缓存系统、背景生成线程或渐进加载流程。玻璃远景块化、静态反射视差、外围近距离构造和首次等待仍可继续研究。
 
 这轮证据限定于上述桌面 Chrome/Metal 环境与固定路线。没有测 Windows/Safari、长时温度、功耗、实际显存峰值或 GPU timestamp；静帧对照也不证明所有视角的帧级反射稳定性。实验 TRAA 的旧设备限制仍不在本轮验收范围内。
+
+## 发布与线上核对
+
+- [线上预览](https://touzi-xiansheng.github.io/golden-temple-preview/campus-webgpu.html?rev=406e680)。
+- 源码提交：[`406e680`](https://github.com/touzi-xiansheng/golden-temple-preview/commit/406e680c6f528f5225352fe64bdf3a7d8d25e0b7)，分支 `source/webgpu-preview`。
+- 部署提交：[`8b9ce5d`](https://github.com/touzi-xiansheng/golden-temple-preview/commit/8b9ce5de292eab6d57047cf96d7fa853b0dd768e)。[GitHub Pages 发布任务](https://github.com/touzi-xiansheng/golden-temple-preview/actions/runs/39405611775)已成功完成。
+- [线上文件核对](next-live-assets.json)：两个园区入口、原首页、实验入口、构建标记及递归依赖共 24 个文件，均返回 HTTP 200，内容与部署 checkout 逐字节一致。仅更新园区入口及相应依赖。
+- [线上静止与唤醒检查](next-idle-live.json)：九种静止状态均为零主视图绘制、零原生 GPU 提交；拖动与阻尼自然绘制 102 帧，其余受测动作均正常唤醒，无页面错误。
+- [线上交互回归](next-interaction-live.json)：两轮画质切换与 12 次视角回访、12 次自由相机进入/拖动返回、地面高度约束，以及启动/运行致命错误停止全部通过，无页面错误。
+
+上面的三组性能对照来自本地同机生产构建；线上验收不作为新的加载或帧率对照。部署元数据指向实际构建的源码提交，后续验收文档提交不改变运行时代码。
