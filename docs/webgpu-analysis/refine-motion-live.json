@@ -1,0 +1,930 @@
+{
+  "schemaVersion": 2,
+  "url": "https://touzi-xiansheng.github.io/golden-temple-preview/campus-webgpu.html?rev=8163707",
+  "at": "2026-10-20T03:36:10.895Z",
+  "budgetMs": 25,
+  "method": {
+    "interval": "unclamped render-end to render-end wall time",
+    "cpu": "lighting.update entry through view.frame return; includes reflections",
+    "steadyGate": "p95 <= budget; optional paired baseline + max(2ms, 10%)",
+    "transitions": "reported separately; no steady-state FPS gate",
+    "gpuTime": false
+  },
+  "cases": [
+    {
+      "time": 2,
+      "frames": 120,
+      "intervalMs": {
+        "p50": 16.600000023841858,
+        "p95": 17.899999976158142,
+        "max": 18.5
+      },
+      "cpuSubmitMs": {
+        "p50": 3.399999976158142,
+        "p95": 4,
+        "max": 4.200000047683716
+      },
+      "drawCalls": {
+        "p50": 234,
+        "p95": 235,
+        "max": 235
+      },
+      "triangles": {
+        "p50": 8997281,
+        "p95": 8998025,
+        "max": 8998025
+      },
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      },
+      "quality": "balanced",
+      "aa": "msaa",
+      "shadowMode": "cached",
+      "reflectionMode": "portal",
+      "shadowInvalidations": 8,
+      "timeEnd": 5.199900000000012,
+      "free": false,
+      "errors": [],
+      "firstFrame": {
+        "interval": 17.399999976158142,
+        "cpu": 4.200000047683716,
+        "shot": 0,
+        "drawCalls": 235,
+        "triangles": 8998025
+      },
+      "observedShots": [
+        0
+      ],
+      "events": []
+    },
+    {
+      "time": 12,
+      "frames": 120,
+      "intervalMs": {
+        "p50": 16.600000023841858,
+        "p95": 17.800000071525574,
+        "max": 19.100000023841858
+      },
+      "cpuSubmitMs": {
+        "p50": 4.200000047683716,
+        "p95": 4.599999904632568,
+        "max": 4.899999976158142
+      },
+      "drawCalls": {
+        "p50": 303,
+        "p95": 310,
+        "max": 311
+      },
+      "triangles": {
+        "p50": 11907048,
+        "p95": 12516571,
+        "max": 12600271
+      },
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      },
+      "quality": "balanced",
+      "aa": "msaa",
+      "shadowMode": "cached",
+      "reflectionMode": "portal",
+      "shadowInvalidations": 9,
+      "timeEnd": 15.216499999999956,
+      "free": false,
+      "errors": [],
+      "firstFrame": {
+        "interval": 18.399999976158142,
+        "cpu": 4.599999904632568,
+        "shot": 1,
+        "drawCalls": 311,
+        "triangles": 12600271
+      },
+      "observedShots": [
+        1
+      ],
+      "events": []
+    },
+    {
+      "time": 22,
+      "frames": 120,
+      "intervalMs": {
+        "p50": 16.600000023841858,
+        "p95": 20.09999990463257,
+        "max": 22
+      },
+      "cpuSubmitMs": {
+        "p50": 3,
+        "p95": 5.799999952316284,
+        "max": 6.299999952316284
+      },
+      "drawCalls": {
+        "p50": 165,
+        "p95": 165,
+        "max": 165
+      },
+      "triangles": {
+        "p50": 6420766,
+        "p95": 6420766,
+        "max": 6420766
+      },
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      },
+      "quality": "balanced",
+      "aa": "msaa",
+      "shadowMode": "cached",
+      "reflectionMode": "portal",
+      "shadowInvalidations": 10,
+      "timeEnd": 25.19989999999993,
+      "free": false,
+      "errors": [],
+      "firstFrame": {
+        "interval": 16.199999928474426,
+        "cpu": 2.399999976158142,
+        "shot": 2,
+        "drawCalls": 165,
+        "triangles": 6420766
+      },
+      "observedShots": [
+        2
+      ],
+      "events": []
+    },
+    {
+      "time": 32,
+      "frames": 121,
+      "intervalMs": {
+        "p50": 16.799999952316284,
+        "p95": 19.5,
+        "max": 21.100000023841858
+      },
+      "cpuSubmitMs": {
+        "p50": 2.600000023841858,
+        "p95": 4.799999952316284,
+        "max": 5.199999928474426
+      },
+      "drawCalls": {
+        "p50": 135,
+        "p95": 135,
+        "max": 136
+      },
+      "triangles": {
+        "p50": 4351226,
+        "p95": 4351226,
+        "max": 4352438
+      },
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      },
+      "quality": "balanced",
+      "aa": "msaa",
+      "shadowMode": "cached",
+      "reflectionMode": "portal",
+      "shadowInvalidations": 11,
+      "timeEnd": 35.216500000000224,
+      "free": false,
+      "errors": [],
+      "firstFrame": {
+        "interval": 16.100000023841858,
+        "cpu": 3,
+        "shot": 3,
+        "drawCalls": 136,
+        "triangles": 4352438
+      },
+      "observedShots": [
+        3
+      ],
+      "events": []
+    },
+    {
+      "time": 42,
+      "frames": 120,
+      "intervalMs": {
+        "p50": 16.5,
+        "p95": 17.899999976158142,
+        "max": 22.399999976158142
+      },
+      "cpuSubmitMs": {
+        "p50": 3.4000000953674316,
+        "p95": 4.300000071525574,
+        "max": 7.699999928474426
+      },
+      "drawCalls": {
+        "p50": 235,
+        "p95": 238,
+        "max": 238
+      },
+      "triangles": {
+        "p50": 7023259,
+        "p95": 7258489,
+        "max": 7258489
+      },
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      },
+      "quality": "balanced",
+      "aa": "msaa",
+      "shadowMode": "cached",
+      "reflectionMode": "portal",
+      "shadowInvalidations": 12,
+      "timeEnd": 45.19990000000018,
+      "free": false,
+      "errors": [],
+      "firstFrame": {
+        "interval": 16.5,
+        "cpu": 3.8000000715255737,
+        "shot": 4,
+        "drawCalls": 238,
+        "triangles": 7258489
+      },
+      "observedShots": [
+        4
+      ],
+      "events": []
+    },
+    {
+      "time": 52,
+      "frames": 120,
+      "intervalMs": {
+        "p50": 16.600000023841858,
+        "p95": 18.600000023841858,
+        "max": 22.600000023841858
+      },
+      "cpuSubmitMs": {
+        "p50": 3.399999976158142,
+        "p95": 4.299999952316284,
+        "max": 7.5
+      },
+      "drawCalls": {
+        "p50": 225,
+        "p95": 226,
+        "max": 226
+      },
+      "triangles": {
+        "p50": 8783228,
+        "p95": 8805980,
+        "max": 8805980
+      },
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      },
+      "quality": "balanced",
+      "aa": "msaa",
+      "shadowMode": "cached",
+      "reflectionMode": "portal",
+      "shadowInvalidations": 13,
+      "timeEnd": 55.19990000000022,
+      "free": false,
+      "errors": [],
+      "firstFrame": {
+        "interval": 16.5,
+        "cpu": 2.799999952316284,
+        "shot": 5,
+        "drawCalls": 224,
+        "triangles": 8696396
+      },
+      "observedShots": [
+        5
+      ],
+      "events": []
+    }
+  ],
+  "transitions": [
+    {
+      "kind": "first-entrance-cut",
+      "at": 10,
+      "frames": 41,
+      "intervalMs": {
+        "p50": 16.600000023841858,
+        "p95": 18.700000047683716,
+        "max": 20.100000023841858
+      },
+      "cpuSubmitMs": {
+        "p50": 3.899999976158142,
+        "p95": 5.200000047683716,
+        "max": 6.600000023841858
+      },
+      "drawCalls": {
+        "p50": 225,
+        "p95": 325,
+        "max": 490
+      },
+      "triangles": {
+        "p50": 8783228,
+        "p95": 13884030,
+        "max": 21640146
+      },
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      },
+      "quality": "balanced",
+      "aa": "msaa",
+      "shadowMode": "cached",
+      "reflectionMode": "portal",
+      "shadowInvalidations": 5,
+      "timeEnd": 10.283399999999986,
+      "free": false,
+      "errors": [],
+      "firstFrame": {
+        "interval": 16.600000023841858,
+        "cpu": 4.200000047683716,
+        "shot": 0,
+        "drawCalls": 225,
+        "triangles": 8783228
+      },
+      "observedShots": [
+        0,
+        1
+      ],
+      "events": [
+        {
+          "from": 0,
+          "to": 1,
+          "index": 23,
+          "firstIntervalMs": 20.100000023841858,
+          "firstCpuSubmitMs": 6.600000023841858,
+          "nearbyFrames": [
+            {
+              "interval": 16,
+              "cpu": 3.100000023841858,
+              "shot": 0,
+              "drawCalls": 224,
+              "triangles": 8769392
+            },
+            {
+              "interval": 17.399999976158142,
+              "cpu": 3.1999999284744263,
+              "shot": 0,
+              "drawCalls": 224,
+              "triangles": 8769392
+            },
+            {
+              "interval": 20.100000023841858,
+              "cpu": 6.600000023841858,
+              "shot": 1,
+              "drawCalls": 490,
+              "triangles": 21640146
+            },
+            {
+              "interval": 13.5,
+              "cpu": 4.399999976158142,
+              "shot": 1,
+              "drawCalls": 325,
+              "triangles": 13884030
+            },
+            {
+              "interval": 16.700000047683716,
+              "cpu": 4.300000071525574,
+              "shot": 1,
+              "drawCalls": 325,
+              "triangles": 13884030
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "first-reflection-cut",
+      "at": 40,
+      "frames": 41,
+      "intervalMs": {
+        "p50": 16.699999928474426,
+        "p95": 18.899999976158142,
+        "max": 23.899999976158142
+      },
+      "cpuSubmitMs": {
+        "p50": 3.0999999046325684,
+        "p95": 5,
+        "max": 11.100000023841858
+      },
+      "drawCalls": {
+        "p50": 127,
+        "p95": 246,
+        "max": 366
+      },
+      "triangles": {
+        "p50": 3876398,
+        "p95": 8008933,
+        "max": 14083713
+      },
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      },
+      "quality": "balanced",
+      "aa": "msaa",
+      "shadowMode": "cached",
+      "reflectionMode": "portal",
+      "shadowInvalidations": 7,
+      "timeEnd": 40.283299999999976,
+      "free": false,
+      "errors": [],
+      "firstFrame": {
+        "interval": 16.699999928474426,
+        "cpu": 1.6999999284744263,
+        "shot": 3,
+        "drawCalls": 127,
+        "triangles": 3876398
+      },
+      "observedShots": [
+        3,
+        4
+      ],
+      "events": [
+        {
+          "from": 3,
+          "to": 4,
+          "index": 23,
+          "firstIntervalMs": 23.899999976158142,
+          "firstCpuSubmitMs": 11.100000023841858,
+          "nearbyFrames": [
+            {
+              "interval": 18.40000009536743,
+              "cpu": 1.8000000715255737,
+              "shot": 3,
+              "drawCalls": 126,
+              "triangles": 3792698
+            },
+            {
+              "interval": 17.799999952316284,
+              "cpu": 4.600000023841858,
+              "shot": 3,
+              "drawCalls": 126,
+              "triangles": 3792698
+            },
+            {
+              "interval": 23.899999976158142,
+              "cpu": 11.100000023841858,
+              "shot": 4,
+              "drawCalls": 366,
+              "triangles": 14083713
+            },
+            {
+              "interval": 9.800000071525574,
+              "cpu": 3.3000000715255737,
+              "shot": 4,
+              "drawCalls": 246,
+              "triangles": 8008933
+            },
+            {
+              "interval": 16.59999990463257,
+              "cpu": 3.1999999284744263,
+              "shot": 4,
+              "drawCalls": 246,
+              "triangles": 8008933
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "natural-cut",
+      "at": 10,
+      "frames": 41,
+      "intervalMs": {
+        "p50": 16.700000047683716,
+        "p95": 18.5,
+        "max": 21.700000047683716
+      },
+      "cpuSubmitMs": {
+        "p50": 3.899999976158142,
+        "p95": 4.899999976158142,
+        "max": 7.5
+      },
+      "drawCalls": {
+        "p50": 225,
+        "p95": 325,
+        "max": 490
+      },
+      "triangles": {
+        "p50": 8783228,
+        "p95": 13884030,
+        "max": 21640146
+      },
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      },
+      "quality": "balanced",
+      "aa": "msaa",
+      "shadowMode": "cached",
+      "reflectionMode": "portal",
+      "shadowInvalidations": 14,
+      "timeEnd": 10.283299999999983,
+      "free": false,
+      "errors": [],
+      "firstFrame": {
+        "interval": 17.90000009536743,
+        "cpu": 2.8000000715255737,
+        "shot": 0,
+        "drawCalls": 225,
+        "triangles": 8783228
+      },
+      "observedShots": [
+        0,
+        1
+      ],
+      "events": [
+        {
+          "from": 0,
+          "to": 1,
+          "index": 23,
+          "firstIntervalMs": 21.700000047683716,
+          "firstCpuSubmitMs": 7.5,
+          "nearbyFrames": [
+            {
+              "interval": 18.699999928474426,
+              "cpu": 4.099999904632568,
+              "shot": 0,
+              "drawCalls": 224,
+              "triangles": 8769392
+            },
+            {
+              "interval": 15.100000023841858,
+              "cpu": 3.899999976158142,
+              "shot": 0,
+              "drawCalls": 224,
+              "triangles": 8769392
+            },
+            {
+              "interval": 21.700000047683716,
+              "cpu": 7.5,
+              "shot": 1,
+              "drawCalls": 490,
+              "triangles": 21640146
+            },
+            {
+              "interval": 13.399999976158142,
+              "cpu": 4.299999952316284,
+              "shot": 1,
+              "drawCalls": 325,
+              "triangles": 13884030
+            },
+            {
+              "interval": 17.399999976158142,
+              "cpu": 5,
+              "shot": 1,
+              "drawCalls": 325,
+              "triangles": 13884030
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "natural-cut",
+      "at": 40,
+      "frames": 42,
+      "intervalMs": {
+        "p50": 16.600000023841858,
+        "p95": 18.600000023841858,
+        "max": 23
+      },
+      "cpuSubmitMs": {
+        "p50": 3.799999952316284,
+        "p95": 4.600000023841858,
+        "max": 9
+      },
+      "drawCalls": {
+        "p50": 127,
+        "p95": 246,
+        "max": 366
+      },
+      "triangles": {
+        "p50": 3876398,
+        "p95": 8008933,
+        "max": 14083713
+      },
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      },
+      "quality": "balanced",
+      "aa": "msaa",
+      "shadowMode": "cached",
+      "reflectionMode": "portal",
+      "shadowInvalidations": 16,
+      "timeEnd": 40.299900000000044,
+      "free": false,
+      "errors": [],
+      "firstFrame": {
+        "interval": 17,
+        "cpu": 1.6999999284744263,
+        "shot": 3,
+        "drawCalls": 127,
+        "triangles": 3876398
+      },
+      "observedShots": [
+        3,
+        4
+      ],
+      "events": [
+        {
+          "from": 3,
+          "to": 4,
+          "index": 24,
+          "firstIntervalMs": 23,
+          "firstCpuSubmitMs": 9,
+          "nearbyFrames": [
+            {
+              "interval": 16.699999928474426,
+              "cpu": 2.899999976158142,
+              "shot": 3,
+              "drawCalls": 126,
+              "triangles": 3792698
+            },
+            {
+              "interval": 16.5,
+              "cpu": 2.799999952316284,
+              "shot": 3,
+              "drawCalls": 126,
+              "triangles": 3792698
+            },
+            {
+              "interval": 23,
+              "cpu": 9,
+              "shot": 4,
+              "drawCalls": 366,
+              "triangles": 14083713
+            },
+            {
+              "interval": 10.700000047683716,
+              "cpu": 4.100000023841858,
+              "shot": 4,
+              "drawCalls": 246,
+              "triangles": 8008933
+            },
+            {
+              "interval": 17.200000047683716,
+              "cpu": 4.400000095367432,
+              "shot": 4,
+              "drawCalls": 246,
+              "triangles": 8008933
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "enter-free-camera",
+      "switchJsMs": 0.19999992847442627,
+      "frames": 24,
+      "intervalMs": {
+        "p50": 16.699999928474426,
+        "p95": 21.200000047683716,
+        "max": 22
+      },
+      "cpuSubmitMs": {
+        "p50": 2.100000023841858,
+        "p95": 4.700000047683716,
+        "max": 6.899999976158142
+      },
+      "drawCalls": {
+        "p50": 135,
+        "p95": 135,
+        "max": 355
+      },
+      "triangles": {
+        "p50": 4349786,
+        "p95": 4349786,
+        "max": 12325290
+      },
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      },
+      "quality": "balanced",
+      "aa": "msaa",
+      "shadowMode": "cached",
+      "reflectionMode": "portal",
+      "shadowInvalidations": 18,
+      "timeEnd": 35,
+      "free": true,
+      "errors": [],
+      "firstFrame": {
+        "interval": 22,
+        "cpu": 6.899999976158142,
+        "shot": -1,
+        "drawCalls": 355,
+        "triangles": 12325290
+      },
+      "observedShots": [
+        -1
+      ],
+      "events": []
+    },
+    {
+      "kind": "return-to-tour",
+      "switchJsMs": 0.10000002384185791,
+      "frames": 24,
+      "intervalMs": {
+        "p50": 16.299999952316284,
+        "p95": 22.100000023841858,
+        "max": 22.600000023841858
+      },
+      "cpuSubmitMs": {
+        "p50": 2.799999952316284,
+        "p95": 6.600000023841858,
+        "max": 10
+      },
+      "drawCalls": {
+        "p50": 135,
+        "p95": 135,
+        "max": 283
+      },
+      "triangles": {
+        "p50": 4349786,
+        "p95": 4349786,
+        "max": 11753007
+      },
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      },
+      "quality": "balanced",
+      "aa": "msaa",
+      "shadowMode": "cached",
+      "reflectionMode": "portal",
+      "shadowInvalidations": 19,
+      "timeEnd": 35,
+      "free": false,
+      "errors": [],
+      "firstFrame": {
+        "interval": 22.600000023841858,
+        "cpu": 10,
+        "shot": 3,
+        "drawCalls": 283,
+        "triangles": 11753007
+      },
+      "observedShots": [
+        3
+      ],
+      "events": []
+    }
+  ],
+  "errors": [],
+  "browser": "Chrome/155.0.8059.84",
+  "capabilities": {
+    "backend": "webgpu",
+    "secureContext": true,
+    "adapter": {
+      "vendor": "apple",
+      "architecture": "metal-3",
+      "device": "",
+      "description": "",
+      "isFallbackAdapter": false
+    },
+    "features": [
+      "bgra8unorm-storage",
+      "clip-distances",
+      "core-features-and-limits",
+      "depth-clip-control",
+      "depth32float-stencil8",
+      "dual-source-blending",
+      "float32-blendable",
+      "float32-filterable",
+      "indirect-first-instance",
+      "rg11b10ufloat-renderable",
+      "shader-f16",
+      "subgroups",
+      "texture-compression-astc",
+      "texture-compression-astc-sliced-3d",
+      "texture-compression-bc",
+      "texture-compression-bc-sliced-3d",
+      "texture-compression-etc2",
+      "texture-formats-tier1",
+      "texture-formats-tier2",
+      "timestamp-query"
+    ],
+    "compatibilityMode": false,
+    "limits": {
+      "maxTextureDimension2D": 8192,
+      "maxTextureDimension3D": 2048,
+      "maxStorageBufferBindingSize": 134217728,
+      "maxBufferSize": 268435456,
+      "maxStorageBuffersPerShaderStage": 8,
+      "maxComputeWorkgroupSizeX": 256
+    }
+  },
+  "startupTimings": {
+    "architectureMs": 145,
+    "landscapeMs": 6077.600000023842,
+    "materialsMs": 35.800000071525574,
+    "rendererInitMs": 4.100000023841858,
+    "lightingMs": 452.39999997615814,
+    "reflectionsMs": 4009.399999976158,
+    "defaultPrecompileMs": 4496.199999928474,
+    "reflectionWarmupMs": 5479.899999976158,
+    "initialViewSubmitMs": 679.5,
+    "initialViewQueueWaitMs": 44.700000047683716,
+    "compileMs": 10700.399999976158,
+    "firstFrameMs": 21442.899999976158,
+    "fullReadyMs": 21443.100000023842,
+    "firstVisibleMs": 22101.899999976158
+  },
+  "initialSnapshot": {
+    "minimumFrames": 3,
+    "framesWaited": 5,
+    "stableCameraFrames": 3,
+    "exposure": 1,
+    "toneMapping": 6,
+    "environmentIntensity": 1,
+    "fov": 46,
+    "cameraWorld": [
+      0.7566077034314046,
+      -4.163336342344337e-17,
+      -0.6538690871330864,
+      0,
+      -0.2483752494246358,
+      0.9250461625401059,
+      -0.2874009962457926,
+      0,
+      0.6048590898560636,
+      0.3798547053411661,
+      0.6998970526075032,
+      0,
+      96.66546098351934,
+      70.6619727558229,
+      114.94283346990473,
+      1
+    ],
+    "projection": [
+      1.325166955775861,
+      0,
+      0,
+      0,
+      0,
+      2.3558523658237527,
+      0,
+      0,
+      0,
+      0,
+      -1.0000222227160604,
+      -1,
+      0,
+      0,
+      -0.2000044445432121,
+      0
+    ]
+  },
+  "baselineReport": "out/webgpu/motion-refine-before.json",
+  "reflectionUpgrade": null,
+  "relativeComparisons": [
+    {
+      "time": 2,
+      "baselineMs": 17.700000047683716,
+      "actualMs": 17.899999976158142,
+      "allowanceMs": 2,
+      "limitMs": 19.700000047683716,
+      "passed": true
+    },
+    {
+      "time": 12,
+      "baselineMs": 17.899999976158142,
+      "actualMs": 17.800000071525574,
+      "allowanceMs": 2,
+      "limitMs": 19.899999976158142,
+      "passed": true
+    },
+    {
+      "time": 22,
+      "baselineMs": 17.699999928474426,
+      "actualMs": 20.09999990463257,
+      "allowanceMs": 2,
+      "limitMs": 19.699999928474426,
+      "passed": false
+    },
+    {
+      "time": 32,
+      "baselineMs": 18.300000071525574,
+      "actualMs": 19.5,
+      "allowanceMs": 2,
+      "limitMs": 20.300000071525574,
+      "passed": true
+    },
+    {
+      "time": 42,
+      "baselineMs": 18,
+      "actualMs": 17.899999976158142,
+      "allowanceMs": 2,
+      "limitMs": 20,
+      "passed": true
+    },
+    {
+      "time": 52,
+      "baselineMs": 17.700000047683716,
+      "actualMs": 18.600000023841858,
+      "allowanceMs": 2,
+      "limitMs": 19.700000047683716,
+      "passed": true
+    }
+  ],
+  "passed": false,
+  "failure": "AssertionError [ERR_ASSERTION]: t=22: p95 20.1ms exceeds baseline allowance 19.7ms\n    at file:///Users/tzz/orca/projects/golden-temple/tools/webgpu-motion-check.mjs:116:65"
+}
