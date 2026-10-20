@@ -114,6 +114,23 @@ test('woodland is reproducible, clears road crowns, and keeps the campus and arr
     if (road(0,z) <= 5) assert.ok(data.slice(row * size, (row + 1) * size).every(v => v === 0));
   }
 });
+test('woodland mask preserves every texel while skipping road queries outside woodland', t => {
+  const size=128,expected=new Uint8Array(size*size),e=CONTEXT_EXTENT;
+  const road=(x,z)=>Math.abs(z-40-.08*x);
+  let needed=0,calls=0;
+  for(let row=0;row<size;row++)for(let col=0;col<size;col++) {
+    const x=e.minX+(col+.5)/size*(e.maxX-e.minX),z=e.minZ+(row+.5)/size*(e.maxZ-e.minZ);
+    const density=woodlandDensity(x,z),distance=road(x,z),u=Math.max(0,Math.min(1,(distance-5)/10));
+    expected[row*size+col]=Math.round(255*density*(u*u*(3-2*u)));
+    if(density!==0)needed++;
+  }
+  const actual=woodlandGroundMask((x,z)=>{calls++;return road(x,z);},size);
+  assert.deepEqual(actual.data,expected,'all mask bytes must match the original unscreened formula');
+  assert.equal(calls,needed,'zero-density texels must not scan the road');
+  assert.ok(calls>0&&calls<size*size,'fixture must exercise both retained and skipped queries');
+  t.diagnostic(`road queries ${calls}/${size*size}; mask sha256 ${createHash('sha256').update(actual.data).digest('hex')}`);
+});
+
 test('neighbouring districts follow receiver triangles and shade only direct sunlight', () => {
   const geometry = new PlaneGeometry(4000,4000,16,16).rotateX(-Math.PI/2), positions = geometry.attributes.position;
   for (let i=0;i<positions.count;i++) {
@@ -1557,7 +1574,8 @@ test('calibrated grove growth preserves actual non-target data inside shared bat
     assert.deepEqual(after.userData.wholeTrees.map(tree=>tree.tree),[0,1,2,3,6,7,8]);
     assert.deepEqual(after.userData.stats.treeForms,{broadleaf:8,vase:1,upright:1});
     assert.equal(after.userData.testFinalRandom,before.userData.testFinalRandom);
-    for(let ti=0;ti<10;ti++)assert.equal(after.userData.testRanges[ti].rng,before.userData.testRanges[ti].rng,`original private RNG changed: ${ti}`);
+    // Replaced crowns no longer consume their discarded generator; retained trees and the shared RNG stay unchanged.
+    for(const ti of [4,5,6,9])assert.equal(after.userData.testRanges[ti].rng,before.userData.testRanges[ti].rng,`original private RNG changed: ${ti}`);
     for(const ti of [0,1,2,3,7,8]) {
       const range=after.userData.testRanges[ti],plan=after.userData.wholeTrees.find(tree=>tree.tree===ti);
       assert.equal(range.card1-range.card0,0,'whole growth must not append the old card crown');

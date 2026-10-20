@@ -342,7 +342,8 @@ export function* buildVegetationSteps(trees, contextTrees, shrubs, districtTrees
     const projectedArea=Math.PI*skeleton.env.r.x*skeleton.env.r.z,meanLeafArea=0.10*0.18*0.68;
     const count=Math.max(3,Math.round(projectedArea*(tree.hero?1.4:0.8)/meanLeafArea/skeleton.twigs.length));
     const sprayProbability=Math.min(0.95,projectedArea*(tree.hero?3.2:4.2)/(0.9*skeleton.twigs.length));
-    for(const twig of skeleton.twigs) {
+    // Whole-growth trees replace this crown below; their private RNG is not reused.
+    if(!wholeTree)for(const twig of skeleton.twigs) {
       const br=twig.br,from=twig.t0||0,center=sampleBranch(br,from+(1-from)*0.55).p;
       if(center.y<ground+3.7)continue;
       const inward=center.clone().lerp(skeleton.env.c,twig.shell?0.16:0.06);

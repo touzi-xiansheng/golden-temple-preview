@@ -1,24 +1,38 @@
 // CPU-only full-geometry comparison; no renderer, browser or GPU is created.
-// node --expose-gc tools/webgpu-landscape-bench.mjs out/webgpu/landscape-before-loading.js
+// node --expose-gc tools/webgpu-landscape-bench.mjs /tmp/baseline-checkout out/webgpu/landscape-cpu-compare.json
+// A saved landscape.js is still supported, but shares all its current dependencies.
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { buildLandscapeSteps } from '../src/campus/landscape.js';
 import { finishBuild } from '../src/campus/loading.js';
 
 const baselinePath=process.argv[2],output=process.argv[3]||'out/webgpu/landscape-cpu-compare.json';
-assert.ok(baselinePath,'Pass a saved, pre-optimization src/campus/landscape.js as the first argument');
+assert.ok(baselinePath,'Pass a frozen repository directory or a saved src/campus/landscape.js as the first argument');
 assert.equal(typeof globalThis.gc,'function','Run with node --expose-gc to collect each completed scene before the next run');
-const baselineSource=fs.readFileSync(baselinePath,'utf8'),sourceURL=new URL('../src/campus/landscape.js',import.meta.url);
-const resolved=baselineSource.replace(/from (['"])([^'"]+)\1/g,(_,quote,specifier)=>
-  `from '${specifier.startsWith('.')?new URL(specifier,sourceURL).href:import.meta.resolve(specifier)}'`);
-const {buildLandscapeSteps:baseline}=await import('data:text/javascript;base64,'+Buffer.from(resolved).toString('base64'));
+const directoryBaseline=fs.statSync(baselinePath).isDirectory(),baselineRoot=directoryBaseline?path.resolve(baselinePath):null;
+const baselineModule=directoryBaseline?path.join(baselineRoot,'src/campus/landscape.js'):path.resolve(baselinePath);
+const baselineSource=fs.readFileSync(baselineModule,'utf8'),sourceURL=new URL('../src/campus/landscape.js',import.meta.url);
+// Import the original URL so every relative dependency stays in the frozen tree.
+// The compatibility mode only freezes this one file, as the old tool did.
+const baselineURL=directoryBaseline?pathToFileURL(baselineModule).href:'data:text/javascript;base64,'+Buffer.from(
+  baselineSource.replace(/from (['"])([^'"]+)\1/g,(_,quote,specifier)=>
+    `from '${specifier.startsWith('.')?new URL(specifier,sourceURL).href:import.meta.resolve(specifier)}'`)
+).toString('base64');
+const {buildLandscapeSteps:baseline}=await import(baselineURL);
 const hashBytes=value=>createHash('sha256').update(value).digest('hex');
-const report={schemaVersion:1,at:new Date().toISOString(),node:process.version,
-  sources:{baseline:path.resolve(baselinePath),baselineHash:hashBytes(baselineSource),currentHash:hashBytes(fs.readFileSync(sourceURL))},
+const currentRoot=fileURLToPath(new URL('../',import.meta.url));
+const dependencies=['src/campus/vegetation.js','src/campus/whole-tree.js','src/campus/site-context.js'].map(file=>({file,
+  baselineHash:hashBytes(fs.readFileSync(path.join(baselineRoot||currentRoot,file))),
+  currentHash:hashBytes(fs.readFileSync(path.join(currentRoot,file)))}));
+const report={schemaVersion:2,at:new Date().toISOString(),node:process.version,
+  sources:{baseline:baselineModule,baselineRoot,dependencyMode:directoryBaseline?'frozen-directory':'shared-current-dependencies',
+    baselineHash:hashBytes(baselineSource),currentHash:hashBytes(fs.readFileSync(sourceURL)),dependencies},
   method:{order:['before','after','after','before'],refined:true,scope:'Full synchronous landscape generation; every geometry/index/instance attribute hashed',
-    limitations:'Canvas calls are stubbed; excludes browser scheduling, GPU work, and complete application startup. Four runs are a diagnostic, not a confidence interval.'},cases:[]};
+    limitations:'Canvas calls are stubbed; excludes browser scheduling, GPU work, and complete application startup. Four runs are a diagnostic, not a confidence interval.'
+      +(directoryBaseline?'':' Single-file baseline shares current dependencies and cannot validate dependency edits.')},cases:[]};
 fs.mkdirSync(path.dirname(output),{recursive:true});
 const save=()=>fs.writeFileSync(output,JSON.stringify(report,null,2));
 const previousDocument=globalThis.document,previousInfo=console.info;
@@ -44,10 +58,14 @@ function run(mode) {
       const count=mesh.isInstancedMesh?mesh.count:1;meshes++;instances+=count;
       triangles+=(mesh.geometry.index?.count||mesh.geometry.attributes.position.count)/3*count;
       hash.update(JSON.stringify([mesh.name,mesh.type,count,mesh.castShadow,mesh.receiveShadow]));
+      hash.update(JSON.stringify([mesh.position.toArray(),mesh.quaternion.toArray(),mesh.scale.toArray(),mesh.matrix.elements]));
       for(const name of Object.keys(mesh.geometry.attributes).sort()){hash.update(name);addAttribute(mesh.geometry.attributes[name]);}
       for(const attribute of [mesh.geometry.index,mesh.instanceMatrix,mesh.instanceColor])addAttribute(attribute);
     });
-    return {mode,elapsedMs,meshes,instances,triangles,geometryHash:hash.digest('hex'),stats:structuredClone(group.userData.stats),
+    const generatedMetadata={trees:group.userData.treePositions,contextTrees:group.userData.contextTreePositions,
+      wholeTrees:group.getObjectByName('campus-vegetation')?.userData.wholeTrees};
+    return {mode,elapsedMs,meshes,instances,triangles,geometryHash:hash.digest('hex'),
+      generatedMetadataHash:hashBytes(JSON.stringify(generatedMetadata)),stats:structuredClone(group.userData.stats),
       removedGrass:{south:[group.userData.southBorder?.shortGrassRemoved,group.userData.southBorder?.mownTurfRemoved],
         southeast:[group.userData.southeastSample?.shortGrassRemoved,group.userData.southeastSample?.mownTurfRemoved]}};
   } finally {
@@ -68,7 +86,7 @@ try {
     const row=run(mode);report.cases.push(row);save();
     console.log('LANDSCAPE_CPU',JSON.stringify({mode,elapsedMs:row.elapsedMs,geometryHash:row.geometryHash}));
     const first=report.cases[0];
-    for(const field of ['meshes','instances','triangles','geometryHash','stats','removedGrass'])assert.deepEqual(row[field],first[field],`Generated output differs: ${field}`);
+    for(const field of ['meshes','instances','triangles','geometryHash','generatedMetadataHash','stats','removedGrass'])assert.deepEqual(row[field],first[field],`Generated output differs: ${field}`);
   }
   const mean=mode=>{const values=report.cases.filter(row=>row.mode===mode);return values.reduce((sum,row)=>sum+row.elapsedMs,0)/values.length;};
   report.summary={beforeMeanMs:mean('before'),afterMeanMs:mean('after'),savedMs:mean('before')-mean('after'),geometryEqual:true};

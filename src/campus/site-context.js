@@ -79,7 +79,9 @@ export function woodlandGroundMask(accessDistance,size=128) {
   const data=new Uint8Array(size*size),e=CONTEXT_EXTENT;
   for(let z=0;z<size;z++)for(let x=0;x<size;x++) {
     const px=e.minX+(x+.5)/size*(e.maxX-e.minX),pz=e.minZ+(z+.5)/size*(e.maxZ-e.minZ);
-    data[z*size+x]=Math.round(255*woodlandDensity(px,pz)*smooth(5,15,accessDistance(px,pz)));
+    const density=woodlandDensity(px,pz);
+    if(density===0)continue; // Empty woodland texels stay zero without scanning the access road.
+    data[z*size+x]=Math.round(255*density*smooth(5,15,accessDistance(px,pz)));
   }
   return {data,size};
 }

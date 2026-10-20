@@ -8,6 +8,7 @@ import { createLighting, applyCampusLighting } from './lighting.js';
 import { createView } from './render.js';
 import { bakeCampusProbes } from './probes.js';
 import { createReflections } from './reflections.js';
+import { createContextVisibility } from './context-visibility.js';
 
 const $ = id => document.getElementById(id), query = new URLSearchParams(location.search);
 if(query.has('debug'))Node.captureStackTrace=true;
@@ -35,10 +36,11 @@ async function start() {
   let playing = !query.has('paused') && !matchMedia('(prefers-reduced-motion: reduce)').matches;
   let free = false, currentShot = -1;
   let quality = Object.hasOwn(QUALITY, query.get('quality')) ? query.get('quality') : 'balanced';
-  let dimensions, view, lighting, world, reflections, indirect;
+  let dimensions, view, lighting, world, reflections, indirect, contextVisibility, dirty = true;
   const controls = new OrbitControls(camera, canvas); controls.enabled = false;
   controls.enableDamping = true; controls.dampingFactor = .075;
   controls.minDistance = .3; controls.maxDistance = 650;
+  controls.addEventListener('change', () => { dirty = true; });
   // Tour cameras look upward; constrain world height instead of the target plane.
   function updateControls() {
     controls.update();
@@ -53,6 +55,7 @@ async function start() {
     $('hint').textContent = free ? '拖动旋转 · 滚轮缩放 · 右键平移 · F 返回漫游' : '空格 暂停 / 播放 · F 自由探索';
   }
   function applyTour() {
+    dirty = true;
     const frame = sampleTour(time); camera.position.copy(frame.position); camera.lookAt(frame.target); camera.fov = frame.fov; camera.updateProjectionMatrix(); controls.target.copy(frame.target);
     if (frame.index !== currentShot) {
       currentShot = frame.index; view?.resetHistory();
@@ -63,6 +66,7 @@ async function start() {
     $('timeline').value = time; $('elapsed').textContent = `00:${String(Math.floor(time)).padStart(2,'0')}`;
   }
   function resize() {
+    dirty = true;
     const width = Math.max(1,canvas.clientWidth), height = Math.max(1,canvas.clientHeight);
     camera.aspect = width / height; camera.updateProjectionMatrix(); dimensions = renderSize(width,height,quality);
     renderer.setSize(dimensions.width,dimensions.height,false); view?.resetHistory();
@@ -73,6 +77,7 @@ async function start() {
     document.querySelectorAll('[data-quality]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.quality===value)));
   }
   function setFree(value) {
+    dirty = true;
     free = !!value; controls.enabled = free; view?.resetHistory();
     if (free) { updateControls(); $('chapter-title').textContent='探索 · 你的视角'; $('chapter-detail').textContent='旋转、靠近，发现建筑的细节'; }
     else {
@@ -100,6 +105,10 @@ async function start() {
   world.materials.bindLighting(lighting);
   for(const material of materials)if(material.isMeshStandardNodeMaterial || material.isMeshPhysicalNodeMaterial)applyCampusLighting(material,lighting);
   indirect?.bindRoughEnvironment();
+  if(query.get('contextShadows')!=='0') {
+    contextVisibility=createContextVisibility(world.landscape,lighting);
+    world.stats.contextVisibility=contextVisibility.stats;
+  }
   world.stats.timings.lightingMs = performance.now()-tick;
   if(query.get('reflections')!=='0') {
     tick=performance.now();reflections=createReflections({renderer,scene:world.scene,materials:world.materials,lighting,planar:query.get('reflections')!=='probes',mode:query.get('reflectionMode')==='reference'?'reference':'portal'});
@@ -123,7 +132,7 @@ async function start() {
     const shadowRevision=lighting.stats.shadowCache?.invalidations;
     lighting.update?.(camera,{shot:free?-1:currentShot});
     if(lighting.stats.shadowCache?.invalidations!==shadowRevision)reflections?.invalidate();
-    reflections?.update(camera);view.frame();
+    reflections?.update(camera);view.frame();dirty=false;
   };
   if(reflections?.stats.enabled) {
     stage('正在准备近景玻璃反射…',92);await yieldControl();
@@ -162,9 +171,9 @@ async function start() {
   let previous=performance.now(), sampleStart=previous, frameCount=0, fps=0, frameTimes=[];
   const pause=()=>{playing=false;playbackUI();};
   let disposed=false;
-  function dispose() { if(disposed)return;disposed=true;stopped=true;controls.dispose();view.dispose();reflections?.dispose();indirect?.dispose();lighting.dispose();world.dispose();runtime.dispose(); }
-  window.__campus={renderer,scene:world.scene,camera,lighting,reflections,world,view,stats:world.stats,capabilities:runtime.capabilities,renderOnce,setTime:seek,setQuality,setFree,pause,dispose,
-    setAA:value=>view.setAA(value),
+  function dispose() { if(disposed)return;disposed=true;stopped=true;controls.dispose();view.dispose();reflections?.dispose();contextVisibility?.dispose();indirect?.dispose();lighting.dispose();world.dispose();runtime.dispose(); }
+  window.__campus={renderer,scene:world.scene,camera,lighting,reflections,contextVisibility,world,view,stats:world.stats,capabilities:runtime.capabilities,renderOnce,setTime:seek,setQuality,setFree,pause,dispose,
+    setAA:value=>{view.setAA(value);dirty=true;},
     getState:()=>({capabilities:runtime.capabilities,errors:[...runtime.errors],quality,time,playing,free,shot:currentShot,renderSize:dimensions,fps,frameTimes:[...frameTimes],stats:world.stats,materials:world.materials.stats,lighting:lighting.stats,reflections:reflections?.stats,rendering:view.stats,memory:{...renderer.info.memory},camera:camera.position.toArray(),target:controls.target.toArray()})};
   document.querySelectorAll('[data-quality]').forEach(button=>button.onclick=()=>setQuality(button.dataset.quality));
   document.querySelectorAll('[data-shot]').forEach(button=>button.onclick=()=>seek(+button.dataset.shot*SHOT_SECONDS));
@@ -178,14 +187,18 @@ async function start() {
     if(event.code==='Space'){event.preventDefault();$('play').click();}else if(event.code==='KeyF')setFree(!free);
   });
   window.addEventListener('resize',resize); window.addEventListener('pagehide',event=>{if(!event.persisted)dispose();},{once:true});
-  document.addEventListener('visibilitychange',()=>{previous=performance.now();sampleStart=previous;frameCount=0;view.resetHistory();});
+  document.addEventListener('visibilitychange',()=>{previous=performance.now();sampleStart=previous;frameCount=0;view.resetHistory();dirty=true;});
   function loop(now) {
     if(stopped)return;
     const dt=Math.min(.1,(now-previous)/1000);previous=now;
     if(!document.hidden){
       if(playing&&!free){time=(time+dt)%DURATION;applyTour();}else if(free)updateControls();
-      renderOnce();frameTimes.push(dt*1000);if(frameTimes.length>180)frameTimes.shift();frameCount++;
-      if(now-sampleStart>=1000){fps=Math.round(frameCount*1000/(now-sampleStart));frameCount=0;sampleStart=now;$('performance').textContent=`${dimensions.width} × ${dimensions.height} · ${fps} FPS`;}
+      // Static MSAA views need no resubmission. Keep controls ticking for damping
+      // and the world-height constraint; temporal AA still needs history frames.
+      if(dirty || view.stats.aa==='traa'){
+        renderOnce();frameTimes.push(dt*1000);if(frameTimes.length>180)frameTimes.shift();frameCount++;
+      }
+      if(now-sampleStart>=1000){fps=Math.round(frameCount*1000/(now-sampleStart));frameCount=0;sampleStart=now;$('performance').textContent=`${dimensions.width} × ${dimensions.height} · ${fps ? `${fps} FPS` : '静止画面'}`;}
     }
     requestAnimationFrame(loop);
   }

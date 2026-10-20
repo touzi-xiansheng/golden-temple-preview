@@ -1,4 +1,4 @@
-import { MeshPhysicalNodeMaterial, Vector3 } from 'three/webgpu';
+import { Color, MeshPhysicalNodeMaterial, Vector3 } from 'three/webgpu';
 import { copyMaterialProperties } from './materials-copy.js';
 import {
   Fn, If, attribute, float, getGeometryRoughness, materialRoughness, max, min, mix, normalViewGeometry, pmremTexture,
@@ -7,6 +7,10 @@ import {
 
 const transmission = cosine => float(.957).mul(float(1).sub(float(1).sub(cosine.clamp()).pow(5)));
 export const roomDaylightGain = uniform(.65);
+export const spandrelBackingStrength = uniform(1);
+// Source Insulated spandrel backing: linear #50646b diffuse share, metalness .3.
+// Only the diffuse backing is approximated; the outer glass owns the reflection.
+const spandrelDiffuse = uniform(new Color('#50646b').multiplyScalar(1 - .3));
 
 const periodicBand = (coordinate, inner, outer) => {
   const footprint = coordinate.fwidth().max(1e-5), halfPixel = footprint.mul(.5);
@@ -141,7 +145,7 @@ export function createGlassMaterial(source, context = false) {
       result.a.assign(1);
     });
     result.rgb.mulAssign(mix(detail.w.mul(.12).add(.88), detail.w.mul(.36).add(.56), result.a));
-    return vision.select(result, vec4(0));
+    return vision.select(result, vec4(spandrelDiffuse.mul(spandrelBackingStrength.clamp()), 1));
   })();
   material.campusRoomNode = room;
   material.emissiveNode = null;

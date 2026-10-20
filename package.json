@@ -36,6 +36,7 @@
     "check:webgpu": "node tools/webgpu-check.mjs",
     "check:webgpu-motion": "node tools/webgpu-motion-check.mjs",
     "check:webgpu-interaction": "node tools/webgpu-interaction-check.mjs",
+    "check:webgpu-idle": "node tools/webgpu-idle-check.mjs",
     "check:webgpu-lab": "node tools/webgpu-check.mjs --lab",
     "build": "vite build",
     "snap": "node tools/snap.mjs",

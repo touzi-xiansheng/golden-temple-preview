@@ -1,0 +1,21 @@
+{
+  "paths": [
+    "out/webgpu/next-release/campus-atlas-on.png",
+    "out/webgpu/next-release/campus-atlas-off.png"
+  ],
+  "changed": 4,
+  "max": 4,
+  "meanAbsolute": 0.000004501028806584362,
+  "bounds": [
+    16,
+    758,
+    23,
+    758
+  ],
+  "rows": [
+    [
+      758,
+      4
+    ]
+  ]
+}

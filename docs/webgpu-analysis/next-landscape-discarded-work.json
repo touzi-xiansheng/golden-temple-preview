@@ -1,0 +1,312 @@
+{
+  "schemaVersion": 2,
+  "at": "2026-10-20T09:21:15.291Z",
+  "node": "v26.10.0",
+  "sources": {
+    "baseline": "/private/tmp/campus-next-before-4a2ac7a/src/campus/landscape.js",
+    "baselineRoot": "/private/tmp/campus-next-before-4a2ac7a",
+    "dependencyMode": "frozen-directory",
+    "baselineHash": "8a612b39ff33b9ec85d9fd378f41a28a8191c33d82719eec8a67d3968ab380d0",
+    "currentHash": "8a612b39ff33b9ec85d9fd378f41a28a8191c33d82719eec8a67d3968ab380d0",
+    "dependencies": [
+      {
+        "file": "src/campus/vegetation.js",
+        "baselineHash": "15a4dd2bcc533b84fc2b9e7cb0530591b496e9572d0489d07f374b8025fc7b53",
+        "currentHash": "633f766408e77cab0bf61ae86846be0372ac70408166f744d9ed5c39f07ef3cf"
+      },
+      {
+        "file": "src/campus/whole-tree.js",
+        "baselineHash": "5a2ff0478d8ad98afd88a75a50be8baa511561a06b22fcee0b33096fc9315fe0",
+        "currentHash": "5a2ff0478d8ad98afd88a75a50be8baa511561a06b22fcee0b33096fc9315fe0"
+      }
+    ]
+  },
+  "method": {
+    "order": [
+      "before",
+      "after",
+      "after",
+      "before"
+    ],
+    "refined": true,
+    "scope": "Full synchronous landscape generation; every geometry/index/instance attribute hashed",
+    "limitations": "Canvas calls are stubbed; excludes browser scheduling, GPU work, and complete application startup. Four runs are a diagnostic, not a confidence interval."
+  },
+  "cases": [
+    {
+      "mode": "before",
+      "elapsedMs": 4973.643792,
+      "meshes": 220,
+      "instances": 1064716,
+      "triangles": 8493119,
+      "geometryHash": "a57d900e2a2fe9ae031b3b4248dc0efc0aeeb5fecbfb9750c9d88d360abe8543",
+      "generatedMetadataHash": "fe257f395488513bfb88785f10d1382de936051797ed9a750cb55f966394b9ce",
+      "stats": {
+        "matureShrubs": 6,
+        "matureShrubTriangles": 166464,
+        "clonalGroundcoverPlants": 750,
+        "trees": 64,
+        "heroTrees": 14,
+        "treeForms": {
+          "broadleaf": 26,
+          "vase": 19,
+          "upright": 19
+        },
+        "contextTrees": 474,
+        "nearForestTrees": 199,
+        "detailedBarkTriangles": 1466846,
+        "treeJunctionsRestored": 68,
+        "trunkCapTriangles": 1728,
+        "primaryRootSleeves": 4,
+        "primaryRootSleeveTriangles": 72,
+        "primaryRootSleeveFailures": 0,
+        "individualLeaves": 754612,
+        "foliageCards": 102247,
+        "districtTrees": 160,
+        "districtFoliageCards": 24000,
+        "districtBatches": 12,
+        "canopyFillCards": 18705,
+        "shrubLobes": 240,
+        "shrubLeaves": 318708,
+        "detailedShrubs": 57,
+        "detailedShrubLeaves": 33252,
+        "extraShrubTriangles": 266016,
+        "shrubStemSegments": 58275,
+        "matureStemSegments": 9576,
+        "flowers": 306,
+        "grassTufts": 98,
+        "shortGrassTufts": 3697,
+        "vegetationBatches": 184,
+        "mownTurfTufts": 25036,
+        "mownTurfBlades": 300432,
+        "mownTurfTriangles": 901296,
+        "mownTurfBatches": 9,
+        "shrubs": 638,
+        "plantingGroups": 16,
+        "paths": 18,
+        "accessRoadLength": 2122,
+        "contextBuildings": 10,
+        "contextTriangles": 36717,
+        "contextBatches": 17
+      },
+      "removedGrass": {
+        "south": [
+          23,
+          0
+        ],
+        "southeast": [
+          129,
+          1894
+        ]
+      }
+    },
+    {
+      "mode": "after",
+      "elapsedMs": 4932.077375000001,
+      "meshes": 220,
+      "instances": 1064716,
+      "triangles": 8493119,
+      "geometryHash": "a57d900e2a2fe9ae031b3b4248dc0efc0aeeb5fecbfb9750c9d88d360abe8543",
+      "generatedMetadataHash": "fe257f395488513bfb88785f10d1382de936051797ed9a750cb55f966394b9ce",
+      "stats": {
+        "matureShrubs": 6,
+        "matureShrubTriangles": 166464,
+        "clonalGroundcoverPlants": 750,
+        "trees": 64,
+        "heroTrees": 14,
+        "treeForms": {
+          "broadleaf": 26,
+          "vase": 19,
+          "upright": 19
+        },
+        "contextTrees": 474,
+        "nearForestTrees": 199,
+        "detailedBarkTriangles": 1466846,
+        "treeJunctionsRestored": 68,
+        "trunkCapTriangles": 1728,
+        "primaryRootSleeves": 4,
+        "primaryRootSleeveTriangles": 72,
+        "primaryRootSleeveFailures": 0,
+        "individualLeaves": 754612,
+        "foliageCards": 102247,
+        "districtTrees": 160,
+        "districtFoliageCards": 24000,
+        "districtBatches": 12,
+        "canopyFillCards": 18705,
+        "shrubLobes": 240,
+        "shrubLeaves": 318708,
+        "detailedShrubs": 57,
+        "detailedShrubLeaves": 33252,
+        "extraShrubTriangles": 266016,
+        "shrubStemSegments": 58275,
+        "matureStemSegments": 9576,
+        "flowers": 306,
+        "grassTufts": 98,
+        "shortGrassTufts": 3697,
+        "vegetationBatches": 184,
+        "mownTurfTufts": 25036,
+        "mownTurfBlades": 300432,
+        "mownTurfTriangles": 901296,
+        "mownTurfBatches": 9,
+        "shrubs": 638,
+        "plantingGroups": 16,
+        "paths": 18,
+        "accessRoadLength": 2122,
+        "contextBuildings": 10,
+        "contextTriangles": 36717,
+        "contextBatches": 17
+      },
+      "removedGrass": {
+        "south": [
+          23,
+          0
+        ],
+        "southeast": [
+          129,
+          1894
+        ]
+      }
+    },
+    {
+      "mode": "after",
+      "elapsedMs": 4992.67275,
+      "meshes": 220,
+      "instances": 1064716,
+      "triangles": 8493119,
+      "geometryHash": "a57d900e2a2fe9ae031b3b4248dc0efc0aeeb5fecbfb9750c9d88d360abe8543",
+      "generatedMetadataHash": "fe257f395488513bfb88785f10d1382de936051797ed9a750cb55f966394b9ce",
+      "stats": {
+        "matureShrubs": 6,
+        "matureShrubTriangles": 166464,
+        "clonalGroundcoverPlants": 750,
+        "trees": 64,
+        "heroTrees": 14,
+        "treeForms": {
+          "broadleaf": 26,
+          "vase": 19,
+          "upright": 19
+        },
+        "contextTrees": 474,
+        "nearForestTrees": 199,
+        "detailedBarkTriangles": 1466846,
+        "treeJunctionsRestored": 68,
+        "trunkCapTriangles": 1728,
+        "primaryRootSleeves": 4,
+        "primaryRootSleeveTriangles": 72,
+        "primaryRootSleeveFailures": 0,
+        "individualLeaves": 754612,
+        "foliageCards": 102247,
+        "districtTrees": 160,
+        "districtFoliageCards": 24000,
+        "districtBatches": 12,
+        "canopyFillCards": 18705,
+        "shrubLobes": 240,
+        "shrubLeaves": 318708,
+        "detailedShrubs": 57,
+        "detailedShrubLeaves": 33252,
+        "extraShrubTriangles": 266016,
+        "shrubStemSegments": 58275,
+        "matureStemSegments": 9576,
+        "flowers": 306,
+        "grassTufts": 98,
+        "shortGrassTufts": 3697,
+        "vegetationBatches": 184,
+        "mownTurfTufts": 25036,
+        "mownTurfBlades": 300432,
+        "mownTurfTriangles": 901296,
+        "mownTurfBatches": 9,
+        "shrubs": 638,
+        "plantingGroups": 16,
+        "paths": 18,
+        "accessRoadLength": 2122,
+        "contextBuildings": 10,
+        "contextTriangles": 36717,
+        "contextBatches": 17
+      },
+      "removedGrass": {
+        "south": [
+          23,
+          0
+        ],
+        "southeast": [
+          129,
+          1894
+        ]
+      }
+    },
+    {
+      "mode": "before",
+      "elapsedMs": 4950.408791,
+      "meshes": 220,
+      "instances": 1064716,
+      "triangles": 8493119,
+      "geometryHash": "a57d900e2a2fe9ae031b3b4248dc0efc0aeeb5fecbfb9750c9d88d360abe8543",
+      "generatedMetadataHash": "fe257f395488513bfb88785f10d1382de936051797ed9a750cb55f966394b9ce",
+      "stats": {
+        "matureShrubs": 6,
+        "matureShrubTriangles": 166464,
+        "clonalGroundcoverPlants": 750,
+        "trees": 64,
+        "heroTrees": 14,
+        "treeForms": {
+          "broadleaf": 26,
+          "vase": 19,
+          "upright": 19
+        },
+        "contextTrees": 474,
+        "nearForestTrees": 199,
+        "detailedBarkTriangles": 1466846,
+        "treeJunctionsRestored": 68,
+        "trunkCapTriangles": 1728,
+        "primaryRootSleeves": 4,
+        "primaryRootSleeveTriangles": 72,
+        "primaryRootSleeveFailures": 0,
+        "individualLeaves": 754612,
+        "foliageCards": 102247,
+        "districtTrees": 160,
+        "districtFoliageCards": 24000,
+        "districtBatches": 12,
+        "canopyFillCards": 18705,
+        "shrubLobes": 240,
+        "shrubLeaves": 318708,
+        "detailedShrubs": 57,
+        "detailedShrubLeaves": 33252,
+        "extraShrubTriangles": 266016,
+        "shrubStemSegments": 58275,
+        "matureStemSegments": 9576,
+        "flowers": 306,
+        "grassTufts": 98,
+        "shortGrassTufts": 3697,
+        "vegetationBatches": 184,
+        "mownTurfTufts": 25036,
+        "mownTurfBlades": 300432,
+        "mownTurfTriangles": 901296,
+        "mownTurfBatches": 9,
+        "shrubs": 638,
+        "plantingGroups": 16,
+        "paths": 18,
+        "accessRoadLength": 2122,
+        "contextBuildings": 10,
+        "contextTriangles": 36717,
+        "contextBatches": 17
+      },
+      "removedGrass": {
+        "south": [
+          23,
+          0
+        ],
+        "southeast": [
+          129,
+          1894
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "beforeMeanMs": 4962.0262915,
+    "afterMeanMs": 4962.3750625,
+    "savedMs": -0.34877099999994243,
+    "geometryEqual": true
+  },
+  "passed": true
+}

@@ -7,6 +7,7 @@ import { buildingMaterials } from '../campus/building-materials.js';
 import { foliageMaterial } from '../campus/foliage-material.js';
 import { createCampusMaterials } from './materials.js';
 import { applyCampusLighting, createIrradianceNode } from './lighting.js';
+import { spandrelBackingStrength } from './materials-glass.js';
 
 const maximumError = (actual, expected) => Math.max(...actual.map((value, index) => Math.abs(value - expected[index])));
 
@@ -18,6 +19,7 @@ export async function runMaterialCalibration(renderer) {
     target: renderer.getRenderTarget(), toneMapping: renderer.toneMapping,
     outputColorSpace: renderer.outputColorSpace, mrt: renderer.getMRT(), autoClear: renderer.autoClear,
     shadows: renderer.shadowMap.enabled,
+    spandrelBackingStrength: spandrelBackingStrength.value,
   };
   const resources = [], factories = [], report = { backend: 'WebGPU', tests: [], passed: false };
   const check = (name, passed, details) => report.tests.push({ name, passed: !!passed, ...details });
@@ -43,6 +45,7 @@ export async function runMaterialCalibration(renderer) {
     return result;
   };
   try {
+    spandrelBackingStrength.value = 0;
     renderer.setMRT(null); renderer.toneMapping = NoToneMapping;
     renderer.outputColorSpace = LinearSRGBColorSpace; renderer.autoClear = true;
     renderer.shadowMap.enabled = true;
@@ -52,6 +55,8 @@ export async function runMaterialCalibration(renderer) {
     scene.environment = environment.texture;
     const owner = {
       environment, probes: [], materials: new Set(),
+      // The calibration keeps its 256px shadow allocation for the whole run.
+      stats: { shadowResourceGeneration: 0 },
       sampleIrradiance: ({ normal, position }) => createIrradianceNode({ skyTexture: environment.texture, normal, position }),
     };
     const leafSource = foliageMaterial({ bend: 0 }); leafSource.color.setRGB(.2, .3, .1); resources.push(leafSource);
@@ -148,6 +153,63 @@ export async function runMaterialCalibration(renderer) {
     check('ordinary rooms receive actual window-facing sunlight without a constant glow',
       roomAddition.every(value => value > .0001) && maximumError(darkRoom, darkBacking) < .000002,
       { sunRoom, sunBacking, roomAddition, darkRoom, darkBacking });
+
+    const backingDifference = async (environmentStrength = 0) => {
+      spandrelBackingStrength.value = 0;
+      const baseline = await draw(roomGlass, environmentStrength);
+      spandrelBackingStrength.value = 1;
+      const actual = await draw(roomGlass, environmentStrength);
+      return actual.map((value, index) => value - baseline[index]);
+    };
+    // Derive expectations from the source material, so its colour/metalness cannot
+    // silently drift away from the production glass's approximate diffuse backing.
+    const backingAlbedo = glassSources.spandrel.color.clone().multiplyScalar(1 - glassSources.spandrel.metalness).toArray();
+    setAttribute('paneType', [1]);
+    sun.position.set(0, 0, 3); sun.intensity = 1; sun.shadow.needsUpdate = true;
+    const directBacking = await backingDifference();
+    const expectedDirectBacking = backingAlbedo.map(value => value * .65 ** 2 * .957 ** 2 / Math.PI);
+    check('spandrel direct response matches the source diffuse share and two glass crossings',
+      maximumError(directBacking, expectedDirectBacking) < .0001,
+      { actual: directBacking, expected: expectedDirectBacking, backingAlbedo });
+    spandrelBackingStrength.value = 0; const disabledBacking = await draw(roomGlass, 0);
+    spandrelBackingStrength.value = .5; const halfBacking = await draw(roomGlass, 0);
+    const halfAddition = halfBacking.map((value, index) => value - disabledBacking[index]);
+    check('spandrel experiment strength changes only the added backing energy linearly',
+      maximumError(halfAddition, directBacking.map(value => value * .5)) < .0001,
+      { actual: halfAddition, expected: directBacking.map(value => value * .5) });
+
+    sun.intensity = 0;
+    const environmentBacking = [];
+    for (const strength of [1, .45, 0]) environmentBacking.push({ strength, added: await backingDifference(strength) });
+    const expectedEnvironmentBacking = backingAlbedo.map((value, index) => value * skyColor[index] * .65 ** 2 * .957 ** 2 * 20 / 21);
+    check('spandrel diffuse environment has one incident-light contribution and no constant glow',
+      maximumError(environmentBacking[0].added, expectedEnvironmentBacking) < .0001
+      && maximumError(environmentBacking[1].added, expectedEnvironmentBacking.map(value => value * .45)) < .0001
+      && environmentBacking[2].added.every(value => Math.abs(value) < .000002),
+      { actual: environmentBacking, expected: expectedEnvironmentBacking });
+    roomGlass.envMap = environment.texture; roomGlass.needsUpdate = true;
+    const ownedEnvironmentBacking = await backingDifference(.45);
+    check('binding a glass reflection probe does not add a second spandrel diffuse environment',
+      maximumError(ownedEnvironmentBacking, environmentBacking[1].added) < .0001,
+      { actual: ownedEnvironmentBacking, expected: environmentBacking[1].added });
+    roomGlass.envMap = null; roomGlass.needsUpdate = true;
+
+    // This small off-axis blocker shadows the sampled pane centre without
+    // covering it from the orthographic camera.
+    sun.position.set(3, 0, 1); sun.intensity = 1; sun.shadow.needsUpdate = true;
+    const unblockedBacking = await backingDifference();
+    blocker.position.set(.75, 0, .25); blocker.scale.setScalar(.2); blocker.rotation.y = Math.atan2(3, 1);
+    scene.add(blocker); sun.shadow.needsUpdate = true;
+    const blockedBacking = await backingDifference();
+    check('an opaque blocker removes direct spandrel backing light',
+      unblockedBacking.every(value => value > .0001) && blockedBacking.every(value => Math.abs(value) < .00001),
+      { unblocked: unblockedBacking, blocked: blockedBacking });
+    scene.remove(blocker); sun.position.set(0, 0, 3); sun.shadow.needsUpdate = true;
+    setAttribute('paneType', [0]);
+    const ordinaryPaneDifference = await backingDifference(.45);
+    check('spandrel strength leaves ordinary window lighting unchanged',
+      ordinaryPaneDifference.every(value => Math.abs(value) < .000002), { actual: ordinaryPaneDifference });
+    spandrelBackingStrength.value = 0; sun.intensity = 0;
 
     const patternFactory = createCampusMaterials(); factories.push(patternFactory);
     const pattern = patternFactory.convert(glassSources.glass, mesh);
@@ -270,6 +332,7 @@ export async function runMaterialCalibration(renderer) {
     report.passed = report.tests.every(test => test.passed);
     return report;
   } finally {
+    spandrelBackingStrength.value = previous.spandrelBackingStrength;
     renderer.setRenderTarget(previous.target); renderer.setMRT(previous.mrt);
     renderer.toneMapping = previous.toneMapping; renderer.outputColorSpace = previous.outputColorSpace; renderer.autoClear = previous.autoClear;
     renderer.shadowMap.enabled = previous.shadows;

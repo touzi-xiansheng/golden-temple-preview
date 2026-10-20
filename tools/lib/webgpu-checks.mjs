@@ -22,6 +22,9 @@ export async function waitForStableCampus(page, laboratory = false) {
       await new Promise(requestAnimationFrame);
       if (window.__ERROR) throw new Error(window.__ERROR);
       if (performance.now() > deadline) throw new Error('Camera/render frames did not settle');
+      // The application intentionally stops drawing stationary MSAA views.
+      // Explicit draws also capture diagnostic camera/material changes.
+      app.renderOnce();
       const pose = [...app.camera.matrixWorld.elements, ...app.camera.projectionMatrix.elements];
       stable = previous && pose.every((value, i) => Math.abs(value - previous[i]) < 1e-6) ? stable + 1 : 0;
       previous = pose;

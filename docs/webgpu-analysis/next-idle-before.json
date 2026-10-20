@@ -1,0 +1,42 @@
+{
+  "url": "http://127.0.0.1:5186/campus-webgpu.html?paused=1",
+  "idle": [
+    {
+      "kind": "paused-tour",
+      "elapsedMs": 2000.8999999761581,
+      "frames": 120,
+      "submissions": 240,
+      "cameraBefore": [
+        98,
+        72,
+        116
+      ],
+      "cameraAfter": [
+        98,
+        72,
+        116
+      ]
+    }
+  ],
+  "actions": [],
+  "errors": [],
+  "browser": "Chrome/155.0.8059.84",
+  "startup": {
+    "architectureMs": 147.89999997615814,
+    "landscapeMs": 6124.899999976158,
+    "materialsMs": 47.89999997615814,
+    "rendererInitMs": 10.5,
+    "lightingMs": 469.89999997615814,
+    "reflectionsMs": 3994.8000000715256,
+    "defaultPrecompileMs": 186.10000002384186,
+    "reflectionWarmupMs": 5095.5,
+    "initialViewSubmitMs": 692.8999999761581,
+    "initialViewQueueWaitMs": 62,
+    "compileMs": 6036.5,
+    "firstFrameMs": 16850.199999928474,
+    "fullReadyMs": 16850.399999976158,
+    "firstVisibleMs": 17530.099999904633
+  },
+  "passed": false,
+  "failure": "AssertionError [ERR_ASSERTION]: paused-tour: stationary view submitted 120 redundant frames\n\n120 !== 0\n\n    at idle (file:///Users/tzz/orca/projects/golden-temple/tools/webgpu-idle-check.mjs:42:12)\n    at async file:///Users/tzz/orca/projects/golden-temple/tools/webgpu-idle-check.mjs:56:3"
+}

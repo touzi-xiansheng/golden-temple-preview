@@ -94,7 +94,9 @@ try {
       window.__motionProbe.reset();const before=performance.now();window.__campus.setFree(enabled);
       return performance.now()-before;
     },enabled);
-    await page.waitForFunction(()=>window.__motionProbe.samples.length>=24,{timeout:15000});
+    // A paused camera switch needs one visible frame; continuous sampling would
+    // incorrectly require a stationary scene to waste GPU work.
+    await page.waitForFunction(()=>window.__motionProbe.samples.length>=1,{timeout:15000});
     const sample={kind:enabled?'enter-free-camera':'return-to-tour',switchJsMs,...await collect()};
     report.transitions.push(sample);console.log('TRANSITION',JSON.stringify(sample));
     assert.equal(sample.free,enabled);assert.ok(sample.observedShots.includes(enabled?-1:3));

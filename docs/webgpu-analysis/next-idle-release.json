@@ -1,0 +1,390 @@
+{
+  "url": "http://127.0.0.1:5187/campus-webgpu.html?paused=1",
+  "idle": [
+    {
+      "kind": "paused-tour",
+      "elapsedMs": 2001.0999999046326,
+      "frames": 0,
+      "submissions": 0,
+      "cameraBefore": [
+        98,
+        72,
+        116
+      ],
+      "cameraAfter": [
+        98,
+        72,
+        116
+      ],
+      "ready": true,
+      "error": null,
+      "errors": []
+    },
+    {
+      "kind": "after-seek",
+      "elapsedMs": 2000.7999999523163,
+      "frames": 0,
+      "submissions": 0,
+      "cameraBefore": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "cameraAfter": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "ready": true,
+      "error": null,
+      "errors": []
+    },
+    {
+      "kind": "free-camera-at-rest",
+      "elapsedMs": 2000.6000000238419,
+      "frames": 0,
+      "submissions": 0,
+      "cameraBefore": [
+        16.1,
+        1.7199999999999998,
+        -17.4
+      ],
+      "cameraAfter": [
+        16.1,
+        1.7199999999999998,
+        -17.4
+      ],
+      "ready": true,
+      "error": null,
+      "errors": []
+    },
+    {
+      "kind": "after-damping",
+      "elapsedMs": 2000.2999999523163,
+      "frames": 0,
+      "submissions": 0,
+      "cameraBefore": [
+        1.649985661767909,
+        8.805945242046258,
+        -10.541100855694651
+      ],
+      "cameraAfter": [
+        1.6499856132885053,
+        8.805945263532472,
+        -10.541100847579152
+      ],
+      "ready": true,
+      "error": null,
+      "errors": []
+    },
+    {
+      "kind": "after-wheel",
+      "elapsedMs": 2001.3000000715256,
+      "frames": 0,
+      "submissions": 0,
+      "cameraBefore": [
+        1.2231607342223656,
+        8.608593861221134,
+        -12.568308146697902
+      ],
+      "cameraAfter": [
+        1.2231607342212545,
+        8.608593861221612,
+        -12.568308146697639
+      ],
+      "ready": true,
+      "error": null,
+      "errors": []
+    },
+    {
+      "kind": "after-snapshot",
+      "elapsedMs": 2000.3999999761581,
+      "frames": 0,
+      "submissions": 0,
+      "cameraBefore": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "cameraAfter": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "ready": true,
+      "error": null,
+      "errors": []
+    },
+    {
+      "kind": "hidden-tab",
+      "elapsedMs": 2192,
+      "frames": 0,
+      "submissions": 0,
+      "cameraBefore": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "cameraAfter": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "ready": true,
+      "error": null,
+      "errors": []
+    },
+    {
+      "kind": "visible-again",
+      "elapsedMs": 2001.7000000476837,
+      "frames": 0,
+      "submissions": 0,
+      "cameraBefore": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "cameraAfter": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "ready": true,
+      "error": null,
+      "errors": []
+    },
+    {
+      "kind": "paused-again",
+      "elapsedMs": 2001.8999999761581,
+      "frames": 0,
+      "submissions": 0,
+      "cameraBefore": [
+        16.32912130134484,
+        1.7265663539408913,
+        -20.53342064589381
+      ],
+      "cameraAfter": [
+        16.32912130134484,
+        1.7265663539408913,
+        -20.53342064589381
+      ],
+      "ready": true,
+      "error": null,
+      "errors": []
+    }
+  ],
+  "actions": [
+    {
+      "kind": "timeline",
+      "frames": 1,
+      "camera": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "time": 35,
+      "quality": "balanced",
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    {
+      "kind": "free-camera",
+      "frames": 1,
+      "camera": [
+        16.1,
+        1.7199999999999998,
+        -17.4
+      ],
+      "time": 35,
+      "quality": "balanced",
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    {
+      "kind": "drag-and-damping",
+      "frames": 102,
+      "camera": [
+        1.649985661767909,
+        8.805945242046258,
+        -10.541100855694651
+      ],
+      "time": 35,
+      "quality": "balanced",
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    {
+      "kind": "wheel",
+      "frames": 1,
+      "camera": [
+        1.2231607342223656,
+        8.608593861221134,
+        -12.568308146697902
+      ],
+      "time": 35,
+      "quality": "balanced",
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    {
+      "kind": "return-tour",
+      "frames": 1,
+      "camera": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "time": 35,
+      "quality": "balanced",
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    {
+      "kind": "quality-performance",
+      "frames": 1,
+      "camera": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "time": 35,
+      "quality": "performance",
+      "renderSize": {
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "kind": "quality-quality",
+      "frames": 1,
+      "camera": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "time": 35,
+      "quality": "quality",
+      "renderSize": {
+        "width": 2400,
+        "height": 1350
+      }
+    },
+    {
+      "kind": "quality-balanced",
+      "frames": 1,
+      "camera": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "time": 35,
+      "quality": "balanced",
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    {
+      "kind": "resize-1366",
+      "frames": 1,
+      "camera": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "time": 35,
+      "quality": "balanced",
+      "renderSize": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "kind": "resize-1920",
+      "frames": 1,
+      "camera": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "time": 35,
+      "quality": "balanced",
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    {
+      "kind": "snapshot",
+      "frames": 1,
+      "camera": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "time": 35,
+      "quality": "balanced",
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    {
+      "kind": "return-to-visible-tab",
+      "frames": 1,
+      "camera": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "time": 35,
+      "quality": "balanced",
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      }
+    }
+  ],
+  "errors": [],
+  "browser": "Chrome/155.0.8059.84",
+  "startup": {
+    "architectureMs": 144.39999997615814,
+    "landscapeMs": 6047.600000023842,
+    "materialsMs": 46.5,
+    "rendererInitMs": 13.600000023841858,
+    "lightingMs": 651,
+    "reflectionsMs": 3973.6999999284744,
+    "defaultPrecompileMs": 154.60000002384186,
+    "reflectionWarmupMs": 5140.5,
+    "initialViewSubmitMs": 706.2999999523163,
+    "initialViewQueueWaitMs": 56.89999997615814,
+    "compileMs": 6058.299999952316,
+    "firstFrameMs": 16952.799999952316,
+    "fullReadyMs": 16953.100000023842,
+    "firstVisibleMs": 17604.5
+  },
+  "download": {
+    "name": "verdant-webgpu-35.png",
+    "png": true,
+    "bytes": 5388250
+  },
+  "visibility": {
+    "hidden": "hidden",
+    "restored": "visible"
+  },
+  "playback": {
+    "frames": 60,
+    "elapsed": 0.9999000000000535
+  },
+  "passed": true
+}

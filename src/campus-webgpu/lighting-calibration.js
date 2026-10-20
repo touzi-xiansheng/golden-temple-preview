@@ -77,7 +77,7 @@ export async function runLightingCalibration(renderer = null) {
     const material = new MeshStandardNodeMaterial({ color: 0xffffff, metalness: 1, roughness: 0.02 });
     const geometry = new PlaneGeometry(2, 2); scene.add(new Mesh(geometry, material));
     resources.push(material, geometry);
-    const owner = { environment, probes: [darkProbe], materials: new Set() };
+    const owner = { environment, probes: [darkProbe], materials: new Set(), stats: {shadowResourceGeneration: 0} };
     applyCampusLighting(material, owner);
     const drawMaterial = async strength => {
       darkProbe.strength.value = strength;

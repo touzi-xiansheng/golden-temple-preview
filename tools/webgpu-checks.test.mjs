@@ -50,13 +50,13 @@ test('snapshot waits for loading opacity, rendered frames, stable pose and GPU c
   for(const aa of ['msaa','traa']) {
     let now=0,queueWaits=0,paused=false;
     const style={display:'grid',visibility:'hidden',opacity:'.5'};
-    const app={pause(){paused=true;},view:{stats:{aa,frames:0}},scene:{environmentIntensity:.45},
+    const app={pause(){paused=true;},renderOnce(){this.view.stats.frames++;},view:{stats:{aa,frames:0}},scene:{environmentIntensity:.45},
       camera:{matrixWorld:{elements:[1,0,0,1]},projectionMatrix:{elements:[1,0,0,1]},fov:46},
       getState:()=>({errors:[]}),renderer:{toneMappingExposure:1,toneMapping:7,backend:{device:{queue:{async onSubmittedWorkDone(){
         assert.ok(app.view.stats.frames>=(aa==='traa'?32:3));queueWaits++;
       }}}}}};
     const context=vm.createContext({window:{__campus:app},document:{getElementById:()=>({})},getComputedStyle:()=>style,
-      performance:{now:()=>now},requestAnimationFrame:callback=>{app.view.stats.frames++;now+=16;queueMicrotask(callback);}});
+      performance:{now:()=>now},requestAnimationFrame:callback=>{now+=16;queueMicrotask(callback);}});
     const page={async waitForFunction(fn){
       assert.equal(vm.runInContext(`(${fn.toString()})()`,context),false);
       style.opacity='0';assert.equal(vm.runInContext(`(${fn.toString()})()`,context),true);
