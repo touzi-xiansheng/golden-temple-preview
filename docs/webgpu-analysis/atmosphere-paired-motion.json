@@ -1,0 +1,188 @@
+[
+  {
+    "pair": 1,
+    "mode": "before",
+    "exitCode": 0,
+    "passed": true,
+    "startup": {
+      "architectureMs": 142.89999997615814,
+      "landscapeMs": 6092.700000047684,
+      "materialsMs": 43.60000002384186,
+      "rendererInitMs": 10.300000071525574,
+      "lightingMs": 660.2999999523163,
+      "reflectionsMs": 3971.399999976158,
+      "defaultPrecompileMs": 156.09999990463257,
+      "reflectionWarmupMs": 5095.900000095367,
+      "initialViewSubmitMs": 696.0999999046326,
+      "initialViewQueueWaitMs": 56.10000002384186,
+      "compileMs": 6004.199999928474,
+      "firstFrameMs": 16943.600000023842,
+      "fullReadyMs": 16943.800000071526,
+      "firstVisibleMs": 17607.300000071526
+    },
+    "p95": [
+      18.100000023841858,
+      17.800000071525574,
+      18.699999928474426,
+      19.799999952316284,
+      18.600000023841858,
+      18.399999976158142
+    ],
+    "failure": null
+  },
+  {
+    "pair": 1,
+    "mode": "after",
+    "exitCode": 0,
+    "passed": true,
+    "startup": {
+      "architectureMs": 141.29999995231628,
+      "landscapeMs": 6159.100000023842,
+      "materialsMs": 46.60000002384186,
+      "rendererInitMs": 14.199999928474426,
+      "lightingMs": 651.7000000476837,
+      "reflectionsMs": 4039.5,
+      "defaultPrecompileMs": 176.29999995231628,
+      "reflectionWarmupMs": 5255.299999952316,
+      "initialViewSubmitMs": 703.6000000238419,
+      "initialViewQueueWaitMs": 63,
+      "compileMs": 6198.299999952316,
+      "firstFrameMs": 17267.899999976158,
+      "fullReadyMs": 17268.100000023842,
+      "firstVisibleMs": 17951.100000023842
+    },
+    "p95": [
+      18.399999976158142,
+      17.800000071525574,
+      17.600000023841858,
+      18.200000047683716,
+      18.299999952316284,
+      17.700000047683716
+    ],
+    "failure": null
+  },
+  {
+    "pair": 2,
+    "mode": "before",
+    "exitCode": 0,
+    "passed": true,
+    "startup": {
+      "architectureMs": 150.5,
+      "landscapeMs": 6449.100000023842,
+      "materialsMs": 46.40000009536743,
+      "rendererInitMs": 21.299999952316284,
+      "lightingMs": 658.7000000476837,
+      "reflectionsMs": 4157.899999976158,
+      "defaultPrecompileMs": 220.09999990463257,
+      "reflectionWarmupMs": 5325.700000047684,
+      "initialViewSubmitMs": 733,
+      "initialViewQueueWaitMs": 57.799999952316284,
+      "compileMs": 6336.799999952316,
+      "firstFrameMs": 17839.799999952316,
+      "fullReadyMs": 17840.099999904633,
+      "firstVisibleMs": 18514.5
+    },
+    "p95": [
+      17.700000047683716,
+      18,
+      17.40000009536743,
+      17.40000009536743,
+      18,
+      18
+    ],
+    "failure": null
+  },
+  {
+    "pair": 2,
+    "mode": "after",
+    "exitCode": 1,
+    "passed": false,
+    "startup": {
+      "architectureMs": 145.10000002384186,
+      "landscapeMs": 6097.399999976158,
+      "materialsMs": 45.700000047683716,
+      "rendererInitMs": 9.799999952316284,
+      "lightingMs": 654.3999999761581,
+      "reflectionsMs": 3997.600000023842,
+      "defaultPrecompileMs": 153.5,
+      "reflectionWarmupMs": 5138.100000023842,
+      "initialViewSubmitMs": 696.3999999761581,
+      "initialViewQueueWaitMs": 53,
+      "compileMs": 6041.100000023842,
+      "firstFrameMs": 17006.799999952316,
+      "fullReadyMs": 17007,
+      "firstVisibleMs": 17657.199999928474
+    },
+    "p95": [
+      19,
+      18.699999928474426,
+      19.899999976158142,
+      19.5,
+      18.399999976158142,
+      17.600000023841858
+    ],
+    "failure": "AssertionError [ERR_ASSERTION]: t=22: p95 19.9ms exceeds baseline allowance 19.4ms\n    at file:///Users/tzz/orca/projects/golden-temple/tools/webgpu-motion-check.mjs:118:65"
+  },
+  {
+    "pair": 3,
+    "mode": "before",
+    "exitCode": 0,
+    "passed": true,
+    "startup": {
+      "architectureMs": 144.20000004768372,
+      "landscapeMs": 6137.5,
+      "materialsMs": 45.60000002384186,
+      "rendererInitMs": 9.899999976158142,
+      "lightingMs": 664,
+      "reflectionsMs": 3974.600000023842,
+      "defaultPrecompileMs": 154.60000002384186,
+      "reflectionWarmupMs": 5092.899999976158,
+      "initialViewSubmitMs": 698.2000000476837,
+      "initialViewQueueWaitMs": 52.199999928474426,
+      "compileMs": 5998.100000023842,
+      "firstFrameMs": 16991.799999952316,
+      "fullReadyMs": 16992,
+      "firstVisibleMs": 17674.299999952316
+    },
+    "p95": [
+      18.5,
+      17.800000071525574,
+      20.100000023841858,
+      19.399999976158142,
+      18.799999952316284,
+      17.799999952316284
+    ],
+    "failure": null
+  },
+  {
+    "pair": 3,
+    "mode": "after",
+    "exitCode": 0,
+    "passed": true,
+    "startup": {
+      "architectureMs": 144.79999995231628,
+      "landscapeMs": 6105.399999976158,
+      "materialsMs": 45.5,
+      "rendererInitMs": 10.699999928474426,
+      "lightingMs": 670.6000000238419,
+      "reflectionsMs": 3994.2999999523163,
+      "defaultPrecompileMs": 150.89999997615814,
+      "reflectionWarmupMs": 5150.899999976158,
+      "initialViewSubmitMs": 706.3999999761581,
+      "initialViewQueueWaitMs": 55.200000047683716,
+      "compileMs": 6063.5,
+      "firstFrameMs": 17053,
+      "fullReadyMs": 17053.199999928474,
+      "firstVisibleMs": 17724.699999928474
+    },
+    "p95": [
+      18.200000047683716,
+      18.399999976158142,
+      20,
+      20.799999952316284,
+      18.700000047683716,
+      18
+    ],
+    "failure": null
+  }
+]

@@ -14,10 +14,11 @@ import { LightProbeGrid } from 'three/addons/lighting/LightProbeGrid.js';
 import { createStaticShadows } from './static-shadows.js';
 import { observeShadowResources } from './shadow-resource-observer.js';
 
-const SUN_DIRECTION = new Vector3(0.35, 0.72, 0.66843).normalize();
+// Balance afternoon shadow contrast with readable courtyard entrances.
+const SUN_DIRECTION = new Vector3(.379982, .573576, .725689).normalize();
 const SHADOW_SIZES = { performance: 1024, balanced: 4096, quality: 4096 };
 // One daylight scale is captured by the sky, diffuse probes and local reflections.
-export const DAYLIGHT = Object.freeze({ sunIntensity: 5.6, skyIntensity: .4, skySaturation: .65, fogDensity: .00048, fogStart: 95 });
+export const DAYLIGHT = Object.freeze({ sunIntensity: 5.6, skyIntensity: .28, skySaturation: .85, fogDensity: .00048, fogStart: 95 });
 // A captured material reflection must not change the scale of diffuse sky/probe light.
 export const campusDiffuseIntensity = uniform(1).onRenderUpdate(({ scene }) => scene.environmentIntensity);
 // Same representative soil/grass reflectance as the probe capture ground.
@@ -163,7 +164,7 @@ export function createLighting({ renderer, scene, camera, quality = 'balanced', 
     backgroundIntensity: scene.backgroundIntensity, environmentIntensity: scene.environmentIntensity,
     fogNode: scene.fogNode,
   };
-  const sun = cacheShadows ? new DirectionalLight(new Color(1, 0.97, 0.91), DAYLIGHT.sunIntensity) : new SunLight(new Color(1, 0.97, 0.91), DAYLIGHT.sunIntensity);
+  const sun = cacheShadows ? new DirectionalLight(new Color(1, .93, .82), DAYLIGHT.sunIntensity) : new SunLight(new Color(1, .93, .82), DAYLIGHT.sunIntensity);
   sun.name = 'Campus WebGPU sun';
   sun.position.copy(SUN_DIRECTION);
   sun.castShadow = true;
@@ -313,11 +314,11 @@ export function createLighting({ renderer, scene, camera, quality = 'balanced', 
     const sky = new SkyMesh();
     sky.scale.setScalar(10000);
     sky.sunPosition.value.copy(SUN_DIRECTION).multiplyScalar(450000);
-    sky.turbidity.value = 2.5;
+    sky.turbidity.value = 2;
     sky.rayleigh.value = 1.3;
     sky.cloudSpeed.value = 0;
-    sky.cloudCoverage.value = 0.2;
-    sky.cloudDensity.value = 0.25;
+    sky.cloudCoverage.value = 0.12;
+    sky.cloudDensity.value = 0.2;
     const skyRadiance = sky.material.colorNode.rgb;
     const skyLuminance = skyRadiance.dot(vec3(.2126, .7152, .0722));
     sky.material.colorNode = vec4(mix(vec3(skyLuminance), skyRadiance, DAYLIGHT.skySaturation).mul(DAYLIGHT.skyIntensity), 1);

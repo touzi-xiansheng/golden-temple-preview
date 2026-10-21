@@ -1,0 +1,20 @@
+{
+  "method": "120Hz samples of 20–30s route vs conservative horizontal bench bounding boxes; not branch/whole-scene collision validation",
+  "samples": 1200,
+  "minimumRequired": 0.15,
+  "nearest": {
+    "time": 25.433333333333334,
+    "bench": [
+      13,
+      39,
+      -1.1
+    ],
+    "camera": [
+      14.259823457106469,
+      1.7511285430978865,
+      40.23342259530655
+    ],
+    "horizontalClearance": 0.5583176895352688
+  },
+  "passed": true
+}

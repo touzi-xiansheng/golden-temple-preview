@@ -1,0 +1,131 @@
+{
+  "summary": {
+    "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)",
+    "fps": 60,
+    "p95FrameMs": 16.70000000001164,
+    "triangles": 9180889,
+    "meshes": 272,
+    "firstFrameMs": 8531.299999952316,
+    "drawCalls": 240,
+    "renderSize": {
+      "width": 1920,
+      "height": 1080
+    }
+  },
+  "modes": [
+    {
+      "mode": "performance",
+      "renderSize": {
+        "width": 1036,
+        "height": 648
+      },
+      "drawCalls": 236
+    },
+    {
+      "mode": "balanced",
+      "renderSize": {
+        "width": 1440,
+        "height": 900
+      },
+      "drawCalls": 237
+    },
+    {
+      "mode": "quality",
+      "renderSize": {
+        "width": 1800,
+        "height": 1125
+      },
+      "drawCalls": 250
+    }
+  ],
+  "tourSamples": [
+    {
+      "time": 4.983100000000008,
+      "shot": 0,
+      "fps": 53.028188668713476,
+      "p95FrameMs": 33.30000000000291,
+      "drawCalls": 234
+    },
+    {
+      "time": 9.999700000000013,
+      "shot": 0,
+      "fps": 57.27533069684991,
+      "p95FrameMs": 33.30000000000291,
+      "drawCalls": 227
+    },
+    {
+      "time": 15.016099999999952,
+      "shot": 1,
+      "fps": 60.013956734124214,
+      "p95FrameMs": 16.80000000000291,
+      "drawCalls": 196
+    },
+    {
+      "time": 19.9991999999998,
+      "shot": 1,
+      "fps": 57.21462461624349,
+      "p95FrameMs": 16.799999999995634,
+      "drawCalls": 181
+    },
+    {
+      "time": 25.01569999999966,
+      "shot": 2,
+      "fps": 54.285714285714285,
+      "p95FrameMs": 33.30000000000291,
+      "drawCalls": 164
+    },
+    {
+      "time": 30.015499999999545,
+      "shot": 3,
+      "fps": 50,
+      "p95FrameMs": 33.30000000000291,
+      "drawCalls": 287
+    },
+    {
+      "time": 35.015299999999634,
+      "shot": 3,
+      "fps": 50,
+      "p95FrameMs": 33.39999999999418,
+      "drawCalls": 137
+    },
+    {
+      "time": 40.03179999999997,
+      "shot": 4,
+      "fps": 60,
+      "p95FrameMs": 16.700000000004366,
+      "drawCalls": 248
+    },
+    {
+      "time": 45.031500000000314,
+      "shot": 4,
+      "fps": 60.005581914597435,
+      "p95FrameMs": 16.70000000001164,
+      "drawCalls": 233
+    },
+    {
+      "time": 50.03130000000061,
+      "shot": 5,
+      "fps": 60,
+      "p95FrameMs": 16.80000000000291,
+      "drawCalls": 216
+    },
+    {
+      "time": 55.0478000000009,
+      "shot": 5,
+      "fps": 60,
+      "p95FrameMs": 16.79999999998836,
+      "drawCalls": 229
+    },
+    {
+      "time": 0.047600000001223344,
+      "shot": 0,
+      "fps": 60,
+      "p95FrameMs": 16.70000000001164,
+      "drawCalls": 240
+    }
+  ],
+  "contextLossRetry": true,
+  "errors": [],
+  "external": [],
+  "failedRequests": []
+}
