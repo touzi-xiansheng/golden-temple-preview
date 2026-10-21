@@ -1,0 +1,129 @@
+{
+  "at": "2026-10-21T04:47:57.576Z",
+  "base": "https://touzi-xiansheng.github.io/golden-temple-preview/",
+  "sourceCommit": "1ae31bfe041631c81f6cff2cbe5a8ad094a1e75c",
+  "deploymentCommit": "2ca6483c30c92eee9bb2888384b92843cdb06eb9",
+  "files": [
+    {
+      "path": "index.html",
+      "sha256": "23383f91426fc0e76014899192b63bb82ec21549980c8da25dc9c61b1c07bb8f",
+      "bytes": 2153
+    },
+    {
+      "path": "campus.html",
+      "sha256": "4105547a8d9d085589c8cb2a244114b2387b24c1feff49b31da36124102c1268",
+      "bytes": 4803
+    },
+    {
+      "path": "campus-webgpu.html",
+      "sha256": "72a447c44f83642ea428958a70ea2f51cd41c3071913dc2ff9ebfb490e1bc50e",
+      "bytes": 4817
+    },
+    {
+      "path": "webgpu-lab.html",
+      "sha256": "c3fb17cfd3051b479010c9ba7803987ceb4270dd05494b469384cf957de7c966",
+      "bytes": 783
+    },
+    {
+      "path": "preview-build.json",
+      "sha256": "e32d1b85ada2436e1d0a3af4c8488524c733fdc483e7deac95e8d04e4b145f14",
+      "bytes": 301
+    },
+    {
+      "path": "assets/temple-CacCM6da.js",
+      "sha256": "cdfc2ea50441c81ea47962741e9eaa263a8a43700d964c1a8975fb6c4a460fe5",
+      "bytes": 70866
+    },
+    {
+      "path": "assets/three.core-DuvWXBVy.js",
+      "sha256": "ce55011d97ee6d9eeeac0b6472d36b33aefc7abb6ef44c07f4a144e8f7cfc2a9",
+      "bytes": 377462
+    },
+    {
+      "path": "assets/three.module-By_ZExND.js",
+      "sha256": "c1bda4c0249430d36f73c945dfd3894435bab54daae82c4b7a65d5b530e6ae20",
+      "bytes": 365107
+    },
+    {
+      "path": "assets/modulepreload-polyfill-P2Xu9kJm.js",
+      "sha256": "418c206484b89b68ef5f067277831e583fc9193a62aadf4de269acaaeb12a85f",
+      "bytes": 670
+    },
+    {
+      "path": "assets/BufferGeometryUtils-Bl0DW3-j.js",
+      "sha256": "14d1b64aad652c153eb42c125b79097944cef4e6f9d4a95733d52dc9eb6b52c7",
+      "bytes": 6767
+    },
+    {
+      "path": "assets/RoundedBoxGeometry-BiBwjk7E.js",
+      "sha256": "45cfea49154918ce41e9cde06e0db8a96c3954b0af286911da757e7e33f0d178",
+      "bytes": 1708
+    },
+    {
+      "path": "assets/geom-C12jUWl1.js",
+      "sha256": "4586605b9f25100ada09811a6cdef1abe8b2ce905d8c887283fc5003ac20a156",
+      "bytes": 23882
+    },
+    {
+      "path": "assets/glsl-g9hpiSYu.js",
+      "sha256": "e0820f4d9a57a8d130086e491fc5a9a05e5c564b93889d846a8de08629a0b491",
+      "bytes": 5477
+    },
+    {
+      "path": "assets/sky-CE_hpqjI.js",
+      "sha256": "8383122ff95a53dd3eba35aefaace6a67bf00d1be95b4e706fca7f309b04f65e",
+      "bytes": 7844
+    },
+    {
+      "path": "assets/Pass-CXM1VNzz.js",
+      "sha256": "f622a1bbc5f028fb9456aaabf3558cafd3a19131bff507ace348c7a49937d31b",
+      "bytes": 691
+    },
+    {
+      "path": "assets/shots-CFEcEcFb.js",
+      "sha256": "1f614063141a30e96eae1476ab2785f0f0fbba09456327d74bb974653e06ada9",
+      "bytes": 11411
+    },
+    {
+      "path": "assets/preload-helper-9vEx8zwa.js",
+      "sha256": "67c6302741b6e43958bd1524e386d87bbc98e3c3d3825dfb10381f032226c6ed",
+      "bytes": 1541
+    },
+    {
+      "path": "assets/campus-iOTTQiGZ.js",
+      "sha256": "1756a6d340b2378e873f9d1815f50118bde3bdc7087727ee2cd7d0ffed479d35",
+      "bytes": 78317
+    },
+    {
+      "path": "assets/vegetation-tree-BVrkfeHc.js",
+      "sha256": "b06141da5ea92f5f61ed4e15d9e50a028d8b73e16e66a99de7ca88b017b8c0e8",
+      "bytes": 23343
+    },
+    {
+      "path": "assets/LightProbeGridUtils-BiVXotx9.js",
+      "sha256": "f87db80698ed2dc895e3ecfa185341224ce4f6de2e7436e52d5b78cf21b330c6",
+      "bytes": 191092
+    },
+    {
+      "path": "assets/LightProbeGridUtils-Csy05UQj.css",
+      "sha256": "4265bdf87846f0efecdd0c7c7f1ca3fd04ecc543dd8cc8c8a230d929a69add2e",
+      "bytes": 5713
+    },
+    {
+      "path": "assets/campusWebGPU-Bg-qgQKK.js",
+      "sha256": "8cf3d70e5761061a0c2f32512d2e5ae25d695e789f8568d57f12ede180acc3b7",
+      "bytes": 86500
+    },
+    {
+      "path": "assets/three.tsl-DJhDxPQQ.js",
+      "sha256": "b61efedac3202053088094f7fc08159edca4c1466f1aacb284fa2870b5f9bf0c",
+      "bytes": 691610
+    },
+    {
+      "path": "assets/webgpuLab-C3i_Im7-.js",
+      "sha256": "402049f0f498d742357ffa6d98e29035295f95368cbd26a1c8a99e643314f543",
+      "bytes": 1374
+    }
+  ],
+  "passed": true
+}

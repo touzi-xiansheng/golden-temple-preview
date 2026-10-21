@@ -35,6 +35,8 @@
 
 [基线截图记录](atmosphere-visual-before.json)含 19 个路线帧；[最终截图记录](atmosphere-visual-after.json)含同样 19 帧、4 组同相机 local/overview 阴影对照和 3 个自由视角。所有截图使用 1920×1080、DPR 1、balanced、4×MSAA。上表四组图仅 25 秒相机改变；完整 19 帧中，20–30 秒段内部相机均受曲线变化影响。
 
+[最终独立视觉验收](atmosphere-final-visual-review.md)支持保留当前候选：25 秒收益延续至 26–27 秒，35° 恢复了入口旁树干与背景的分离，未在受检机位发现新增显著回归；同时明确阴面更深、入口玻璃仍暗及全域阴影条带的代价。这次最终复审知道候选参数，不是匿名盲测。[独立证据复核](atmosphere-final-evidence-review.md)确认统计与 JSON 相符，并纠正了截图相机一致性的表述。
+
 ## 校准与代码检查
 
 - [实际 GPU 校准](atmosphere-calibration.json)：23 项材质、14 项光照通过，未放松门槛。最终灰卡直射/天空比为 **3.0051**，总光 B/R 为 **1.2216**；这些美术观测值不是“更真实”的分数。探针不重复计光、零入射响应、地面反弹、遮挡和能量组合等实现不变量仍通过。
@@ -78,3 +80,17 @@ Chrome 155 / Apple Metal 3，1920×1080、DPR 1、balanced、4×MSAA。冻结基
 自由探索采用全域阴影图，近景存在软化及密集条带。独立复审发现后补拍了冻结基线：同相机 [45 秒旧版全域图](atmosphere-overview-before-45.png)与[新版](atmosphere-overview-after-45.png)都有明显条带；正常导览 45 秒用局部阴影，见上表截图。补充[旧版阴影记录](atmosphere-baseline-shadow.json)及[旧版自由视角记录](atmosphere-baseline-free.json)。这是本轮仍未解决的近景自由探索质量限制，不能把自由视角功能通过等同于阴影质量通过。
 
 证据限定于桌面 Chrome/Metal 和受测镜头。没有测 Windows、Safari、功耗、GPU timestamp 或真实显存峰值；没有将静帧审查等同于全场连续碰撞验证。实验 TRAA 不在本轮性能验收范围内。
+
+## 发布与线上验收
+
+- [线上预览](https://touzi-xiansheng.github.io/golden-temple-preview/campus-webgpu.html?rev=1ae31bf)。
+- 源码提交 [`1ae31bf`](https://github.com/touzi-xiansheng/golden-temple-preview/commit/1ae31bfe041631c81f6cff2cbe5a8ad094a1e75c)，分支 `source/webgpu-preview`。
+- 部署提交 [`2ca6483`](https://github.com/touzi-xiansheng/golden-temple-preview/commit/2ca6483c30c92eee9bb2888384b92843cdb06eb9)，[GitHub Pages 任务](https://github.com/touzi-xiansheng/golden-temple-preview/actions/runs/39545826120)成功。
+
+- [线上资源核对](atmosphere-live-assets.json)：园区入口、原首页、实验入口、元数据及递归依赖共 24 个文件均 HTTP 200，和部署文件逐字节一致。
+- [线上静止与唤醒](atmosphere-idle-live.json)：九种静止状态零主视图绘制、零原生 GPU 提交；交互自然唤醒通过，无页面错误。
+- [线上交互](atmosphere-interaction-live.json)：两轮画质往返、12 次视角回访、12 次自由相机进入/拖动返回，以及地面限制和致命错误停止检查通过。
+
+- [线上关键镜头](atmosphere-visual-live.json)：15/25/45 秒均正常，太阳参数与相机矩阵和本地候选一致。PNG 不完全相同；[像素比较](atmosphere-live-visual-comparison.json)保留差异，三帧平均绝对通道差均小于 0.006/255，不宣称逐像素一致。
+
+部署只更新两个园区入口和对应依赖。构建元数据指向实际应用源码提交，后续验收文档提交不改变运行时代码。

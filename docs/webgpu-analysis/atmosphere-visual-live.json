@@ -1,0 +1,591 @@
+{
+  "url": "https://touzi-xiansheng.github.io/golden-temple-preview/campus-webgpu.html?rev=1ae31bf&paused=1&clean=1",
+  "at": "2026-10-21T04:50:08.193Z",
+  "captures": [
+    {
+      "file": "out/webgpu/atmosphere/live/tour-15.png",
+      "time": 15,
+      "camera": [
+        2,
+        1.72,
+        75
+      ],
+      "snapshot": {
+        "minimumFrames": 3,
+        "framesWaited": 5,
+        "stableCameraFrames": 3,
+        "exposure": 1,
+        "toneMapping": 6,
+        "environmentIntensity": 1,
+        "fov": 42,
+        "cameraWorld": [
+          0.9986649849421085,
+          -4.336808689942018e-19,
+          -0.0516550854280401,
+          0,
+          0.00379640529133891,
+          0.9972955644615377,
+          0.07339716896588559,
+          0,
+          0.05151538757926621,
+          -0.07349528627975312,
+          0.9959641598658132,
+          0,
+          2,
+          1.72,
+          75,
+          1
+        ],
+        "projection": [
+          1.4653625988902634,
+          0,
+          0,
+          0,
+          0,
+          2.6050890646938014,
+          0,
+          0,
+          0,
+          0,
+          -1.0000222227160604,
+          -1,
+          0,
+          0,
+          -0.2000044445432121,
+          0
+        ]
+      },
+      "memory": {
+        "attributes": 2758,
+        "attributesSize": 1415279344,
+        "geometries": 253,
+        "indexAttributes": 198,
+        "indexAttributesSize": 17750304,
+        "indirectStorageAttributes": 0,
+        "indirectStorageAttributesSize": 0,
+        "programs": 576,
+        "programsSize": 5128090,
+        "readbackBuffers": 0,
+        "readbackBuffersSize": 0,
+        "renderTargets": 19,
+        "storageAttributes": 0,
+        "storageAttributesSize": 0,
+        "textures": 45,
+        "texturesSize": 415466037,
+        "uniformBuffers": 2084,
+        "uniformBuffersSize": 5724720,
+        "total": 1859348495
+      }
+    },
+    {
+      "file": "out/webgpu/atmosphere/live/tour-25.png",
+      "time": 25,
+      "camera": [
+        13.8,
+        1.75,
+        41
+      ],
+      "snapshot": {
+        "minimumFrames": 3,
+        "framesWaited": 5,
+        "stableCameraFrames": 3,
+        "exposure": 1,
+        "toneMapping": 6,
+        "environmentIntensity": 1,
+        "fov": 48,
+        "cameraWorld": [
+          0.641471164120127,
+          3.469446951953614e-18,
+          -0.7671471472946825,
+          0,
+          0.05509340072944936,
+          0.9974179010869002,
+          0.04606786067820852,
+          0,
+          0.7651662974794653,
+          -0.0718159494221341,
+          0.6398148221244675,
+          0,
+          13.8,
+          1.75,
+          41,
+          1
+        ],
+        "projection": [
+          1.2633956853211212,
+          0,
+          0,
+          0,
+          0,
+          2.2460367739042155,
+          0,
+          0,
+          0,
+          0,
+          -1.0000222227160604,
+          -1,
+          0,
+          0,
+          -0.2000044445432121,
+          0
+        ]
+      },
+      "memory": {
+        "attributes": 2758,
+        "attributesSize": 1415279344,
+        "geometries": 253,
+        "indexAttributes": 198,
+        "indexAttributesSize": 17750304,
+        "indirectStorageAttributes": 0,
+        "indirectStorageAttributesSize": 0,
+        "programs": 576,
+        "programsSize": 5128090,
+        "readbackBuffers": 0,
+        "readbackBuffersSize": 0,
+        "renderTargets": 19,
+        "storageAttributes": 0,
+        "storageAttributesSize": 0,
+        "textures": 45,
+        "texturesSize": 415466037,
+        "uniformBuffers": 2084,
+        "uniformBuffersSize": 5724720,
+        "total": 1859348495
+      }
+    },
+    {
+      "file": "out/webgpu/atmosphere/live/tour-45.png",
+      "time": 45,
+      "camera": [
+        -22.1,
+        1.72,
+        -16
+      ],
+      "snapshot": {
+        "minimumFrames": 3,
+        "framesWaited": 4,
+        "stableCameraFrames": 3,
+        "exposure": 1,
+        "toneMapping": 6,
+        "environmentIntensity": 1,
+        "fov": 50,
+        "cameraWorld": [
+          0.9999652795861222,
+          0,
+          0.008333043996551017,
+          0,
+          -0.00017494927868039317,
+          0.9997795882048975,
+          0.020993913441647184,
+          0,
+          -0.00833120729536507,
+          -0.020994642384319983,
+          0.9997448754438085,
+          0,
+          -22.1,
+          1.72,
+          -16,
+          1
+        ],
+        "projection": [
+          1.2062851427866268,
+          0,
+          0,
+          0,
+          0,
+          2.1445069205095586,
+          0,
+          0,
+          0,
+          0,
+          -1.0000222227160604,
+          -1,
+          0,
+          0,
+          -0.2000044445432121,
+          0
+        ]
+      },
+      "memory": {
+        "attributes": 2758,
+        "attributesSize": 1415279344,
+        "geometries": 253,
+        "indexAttributes": 198,
+        "indexAttributesSize": 17750304,
+        "indirectStorageAttributes": 0,
+        "indirectStorageAttributesSize": 0,
+        "programs": 576,
+        "programsSize": 5128090,
+        "readbackBuffers": 0,
+        "readbackBuffersSize": 0,
+        "renderTargets": 19,
+        "storageAttributes": 0,
+        "storageAttributesSize": 0,
+        "textures": 45,
+        "texturesSize": 415466037,
+        "uniformBuffers": 2084,
+        "uniformBuffersSize": 5724720,
+        "total": 1859348495
+      }
+    }
+  ],
+  "errors": [],
+  "initial": {
+    "capabilities": {
+      "backend": "webgpu",
+      "secureContext": true,
+      "adapter": {
+        "vendor": "apple",
+        "architecture": "metal-3",
+        "device": "",
+        "description": "",
+        "isFallbackAdapter": false
+      },
+      "features": [
+        "bgra8unorm-storage",
+        "clip-distances",
+        "core-features-and-limits",
+        "depth-clip-control",
+        "depth32float-stencil8",
+        "dual-source-blending",
+        "float32-blendable",
+        "float32-filterable",
+        "indirect-first-instance",
+        "rg11b10ufloat-renderable",
+        "shader-f16",
+        "subgroups",
+        "texture-compression-astc",
+        "texture-compression-astc-sliced-3d",
+        "texture-compression-bc",
+        "texture-compression-bc-sliced-3d",
+        "texture-compression-etc2",
+        "texture-formats-tier1",
+        "texture-formats-tier2",
+        "timestamp-query"
+      ],
+      "compatibilityMode": false,
+      "limits": {
+        "maxTextureDimension2D": 8192,
+        "maxTextureDimension3D": 2048,
+        "maxStorageBufferBindingSize": 134217728,
+        "maxBufferSize": 268435456,
+        "maxStorageBuffersPerShaderStage": 8,
+        "maxComputeWorkgroupSizeX": 256
+      }
+    },
+    "errors": [],
+    "quality": "balanced",
+    "time": 0,
+    "playing": false,
+    "free": false,
+    "shot": 0,
+    "renderSize": {
+      "width": 1920,
+      "height": 1080
+    },
+    "fps": 0,
+    "frameTimes": [],
+    "stats": {
+      "buildings": 7,
+      "refined": true,
+      "meshes": 272,
+      "triangles": 9131105,
+      "instances": 1155332,
+      "landscape": {
+        "matureShrubs": 6,
+        "matureShrubTriangles": 166464,
+        "clonalGroundcoverPlants": 750,
+        "trees": 64,
+        "heroTrees": 14,
+        "treeForms": {
+          "broadleaf": 26,
+          "vase": 19,
+          "upright": 19
+        },
+        "contextTrees": 474,
+        "nearForestTrees": 199,
+        "detailedBarkTriangles": 1466846,
+        "treeJunctionsRestored": 68,
+        "trunkCapTriangles": 1728,
+        "primaryRootSleeves": 4,
+        "primaryRootSleeveTriangles": 72,
+        "primaryRootSleeveFailures": 0,
+        "individualLeaves": 754612,
+        "foliageCards": 102252,
+        "districtTrees": 160,
+        "districtFoliageCards": 24000,
+        "districtBatches": 12,
+        "canopyFillCards": 18705,
+        "shrubLobes": 240,
+        "shrubLeaves": 318708,
+        "detailedShrubs": 61,
+        "detailedShrubLeaves": 34980,
+        "extraShrubTriangles": 279840,
+        "shrubStemSegments": 58275,
+        "matureStemSegments": 9576,
+        "flowers": 306,
+        "grassTufts": 98,
+        "shortGrassTufts": 3697,
+        "vegetationBatches": 184,
+        "mownTurfTufts": 24701,
+        "mownTurfBlades": 296412,
+        "mownTurfTriangles": 889236,
+        "mownTurfBatches": 10,
+        "shrubs": 638,
+        "plantingGroups": 16,
+        "paths": 18,
+        "accessRoadLength": 2122,
+        "contextBuildings": 10,
+        "contextTriangles": 36717,
+        "contextBatches": 17
+      },
+      "contacts": {
+        "stamps": 526,
+        "size": 2048,
+        "bytes": 4194304
+      },
+      "timings": {
+        "architectureMs": 149.30000007152557,
+        "landscapeMs": 6124.299999952316,
+        "materialsMs": 47.59999990463257,
+        "rendererInitMs": 2.899999976158142,
+        "lightingMs": 659.6000000238419,
+        "reflectionsMs": 3989.2000000476837,
+        "defaultPrecompileMs": 167.19999992847443,
+        "reflectionWarmupMs": 5149.799999952316,
+        "initialViewSubmitMs": 686.8000000715256,
+        "initialViewQueueWaitMs": 58.699999928474426,
+        "compileMs": 6062.599999904633,
+        "firstFrameMs": 17053.199999928474,
+        "fullReadyMs": 17053.5,
+        "firstVisibleMs": 17724.5
+      },
+      "indirect": {
+        "regions": [
+          "courtyards",
+          "arcade-a",
+          "arcade-c",
+          "cafe"
+        ],
+        "probes": 907,
+        "paving": {
+          "meshes": 1,
+          "triangles": 1744
+        },
+        "roughEnvironment": {
+          "captures": 2,
+          "faceSize": 32,
+          "cubeViews": 12,
+          "colorBytes": 688128,
+          "boundMaterials": 2,
+          "captureMs": 8.899999976158142
+        }
+      },
+      "contextVisibility": {
+        "bakeMs": 192,
+        "size": 1024,
+        "bytesWithMips": 1398102,
+        "rayTests": 2032419,
+        "shadowTexels": 203932,
+        "partialTexels": 8255,
+        "receiverTriangles": 6324,
+        "maxCandidates": 10
+      },
+      "startupCompilation": {
+        "defaultPrecompile": true,
+        "programCountSource": "renderer.info.memory.programs",
+        "programsBefore": 333,
+        "warmup": [
+          {
+            "time": 10,
+            "submitMs": 4475.799999952316,
+            "queueWaitMs": 185,
+            "totalMs": 4666.5,
+            "programsBefore": 333,
+            "programsAfter": 448
+          },
+          {
+            "time": 40,
+            "submitMs": 429.5,
+            "queueWaitMs": 31.399999976158142,
+            "totalMs": 466.60000002384186,
+            "programsBefore": 448,
+            "programsAfter": 464
+          },
+          {
+            "time": 45,
+            "submitMs": 4.199999928474426,
+            "queueWaitMs": 8.600000023841858,
+            "totalMs": 16.699999928474426,
+            "programsBefore": 464,
+            "programsAfter": 464
+          }
+        ],
+        "programsAfterDefaultPrecompile": 333,
+        "programsAtReady": 576
+      }
+    },
+    "materials": {
+      "converted": 74,
+      "reused": 198,
+      "categories": {
+        "mineral": 18,
+        "standard": 28,
+        "glass": 4,
+        "foliage": 7,
+        "ground": 7,
+        "context-glass": 1,
+        "context-recess": 2,
+        "bark": 2,
+        "turf": 1,
+        "physical": 4
+      },
+      "extractedTextureUniforms": 7,
+      "pending": [
+        "Room daylight uses an incident-light-driven ray-box diffuse approximation; geometric interior refraction and multi-bounce transport are not simulated."
+      ]
+    },
+    "lighting": {
+      "ready": true,
+      "skyMs": 38.5,
+      "probeBakeMs": 415.7000000476837,
+      "probes": 907,
+      "cubeViews": 5442,
+      "baking": false,
+      "quality": "balanced",
+      "groundBounce": true,
+      "groundAlbedo": [
+        0.08865558627723595,
+        0.12743768042608497,
+        0.04373502925049377
+      ],
+      "shadowMode": "cached",
+      "shadowCache": {
+        "invalidations": 4,
+        "reusedTransitions": 0,
+        "coverage": "overview",
+        "texelMetres": 0.1717689093427079
+      },
+      "shadowResourceGeneration": 0
+    },
+    "reflections": {
+      "planes": 51,
+      "active": [],
+      "updates": 3,
+      "probeCount": 4,
+      "enabled": true,
+      "mode": "portal",
+      "capturesThisUpdate": 0,
+      "cacheHits": 4,
+      "captureSize": [
+        0,
+        0
+      ],
+      "allocatedSize": [
+        1152,
+        648
+      ],
+      "selectedPlane": null,
+      "selectedAreaPixels": 0,
+      "updateCpuMs": 0,
+      "captureCpuMs": 0,
+      "captureDrawCalls": 0,
+      "captureTriangles": 0,
+      "reason": "stationary"
+    },
+    "rendering": {
+      "aa": "msaa",
+      "frames": 8,
+      "cpuSubmitMs": 3.1999999284744263
+    },
+    "memory": {
+      "attributes": 2758,
+      "attributesSize": 1415279344,
+      "geometries": 253,
+      "indexAttributes": 198,
+      "indexAttributesSize": 17750304,
+      "indirectStorageAttributes": 0,
+      "indirectStorageAttributesSize": 0,
+      "programs": 576,
+      "programsSize": 5128090,
+      "readbackBuffers": 0,
+      "readbackBuffersSize": 0,
+      "renderTargets": 19,
+      "storageAttributes": 0,
+      "storageAttributesSize": 0,
+      "textures": 45,
+      "texturesSize": 415466037,
+      "uniformBuffers": 2084,
+      "uniformBuffersSize": 5724720,
+      "total": 1859348495
+    },
+    "camera": [
+      98,
+      72,
+      116
+    ],
+    "target": [
+      0,
+      10,
+      3
+    ],
+    "snapshot": {
+      "minimumFrames": 3,
+      "framesWaited": 4,
+      "stableCameraFrames": 3,
+      "exposure": 1,
+      "toneMapping": 6,
+      "environmentIntensity": 1,
+      "fov": 46,
+      "cameraWorld": [
+        0.7554684503329323,
+        0,
+        -0.6551850277223662,
+        0,
+        -0.2508789115723744,
+        0.9237843792970263,
+        -0.28927874497630923,
+        0,
+        0.605249694159211,
+        0.3829130718150111,
+        0.6978899534692943,
+        0,
+        98,
+        72,
+        116,
+        1
+      ],
+      "projection": [
+        1.325166955775861,
+        0,
+        0,
+        0,
+        0,
+        2.3558523658237527,
+        0,
+        0,
+        0,
+        0,
+        -1.0000222227160604,
+        -1,
+        0,
+        0,
+        -0.2000044445432121,
+        0
+      ]
+    }
+  },
+  "lighting": {
+    "sunDirection": [
+      0.379981948166476,
+      0.573575921758227,
+      0.725688901008421
+    ],
+    "sunColor": [
+      1,
+      0.93,
+      0.82
+    ],
+    "intensity": 5.6
+  },
+  "passed": true
+}

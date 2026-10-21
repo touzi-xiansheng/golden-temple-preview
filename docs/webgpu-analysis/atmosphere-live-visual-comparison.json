@@ -1,0 +1,56 @@
+{
+  "lightingIdentical": true,
+  "screenshots": [
+    {
+      "time": 15,
+      "localSha256": "e2639a4583af03614c1d0371e910b9514e4668754beab4a2a29801ce28384c85",
+      "liveSha256": "a50bb04aeebee1d842e7414e5d1cafab49e47f7c7eb73eb5859759a4484f358f",
+      "pngBytesIdentical": false,
+      "pixels": {
+        "changed": 19873,
+        "max": 2,
+        "meanAbsolute": 0.003523019547325103,
+        "bounds": [
+          0,
+          666,
+          1919,
+          1079
+        ]
+      }
+    },
+    {
+      "time": 25,
+      "localSha256": "a8c8b7ff143d8f855da1c77e9724aacf4ebab0970808a86376e582e7e33e96b1",
+      "liveSha256": "2b3dbf2802f6d91ca4229d100954720d2cd7315bf8319e996e32673e6ed38e4e",
+      "pngBytesIdentical": false,
+      "pixels": {
+        "changed": 8734,
+        "max": 2,
+        "meanAbsolute": 0.0015051118827160493,
+        "bounds": [
+          0,
+          649,
+          1919,
+          1079
+        ]
+      }
+    },
+    {
+      "time": 45,
+      "localSha256": "57d7272e1004181bb86f5be548f7e4f77a1cd894e6e11461324786180f420a94",
+      "liveSha256": "54078045b82322ea8f01c5dc35fbfbc6cbd4a3be1cb05f7d6e95329fa21d2b70",
+      "pngBytesIdentical": false,
+      "pixels": {
+        "changed": 17752,
+        "max": 9,
+        "meanAbsolute": 0.0051576967592592594,
+        "bounds": [
+          14,
+          602,
+          1919,
+          1079
+        ]
+      }
+    }
+  ]
+}

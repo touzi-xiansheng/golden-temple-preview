@@ -1,0 +1,390 @@
+{
+  "url": "https://touzi-xiansheng.github.io/golden-temple-preview/campus-webgpu.html?rev=1ae31bf&paused=1",
+  "idle": [
+    {
+      "kind": "paused-tour",
+      "elapsedMs": 2002.3000000715256,
+      "frames": 0,
+      "submissions": 0,
+      "cameraBefore": [
+        98,
+        72,
+        116
+      ],
+      "cameraAfter": [
+        98,
+        72,
+        116
+      ],
+      "ready": true,
+      "error": null,
+      "errors": []
+    },
+    {
+      "kind": "after-seek",
+      "elapsedMs": 2001.1999999284744,
+      "frames": 0,
+      "submissions": 0,
+      "cameraBefore": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "cameraAfter": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "ready": true,
+      "error": null,
+      "errors": []
+    },
+    {
+      "kind": "free-camera-at-rest",
+      "elapsedMs": 2001.1000000238419,
+      "frames": 0,
+      "submissions": 0,
+      "cameraBefore": [
+        16.1,
+        1.7199999999999998,
+        -17.4
+      ],
+      "cameraAfter": [
+        16.1,
+        1.7199999999999998,
+        -17.4
+      ],
+      "ready": true,
+      "error": null,
+      "errors": []
+    },
+    {
+      "kind": "after-damping",
+      "elapsedMs": 2002.4000000953674,
+      "frames": 0,
+      "submissions": 0,
+      "cameraBefore": [
+        1.649985661767909,
+        8.805945242046258,
+        -10.541100855694651
+      ],
+      "cameraAfter": [
+        1.6499856132885053,
+        8.805945263532472,
+        -10.541100847579152
+      ],
+      "ready": true,
+      "error": null,
+      "errors": []
+    },
+    {
+      "kind": "after-wheel",
+      "elapsedMs": 2002,
+      "frames": 0,
+      "submissions": 0,
+      "cameraBefore": [
+        1.2231607342223656,
+        8.608593861221134,
+        -12.568308146697902
+      ],
+      "cameraAfter": [
+        1.2231607342212545,
+        8.608593861221612,
+        -12.568308146697639
+      ],
+      "ready": true,
+      "error": null,
+      "errors": []
+    },
+    {
+      "kind": "after-snapshot",
+      "elapsedMs": 2009.5,
+      "frames": 0,
+      "submissions": 0,
+      "cameraBefore": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "cameraAfter": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "ready": true,
+      "error": null,
+      "errors": []
+    },
+    {
+      "kind": "hidden-tab",
+      "elapsedMs": 2143.100000023842,
+      "frames": 0,
+      "submissions": 0,
+      "cameraBefore": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "cameraAfter": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "ready": true,
+      "error": null,
+      "errors": []
+    },
+    {
+      "kind": "visible-again",
+      "elapsedMs": 2001.7999999523163,
+      "frames": 0,
+      "submissions": 0,
+      "cameraBefore": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "cameraAfter": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "ready": true,
+      "error": null,
+      "errors": []
+    },
+    {
+      "kind": "paused-again",
+      "elapsedMs": 2001.3999999761581,
+      "frames": 0,
+      "submissions": 0,
+      "cameraBefore": [
+        16.32912982889029,
+        1.7265656734134853,
+        -20.533111173521544
+      ],
+      "cameraAfter": [
+        16.32912982889029,
+        1.7265656734134853,
+        -20.533111173521544
+      ],
+      "ready": true,
+      "error": null,
+      "errors": []
+    }
+  ],
+  "actions": [
+    {
+      "kind": "timeline",
+      "frames": 1,
+      "camera": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "time": 35,
+      "quality": "balanced",
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    {
+      "kind": "free-camera",
+      "frames": 1,
+      "camera": [
+        16.1,
+        1.7199999999999998,
+        -17.4
+      ],
+      "time": 35,
+      "quality": "balanced",
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    {
+      "kind": "drag-and-damping",
+      "frames": 102,
+      "camera": [
+        1.649985661767909,
+        8.805945242046258,
+        -10.541100855694651
+      ],
+      "time": 35,
+      "quality": "balanced",
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    {
+      "kind": "wheel",
+      "frames": 1,
+      "camera": [
+        1.2231607342223656,
+        8.608593861221134,
+        -12.568308146697902
+      ],
+      "time": 35,
+      "quality": "balanced",
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    {
+      "kind": "return-tour",
+      "frames": 1,
+      "camera": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "time": 35,
+      "quality": "balanced",
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    {
+      "kind": "quality-performance",
+      "frames": 1,
+      "camera": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "time": 35,
+      "quality": "performance",
+      "renderSize": {
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "kind": "quality-quality",
+      "frames": 1,
+      "camera": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "time": 35,
+      "quality": "quality",
+      "renderSize": {
+        "width": 2400,
+        "height": 1350
+      }
+    },
+    {
+      "kind": "quality-balanced",
+      "frames": 1,
+      "camera": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "time": 35,
+      "quality": "balanced",
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    {
+      "kind": "resize-1366",
+      "frames": 1,
+      "camera": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "time": 35,
+      "quality": "balanced",
+      "renderSize": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "kind": "resize-1920",
+      "frames": 1,
+      "camera": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "time": 35,
+      "quality": "balanced",
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    {
+      "kind": "snapshot",
+      "frames": 1,
+      "camera": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "time": 35,
+      "quality": "balanced",
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    {
+      "kind": "return-to-visible-tab",
+      "frames": 1,
+      "camera": [
+        16.1,
+        1.72,
+        -17.4
+      ],
+      "time": 35,
+      "quality": "balanced",
+      "renderSize": {
+        "width": 1920,
+        "height": 1080
+      }
+    }
+  ],
+  "errors": [],
+  "browser": "Chrome/155.0.8059.84",
+  "startup": {
+    "architectureMs": 142,
+    "landscapeMs": 5945.800000071526,
+    "materialsMs": 44.39999997615814,
+    "rendererInitMs": 3.399999976158142,
+    "lightingMs": 2875.9000000953674,
+    "reflectionsMs": 4031.7999999523163,
+    "defaultPrecompileMs": 25107.299999952316,
+    "reflectionWarmupMs": 5836.800000071526,
+    "initialViewSubmitMs": 689.6000000238419,
+    "initialViewQueueWaitMs": 58.89999997615814,
+    "compileMs": 31692.600000023842,
+    "firstFrameMs": 44754.700000047684,
+    "fullReadyMs": 44754.89999997616,
+    "firstVisibleMs": 45423.800000071526
+  },
+  "download": {
+    "name": "verdant-webgpu-35.png",
+    "png": true,
+    "bytes": 5372790
+  },
+  "visibility": {
+    "hidden": "hidden",
+    "restored": "visible"
+  },
+  "playback": {
+    "frames": 60,
+    "elapsed": 0.9999000000000464
+  },
+  "passed": true
+}
